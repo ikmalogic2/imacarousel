@@ -1,5 +1,3 @@
-gemini imacarousel
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -11,27 +9,40 @@ gemini imacarousel
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
-    
     <style>
         /* Native iOS Font Stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #F2F2F7; /* iOS System Grouped Background */
+            background-color: #F2F2F7;
+            /* iOS System Grouped Background */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overscroll-behavior-y: none;
         }
 
         /* iOS Style Scrollbar (Minimalist) */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #C6C6C8; border-radius: 10px; }
-        
-        /* Hide arrows on number input */
-        .hide-arrows::-webkit-inner-spin-button, .hide-arrows::-webkit-outer-spin-button { 
-            -webkit-appearance: none; margin: 0; 
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .hide-arrows { -moz-appearance: textfield; }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #C6C6C8;
+            border-radius: 10px;
+        }
+
+        /* Hide arrows on number input */
+        .hide-arrows::-webkit-inner-spin-button, .hide-arrows::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .hide-arrows {
+            -moz-appearance: textfield;
+        }
 
         /* Smooth Accordion */
         .accordion-content {
@@ -43,6 +54,7 @@ gemini imacarousel
             background-color: rgba(118, 118, 128, 0.12);
             transition: background-color 0.2s ease;
         }
+
         .ios-input:focus {
             background-color: #FFFFFF;
             box-shadow: 0 0 0 2px #007AFF;
@@ -50,32 +62,22 @@ gemini imacarousel
     </style>
 </head>
 <body class="text-[#1C1C1E]">
-
     <div x-data="appData()" x-init="init()" class="w-full max-w-3xl mx-auto min-h-screen flex flex-col relative pb-12">
-        
         <header class="pt-14 pb-4 px-5 sm:px-6 z-10 sticky top-0 bg-[#F2F2F7]/90 backdrop-blur-md">
             <h1 class="text-[34px] font-bold tracking-tight text-black leading-tight">IMACAROUSEL</h1>
             <p class="text-[13px] text-[#8E8E93] font-medium tracking-wide uppercase mt-0.5">Sharia Carousel Prompt Builder</p>
         </header>
 
         <!-- Global Toast Notification -->
-        <div x-show="feedbackMessage" 
-             x-transition:enter="transition ease-out duration-300"
-             x-transition:enter-start="opacity-0 translate-y-[-20px]"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-200"
-             x-transition:leave-start="opacity-100"
-             x-transition:leave-end="opacity-0"
-             class="fixed top-14 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[90%] sm:w-auto text-center drop-shadow-xl">
-            <div class="inline-flex px-5 py-3 rounded-full text-[14px] font-semibold items-center gap-2"
-                 :class="feedbackType === 'success' ? 'bg-[#34C759] text-white' : 'bg-[#1C1C1E] text-white'">
+        <div x-show="feedbackMessage" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-[-20px]" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed top-14 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[90%] sm:w-auto text-center drop-shadow-xl">
+            <div class="inline-flex px-5 py-3 rounded-full text-[14px] font-semibold items-center gap-2" :class="feedbackType === 'success' ? 'bg-[#34C759] text-white' : 'bg-[#1C1C1E] text-white'">
                 <i class="fas" :class="feedbackType === 'success' ? 'fa-check' : 'fa-info-circle'"></i>
                 <span x-text="feedbackMessage"></span>
             </div>
         </div>
 
         <main class="flex-1 px-4 sm:px-6 space-y-6 mt-2 z-0">
-            
+            <!-- TOPIK & NASKAH -->
             <div class="bg-white rounded-[20px] overflow-hidden shadow-sm">
                 <button @click="toggleAccordion('input')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
                     <div class="flex items-center gap-3.5">
@@ -89,7 +91,6 @@ gemini imacarousel
                         <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.input}"></i>
                     </div>
                 </button>
-
                 <div x-show="accordions.input" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100 space-y-4">
                     <div>
                         <label class="block text-[13px] font-medium text-[#8E8E93] uppercase mb-2 ml-1">Draft Teks / Topik</label>
@@ -109,6 +110,7 @@ gemini imacarousel
                 </div>
             </div>
 
+            <!-- PENGATURAN VISUAL -->
             <div class="bg-white rounded-[20px] overflow-hidden shadow-sm">
                 <button @click="toggleAccordion('settings')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
                     <div class="flex items-center gap-3.5">
@@ -121,19 +123,18 @@ gemini imacarousel
                         <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.settings}"></i>
                     </div>
                 </button>
-
                 <div x-show="accordions.settings" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100 space-y-5">
-                    
                     <!-- Quick Actions -->
                     <div class="flex gap-3 pt-1">
                         <button @click="autoDetectOptions()" class="flex-1 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#007AFF] py-2.5 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2">
-                            <i class="fas fa-wand-magic-sparkles"></i> Auto-Set
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            Auto-Set
                         </button>
                         <button @click="resetOptions()" class="flex-1 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#FF3B30] py-2.5 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2">
-                            <i class="fas fa-arrow-rotate-left"></i> Reset
+                            <i class="fas fa-arrow-rotate-left"></i>
+                            Reset
                         </button>
                     </div>
-
                     <!-- Slide Stepper iOS Style -->
                     <div class="flex items-center justify-between py-1 border-b border-gray-100 pb-4">
                         <div>
@@ -152,7 +153,6 @@ gemini imacarousel
                             </button>
                         </div>
                     </div>
-
                     <!-- Settings Grid -->
                     <div class="space-y-4">
                         <!-- Art Style -->
@@ -186,13 +186,14 @@ gemini imacarousel
                                     <option value="grunge_streetwear">🛹 19. Grunge Streetwear</option>
                                     <option value="pixar_3d">🎬 20. Pixar Inspired 3D</option>
                                 </select>
-                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-sm"></i></div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                    <i class="fas fa-chevron-down text-sm"></i>
+                                </div>
                             </div>
                             <div x-show="artStyle === 'custom'" class="mt-2" x-transition>
                                 <textarea x-model="customArtStyle" rows="3" placeholder="Ketik art style..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[15px] resize-none border border-[#FF9500]/30"></textarea>
                             </div>
                         </div>
-
                         <!-- Typography -->
                         <div>
                             <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
@@ -207,13 +208,14 @@ gemini imacarousel
                                         <option :value="index" x-text="`${index + 1}. ${font.name}`"></option>
                                     </template>
                                 </select>
-                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-sm"></i></div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                    <i class="fas fa-chevron-down text-sm"></i>
+                                </div>
                             </div>
                             <div x-show="typographyChoice === 'custom'" class="mt-2" x-transition>
                                 <textarea x-model="customTypography" rows="2" placeholder="Contoh: Bold uppercase serif..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[15px] resize-none border border-[#FF9500]/30"></textarea>
                             </div>
                         </div>
-
                         <!-- 2-Col Grid for minor settings -->
                         <div class="grid grid-cols-2 gap-3">
                             <!-- Character -->
@@ -229,13 +231,14 @@ gemini imacarousel
                                         <option value="girl">👧 Anak P</option>
                                         <option value="custom">✏️ Kustom</option>
                                     </select>
-                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                        <i class="fas fa-chevron-down text-[11px]"></i>
+                                    </div>
                                 </div>
                                 <div x-show="characterType === 'custom'" class="mt-2" x-transition>
                                     <input x-model="customCharacter" type="text" placeholder="Detail..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
                                 </div>
                             </div>
-
                             <!-- Palette -->
                             <div>
                                 <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Warna</label>
@@ -249,13 +252,14 @@ gemini imacarousel
                                         <option value="cool">❄️ Cool</option>
                                         <option value="custom">✏️ Kustom</option>
                                     </select>
-                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                        <i class="fas fa-chevron-down text-[11px]"></i>
+                                    </div>
                                 </div>
                                 <div x-show="colorPalette === 'custom'" class="mt-2" x-transition>
                                     <input x-model="customPalette" type="text" placeholder="Warna..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
                                 </div>
                             </div>
-                            
                             <!-- Structure -->
                             <div>
                                 <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Layout</label>
@@ -270,13 +274,14 @@ gemini imacarousel
                                         <option value="vocabulary">📖 Kata</option>
                                         <option value="custom">✏️ Kustom</option>
                                     </select>
-                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                        <i class="fas fa-chevron-down text-[11px]"></i>
+                                    </div>
                                 </div>
                                 <div x-show="structure === 'custom'" class="mt-2" x-transition>
                                     <input x-model="customStructure" type="text" placeholder="Layout..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
                                 </div>
                             </div>
-
                             <!-- Ratio -->
                             <div>
                                 <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Rasio</label>
@@ -289,14 +294,15 @@ gemini imacarousel
                                         <option value="16:9">💻 16:9</option>
                                         <option value="custom">✏️ Kustom</option>
                                     </select>
-                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none">
+                                        <i class="fas fa-chevron-down text-[11px]"></i>
+                                    </div>
                                 </div>
                                 <div x-show="aspectRatio === 'custom'" class="mt-2" x-transition>
                                     <input x-model="customRatio" type="text" placeholder="Rasio..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
                                 </div>
                             </div>
                         </div>
-
                         <!-- Footer Customization -->
                         <div class="bg-[#F2F2F7] p-4 rounded-[16px] mt-2">
                             <label class="block text-[14px] font-semibold mb-3">Footer Watermark</label>
@@ -311,33 +317,33 @@ gemini imacarousel
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
 
+            <!-- RAKIT BLUEPRINT -->
             <div class="bg-white rounded-[20px] overflow-hidden shadow-sm" :class="generatedCards.length > 0 ? 'ring-2 ring-[#34C759]' : ''">
                 <!-- Trigger Generate Button (iOS Prominent Style) -->
                 <div class="p-5">
                     <button @click="generateCarouselPrompts()" class="w-full bg-[#007AFF] active:bg-[#005bb5] text-white font-semibold py-4 rounded-[14px] transition-colors flex items-center justify-center gap-2 text-[17px]">
-                        <i class="fas fa-magic"></i> RAKIT BLUEPRINT
+                        <i class="fas fa-magic"></i>
+                        RAKIT BLUEPRINT
                     </button>
                 </div>
-
                 <div x-show="generatedCards.length > 0" x-transition class="px-5 pb-5 border-t border-gray-100 pt-5 space-y-4">
-                    
                     <div class="flex justify-between items-center px-1">
                         <span class="text-[14px] font-semibold text-[#8E8E93]" x-text="`Total: ${generatedCards.length} Kartu`"></span>
                         <div class="flex gap-2">
                             <button @click="savePrompt()" class="bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#007AFF] px-4 py-2 rounded-full text-[14px] font-semibold transition-colors flex items-center gap-1.5">
-                                <i class="fas fa-bookmark"></i> Simpan
+                                <i class="fas fa-bookmark"></i>
+                                Simpan
                             </button>
                             <button @click="copyAllCards()" class="bg-[#34C759] active:bg-[#28a745] text-white px-4 py-2 rounded-full text-[14px] font-semibold transition-colors flex items-center gap-1.5">
-                                <i class="fas fa-copy"></i> Copy All
+                                <i class="fas fa-copy"></i>
+                                Copy All
                             </button>
                         </div>
                     </div>
-
                     <!-- Array of Cards (Accordion within Output) -->
                     <div class="space-y-3">
                         <template x-for="(card, index) in generatedCards" :key="index">
@@ -349,9 +355,7 @@ gemini imacarousel
                                         <span x-text="card.title"></span>
                                     </h4>
                                     <div class="flex items-center gap-3">
-                                        <button @click.stop="copySingleCard(card.content)" class="text-[12px] bg-white text-[#007AFF] px-3 py-1.5 rounded-full font-semibold shadow-sm active:opacity-70 transition-opacity">
-                                            Copy
-                                        </button>
+                                        <button @click.stop="copySingleCard(card.content)" class="text-[12px] bg-white text-[#007AFF] px-3 py-1.5 rounded-full font-semibold shadow-sm active:opacity-70 transition-opacity">Copy</button>
                                         <i class="fas fa-chevron-right text-[#C6C6C8] text-[13px] transition-transform duration-300" :class="{'rotate-90': isExpanded}"></i>
                                     </div>
                                 </div>
@@ -365,6 +369,7 @@ gemini imacarousel
                 </div>
             </div>
 
+            <!-- RIWAYAT DISIMPAN -->
             <div class="bg-white rounded-[20px] overflow-hidden shadow-sm mb-12">
                 <button @click="toggleAccordion('saved')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
                     <div class="flex items-center gap-3.5">
@@ -378,12 +383,10 @@ gemini imacarousel
                         <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.saved}"></i>
                     </div>
                 </button>
-
                 <div x-show="accordions.saved" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100">
                     <div x-show="savedPrompts.length === 0" class="text-center py-6 text-[#8E8E93]">
                         <p class="text-[14px]">Belum ada riwayat.</p>
                     </div>
-
                     <div x-show="savedPrompts.length > 0" class="space-y-3 max-h-[300px] overflow-y-auto mt-2">
                         <template x-for="(item, index) in savedPrompts" :key="item.id">
                             <div class="p-4 bg-[#F2F2F7] rounded-[14px] flex flex-col gap-2">
@@ -410,7 +413,6 @@ gemini imacarousel
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -423,32 +425,32 @@ gemini imacarousel
                     output: false,
                     saved: false
                 },
-                
+
                 topic: '',
-                additionalInstructions: '', 
-                numSlides: 7, 
-                socialMediaLogos: 'instagram, threads', 
+                additionalInstructions: '',
+                numSlides: 7,
+                socialMediaLogos: 'instagram, threads',
                 credit: '',
-                
+
                 structure: 'auto',
-                aspectRatio: '3:4', 
+                aspectRatio: '3:4',
                 colorPalette: 'auto',
                 characterType: 'random',
-                
+
                 customCharacter: '',
                 customStructure: '',
                 customRatio: '',
                 customPalette: '',
-                
+
                 artStyle: 'auto',
                 customArtStyle: '',
                 typographyChoice: 'auto',
                 customTypography: '',
 
-                feedbackMessage: '', 
+                feedbackMessage: '',
                 feedbackType: 'success',
                 generatedCards: [],
-                
+
                 savedPrompts: [],
 
                 // 20 Premium Masterpiece Styles
@@ -502,7 +504,11 @@ gemini imacarousel
                 init() {
                     const stored = localStorage.getItem('imavisual_saved_prompts');
                     if (stored) {
-                        try { this.savedPrompts = JSON.parse(stored); } catch (e) { this.savedPrompts = []; }
+                        try {
+                            this.savedPrompts = JSON.parse(stored);
+                        } catch (e) {
+                            this.savedPrompts = [];
+                        }
                     }
                 },
 
@@ -510,34 +516,47 @@ gemini imacarousel
                     this.accordions[section] = !this.accordions[section];
                 },
 
-                showFeedback(msg, type = 'success') {
+                showFeedback(msg, type='success') {
                     this.feedbackMessage = msg;
                     this.feedbackType = type;
-                    setTimeout(() => { this.feedbackMessage = ''; }, 3000);
+                    setTimeout(() => {
+                        this.feedbackMessage = '';
+                    }, 3000);
                 },
 
                 autoDetectOptions() {
                     if (!this.topic) {
-                        this.showFeedback("Isi topik dulu ya!", "neutral"); return;
+                        this.showFeedback("Isi topik dulu ya!", "neutral");
+                        return;
                     }
                     this.showFeedback("Opsi disesuaikan secara otomatis!", "success");
                 },
 
                 resetOptions() {
-                    this.structure = 'auto'; this.aspectRatio = '4:5'; this.colorPalette = 'auto';
-                    this.characterType = 'random'; this.customCharacter = ''; this.customStructure = '';
-                    this.customRatio = ''; this.customPalette = ''; this.artStyle = 'auto'; this.customArtStyle = '';
-                    this.typographyChoice = 'auto'; this.customTypography = '';
-                    this.credit = ''; this.socialMediaLogos = 'instagram, threads';
+                    this.structure = 'auto';
+                    this.aspectRatio = '4:5';
+                    this.colorPalette = 'auto';
+                    this.characterType = 'random';
+                    this.customCharacter = '';
+                    this.customStructure = '';
+                    this.customRatio = '';
+                    this.customPalette = '';
+                    this.artStyle = 'auto';
+                    this.customArtStyle = '';
+                    this.typographyChoice = 'auto';
+                    this.customTypography = '';
+                    this.credit = '';
+                    this.socialMediaLogos = 'instagram, threads';
                     this.showFeedback("Opsi dikembalikan ke bawaan.", "neutral");
                 },
 
                 generateCarouselPrompts() {
                     if (!this.topic) {
                         this.showFeedback("Mohon isi topik utama di Kartu Input!", "neutral");
-                        this.accordions.input = true; return;
+                        this.accordions.input = true;
+                        return;
                     }
-                    this.generatedCards = []; 
+                    this.generatedCards = [];
 
                     // 1. Process Logo & Footer
                     let logoString = "";
@@ -546,7 +565,8 @@ gemini imacarousel
                         logoString = logos.map(l => `[minimalist monochrome vector ${l.toLowerCase()} logo icon]`).join(' ');
                     }
                     let handle = this.credit.trim();
-                    if (handle && !handle.startsWith('@')) handle = '@' + handle;
+                    if (handle && !handle.startsWith('@'))
+                        handle = '@' + handle;
                     let footerString = logoString || handle ? `${logoString} ${handle}`.trim() : "[TANPA FOOTER]";
 
                     let isPosterMode = this.numSlides === 1;
@@ -556,16 +576,18 @@ gemini imacarousel
                     // 2. Formatting Configurations
                     let styleDesc = this.artStyle === 'custom' ? (this.customArtStyle || "Custom Style") : (this.styleDefinitions[this.artStyle] || this.styleDefinitions['layered_papercut']);
                     let styleTitle = this.artStyle === 'custom' ? "Custom Style" : this.artStyle.toUpperCase();
-                    
-                    let typoDesc = ""; let typoName = "";
+
+                    let typoDesc = "";
+                    let typoName = "";
                     if (this.typographyChoice === 'custom') {
-                        typoName = "Custom Font"; typoDesc = this.customTypography || "Custom Typography";
+                        typoName = "Custom Font";
+                        typoDesc = this.customTypography || "Custom Typography";
                     } else if (this.typographyChoice === 'auto') {
                         let randIndex = Math.floor(Math.random() * this.typographyDNA.length);
-                        typoName = `FONT ${randIndex + 1}. ${this.typographyDNA[randIndex].name}`; 
+                        typoName = `FONT ${randIndex + 1}. ${this.typographyDNA[randIndex].name}`;
                         typoDesc = this.typographyDNA[randIndex].desc;
                     } else {
-                        typoName = `FONT ${parseInt(this.typographyChoice) + 1}. ${this.typographyDNA[this.typographyChoice].name}`; 
+                        typoName = `FONT ${parseInt(this.typographyChoice) + 1}. ${this.typographyDNA[this.typographyChoice].name}`;
                         typoDesc = this.typographyDNA[this.typographyChoice].desc;
                     }
 
@@ -581,9 +603,9 @@ gemini imacarousel
                     } else if (this.characterType === 'female') {
                         characterRuleText = `* MC WANITA: WAJIB memakai setelan gamis lebar dan longgar, khimar menutupi bahu hingga lengan, kaki tertutupi rok. Bukan photorealistic.`;
                     } else if (this.characterType === 'male') {
-                         characterRuleText = `* MC PRIA: Pakaian casual/modest rapi, bukan photorealistic.`;
+                        characterRuleText = `* MC PRIA: Pakaian casual/modest rapi, bukan photorealistic.`;
                     } else if (this.characterType === 'boy' || this.characterType === 'girl') {
-                         characterRuleText = `* KARAKTER: Anak-anak (${this.characterType}). Pakaian sopan tertutup. Bukan photorealistic.`;
+                        characterRuleText = `* KARAKTER: Anak-anak (${this.characterType}). Pakaian sopan tertutup. Bukan photorealistic.`;
                     } else {
                         characterRuleText = `* MC WANITA: Jika wanita, WAJIB gamis lebar, khimar menutup bahu/lengan, rok menutup kaki.\n* MC PRIA: Casual/modest.`;
                     }
@@ -597,30 +619,28 @@ gemini imacarousel
                     card1Content += `- Style Art: ${styleTitle} (${styleDesc})\n`;
                     card1Content += `- Color Palette: ${colorInstr} (Bright yet eye-catching, comfortable for the eyes, vibrant and lively background environment)\n`;
                     card1Content += `- Typography: ${typoName} (${typoDesc})\n`;
-                    
+
                     if (this.characterType === 'custom') {
                         card1Content += `- Main Character Detail: ${characterRuleText} MANDATORY: FACELESS NO EYES.\n`;
                     } else {
                         card1Content += `- Main Character (Used contextually):\n${characterRuleText}\nMANDATORY: FACELESS NO EYES.\n`;
                     }
-                    
-                    // PENAMBAHAN PROTOKOL ANTI-GRID DI SINI
+
                     card1Content += `- General Visual Constraints: STRICT ANICONISM. All humans, figures, NPCs, animals, or dolls MUST BE FACELESS WITH NO EYES. Absolute prohibition on living beings displayed in wall photo frames or paintings. No music elements, no dating, no gold for men. NO ARABIC TEXT. No text mentioning "Feynman". ABSOLUTELY NO GRID, NO COLLAGE, NO SPLIT-SCREEN PANELS. EACH SLIDE MUST BE A SINGLE, STANDALONE FULL-CANVAS IMAGE.\n\n`;
                     card1Content += `---------------------------------------------------\n\n`;
-                    
+
                     card1Content += `[SPECS]\n`;
                     card1Content += `- Aspect Ratio: ${ratioText}\n`;
                     card1Content += `- Typography: ${typoName} (Center-aligned for Slide 1 Cover)\n`;
                     card1Content += `- Visual Constraint: MANDATORY FACELESS NO EYES for all figures. No Arabic text. No "Feynman".\n`;
                     card1Content += `- Footer: ${footerString}${footerSuffix}\n\n`;
-                    
+
                     card1Content += `[VISUAL GUIDE]\n`;
                     card1Content += `- Composition: High-impact central focus serving as a powerful visual curiosity hook.\n`;
                     card1Content += `- Characters: [TUGAS AI: Tentukan secara cerdas apakah Slide 1 ini butuh karakter atau hanya metafora benda besar yang estetik. Jika manusia muncul, WAJIB faceless no eyes.]\n`;
                     card1Content += `- Storytelling: [TUGAS AI: Buat deskripsi objek/metafora yang memancing penasaran untuk Cover.]\n\n`;
 
                     card1Content += `[GEN_AI PROMPT]\n`;
-                    // PROTOKOL ANTI GRID DI AWAL PROMPT
                     card1Content += `[TUGAS AI: Tulis prompt DALL-E bahasa Inggris 8K. WAJIB AWALI DENGAN KATA: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN sertakan: "Seamless integrated negative space for text placement, strictly NO solid white boxes or plain white borders, [Tentukan Angle Kamera Wide/Close]"]\n\n`;
 
                     card1Content += `[NASKAH]\n`;
@@ -628,7 +648,7 @@ gemini imacarousel
                     card1Content += `- SUB HEADER: Tanpa Sub Header\n`;
                     card1Content += `- FOOTER: ${footerString}${footerSuffix}\n\n`;
                     card1Content += `Make the aspect ratio ${ratioText}\n\n`;
-                    
+
                     card1Content += `---------------------------------------------------\n`;
                     card1Content += `# VERY IMPORTANT RULES ${!isPosterMode ? `FOR SLIDE 2 TO ${this.numSlides}` : ''}\n`;
                     card1Content += `1. JANGAN PERNAH MENYEBUT KATA "FEYNMAN" ATAU "FEYNMAN TECHNIQUE" DI NASKAH, GAMBAR, ATAUPUN CAPTION.\n`;
@@ -637,12 +657,14 @@ gemini imacarousel
                     card1Content += `4. ADAPTASI INPUT USER: Jika input berupa draft paragraf lengkap, HANYA pecah menjadi slide dan letakkan di area NASKAH. JANGAN MERANGKUM teks draft tersebut. Jika input hanya topik pendek, barulah kembangkan menjadi konten utuh.\n`;
                     card1Content += `5. SEAMLESS BACKGROUND: Wajib instruksikan DALL-E agar background menyatu dengan teks (Seamless negative space). Dilarang keras menggunakan kotak putih polos (solid white boxes) untuk area teks.\n`;
                     card1Content += `6. KARAKTER FLEKSIBEL & METAFORA VISUAL: Karakter manusia BOLEH dimunculkan JIKA KONTEKS narasi slide tersebut menceritakan interaksi atau perasaan. Namun jika narasi slide murni membahas konsep abstrak (seperti waktu, fondasi, kesabaran), HILANGKAN manusia dan gantikan dengan BENDA METAFORA VISUAL (seperti jam dinding, batu fondasi, jembatan) agar variatif. Jika manusia muncul, WAJIB Faceless No Eyes dan ikuti spesifikasi karakter.\n`;
-                    // TAMBAHAN ATURAN KE-7 UNTUK CHATGPT
                     card1Content += `7. DILARANG KERAS MEMBUAT GRID/KOLASE: Jika kamu (AI) diminta untuk meng-generate gambar, WAJIB generate satu per satu secara terpisah. JANGAN PERNAH menggabungkan beberapa slide menjadi satu gambar kanvas (seperti komik, grid, atau kolase). 1 Slide WAJIB 1 Gambar terpisah!\n\n`;
-                    
+
                     card1Content += `TOPIK/DRAFT DARI USER: "${this.topic}"`;
 
-                    this.generatedCards.push({ title: "Card 1 (Global Config)", content: card1Content });
+                    this.generatedCards.push({
+                        title: "Card 1 (Global Config)",
+                        content: card1Content
+                    });
 
                     for (let i = 2; i <= this.numSlides; i++) {
                         let cardContent = `[Card ${i}]\n=== SLIDE ${i} ===\n`;
@@ -651,14 +673,13 @@ gemini imacarousel
                         cardContent += `- Typography: ${typoName} (Left-aligned, consistent size)\n`;
                         cardContent += `- Visual Constraint: MANDATORY FACELESS NO EYES for all figures. STRICTLY NO ARABIC TEXT.\n`;
                         cardContent += `- Footer: ${footerString} | ${i}/${this.numSlides}\n\n`;
-                        
+
                         cardContent += `[VISUAL GUIDE]\n`;
                         cardContent += `- Composition: Text aligned seamlessly on one side, visual focus on the other.\n`;
                         cardContent += `- Characters/Metaphor: [TUGAS AI: Tentukan secara cerdas apakah karakter perlu muncul berdasarkan KONTEKS narasi slide ini. Jika muncul, tulis interaksinya (wajib faceless). Jika slide abstrak/konseptual, ganti dengan BENDA METAFORA VISUAL (tanpa karakter).]\n`;
                         cardContent += `- Storytelling: [TUGAS AI: Buat deskripsi visual yang selaras dengan naskah.]\n\n`;
 
                         cardContent += `[GEN_AI PROMPT]\n`;
-                        // PROTOKOL ANTI GRID DI PROMPT MASING-MASING SLIDE
                         cardContent += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB AWALI DENGAN KATA: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN sertakan: 1) Angle kamera spesifik yang BERBEDA dari slide sebelumnya. 2) "Seamless environmental negative space for text, strictly NO solid white boxes". 3) Jika karakter muncul, PASTIKAN SESUAI DESKRIPSI KUSTOM/STANDAR]\n\n`;
 
                         cardContent += `[NASKAH]\n`;
@@ -668,11 +689,17 @@ gemini imacarousel
                         cardContent += `- FOOTER: ${footerString} | ${i}/${this.numSlides}\n\n`;
                         cardContent += `Make the aspect ratio ${ratioText}`;
 
-                        this.generatedCards.push({ title: `Card ${i} (Content Slide)`, content: cardContent });
+                        this.generatedCards.push({
+                            title: `Card ${i} (Content Slide)`,
+                            content: cardContent
+                        });
                     }
 
                     let captionContent = `[Card ${this.numSlides + 1}]\n=== CAPTION ===\n[TUGAS AI: Tuliskan caption sosmed yang emosional dan persuasif berdasarkan isi ${contentType.toLowerCase()}. Berikan Call to Action (CTA) & Hashtag relevan. JANGAN SEBUT KATA FEYNMAN. BILA ADA DALIL, GUNAKAN BAHASA INDONESIA SAJA, BUKAN TEKS ARAB.]`;
-                    this.generatedCards.push({ title: "Caption (Sosmed)", content: captionContent });
+                    this.generatedCards.push({
+                        title: "Caption (Sosmed)",
+                        content: captionContent
+                    });
 
                     this.accordions.output = true;
                     this.accordions.input = false;
@@ -680,7 +707,9 @@ gemini imacarousel
                     this.showFeedback("Blueprint Prompt Berhasil Dirakit!", "success");
                 },
 
-                copySingleCard(text) { this.executeCopy(text); },
+                copySingleCard(text) {
+                    this.executeCopy(text);
+                },
 
                 copyAllCards() {
                     if (this.generatedCards.length === 0) return;
@@ -690,20 +719,30 @@ gemini imacarousel
 
                 executeCopy(text) {
                     const textarea = document.createElement('textarea');
-                    textarea.value = text; document.body.appendChild(textarea);
-                    textarea.select(); document.execCommand('copy');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
                     document.body.removeChild(textarea);
                     this.showFeedback("Teks berhasil disalin ke clipboard!", "success");
                 },
-                
+
                 savePrompt() {
                     if (this.generatedCards.length === 0) return;
                     let fullText = this.generatedCards.map(c => c.content).join('\n\n');
                     const newItem = {
-                        id: Date.now(), topic: this.topic || "Tanpa Topik",
-                        style: this.artStyle, slides: this.numSlides,
-                        cards: this.generatedCards, fullText: fullText,
-                        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+                        id: Date.now(),
+                        topic: this.topic || "Tanpa Topik",
+                        style: this.artStyle,
+                        slides: this.numSlides,
+                        cards: this.generatedCards,
+                        fullText: fullText,
+                        date: new Date().toLocaleDateString('id-ID', {
+                            day: '2-digit',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })
                     };
                     this.savedPrompts.unshift(newItem);
                     localStorage.setItem('imavisual_saved_prompts', JSON.stringify(this.savedPrompts));
@@ -711,9 +750,13 @@ gemini imacarousel
                 },
 
                 loadSavedPrompt(item) {
-                    this.topic = item.topic; this.artStyle = item.style;
-                    this.numSlides = item.slides; this.generatedCards = item.cards;
-                    this.accordions.input = true; this.accordions.output = true; this.accordions.saved = false;
+                    this.topic = item.topic;
+                    this.artStyle = item.style;
+                    this.numSlides = item.slides;
+                    this.generatedCards = item.cards;
+                    this.accordions.input = true;
+                    this.accordions.output = true;
+                    this.accordions.saved = false;
                     this.showFeedback("Riwayat dimuat!", "success");
                 },
 
