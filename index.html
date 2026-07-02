@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IMAVISUAL Carousel Prompt Gen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        :root {
+            --ios-bg: #F2F2F7;
+            --ios-card: #FFFFFF;
+            --ios-blue: #007AFF;
+            --ios-gray: #8E8E93;
+            --ios-text: #000000;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ios-bg);
+            color: var(--ios-text);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* iOS style scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2); 
+            border-radius: 10px;
+        }
+
+        /* iOS Inputs */
+        .ios-input {
+            background-color: rgba(118, 118, 128, 0.08);
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .ios-input:focus {
+            background-color: rgba(118, 118, 128, 0.12);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+        }
+
+        .ios-card {
+            background-color: var(--ios-card);
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .ios-glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Generated output text formatting */
+        .prompt-text {
+            white-space: pre-wrap;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full flex justify-center pb-10">
+
+    <div x-data="appData()" class="w-full max-w-3xl flex flex-col">
+        
+        <!-- Header iOS Style -->
+        <header class="sticky top-0 z-50 ios-glass px-6 py-4 flex flex-col items-center">
+            <div class="w-10 h-1 bg-gray-300 rounded-full mb-3 hidden sm:block opacity-50"></div>
+            <h1 class="text-[28px] leading-tight font-bold text-center tracking-tight">IMAVISUAL</h1>
+            <p class="text-[11px] font-semibold text-gray-500 uppercase tracking-widest mt-0.5">Carousel Prompt Builder</p>
+        </header>
+
+        <main class="flex-1 px-4 sm:px-6 pt-6 space-y-6">
+            
+            <!-- Global Feedback Notification -->
+            <div x-show="feedbackMessage" 
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 -translate-y-4"
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0"
+                 x-transition:leave-end="opacity-0 -translate-y-4"
+                 class="fixed top-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+                <div class="bg-gray-800/90 backdrop-blur-md text-white px-6 py-3 rounded-full text-sm font-medium shadow-lg flex items-center gap-2">
+                    <i class="fas fa-check-circle text-green-400"></i>
+                    <span x-text="feedbackMessage"></span>
+                </div>
+            </div>
+
+            <!-- 1. IDE & KONTEN -->
+            <section class="ios-card overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs">1</div>
+                    <h2 class="text-base font-semibold">Ide & Konten</h2>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1">Topik Utama & Teks Naskah</label>
+                        <textarea x-model="topic" placeholder="Tuliskan topik, materi, atau draft teks carousel Anda di sini..." class="w-full p-4 rounded-xl ios-input text-[13px] font-medium h-28 resize-none placeholder-gray-400"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1">Instruksi Tambahan (Opsional)</label>
+                        <input x-model="additionalInstructions" type="text" placeholder="Contoh: Fokus pada dalil sabar, target audiens ibu-ibu..." class="w-full p-3.5 rounded-xl ios-input text-[13px] font-medium placeholder-gray-400">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. PENGATURAN VISUAL -->
+            <section class="ios-card overflow-hidden">
+                <div class="px-5 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center gap-3">
+                    <div class="w-7 h-7 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs">2</div>
+                    <h2 class="text-base font-semibold">Pengaturan Visual</h2>
+                </div>
+                
+                <div class="p-5 space-y-5">
+                    
+                    <!-- Stepper Jumlah Slide -->
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                        <div>
+                            <p class="font-semibold text-sm">Jumlah Slide Carousel</p>
+                            <p class="text-[11px] text-gray-500 mt-0.5">Termasuk Cover & Penutup</p>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white px-2 py-1 rounded-full shadow-sm border border-gray-200">
+                            <button @click="if(numSlides > 1) numSlides--" class="w-8 h-8 flex items-center justify-center rounded-full text-blue-500 hover:bg-blue-50 active:scale-95 transition">
+                                <i class="fas fa-minus text-sm"></i>
+                            </button>
+                            <span class="font-bold text-base w-4 text-center" x-text="numSlides"></span>
+                            <button @click="if(numSlides < 10) numSlides++" class="w-8 h-8 flex items-center justify-center rounded-full text-blue-500 hover:bg-blue-50 active:scale-95 transition">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- ART STYLE (20 Options) -->
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1 flex justify-between">
+                                <span>Gaya Seni Ilustrasi (Art Style)</span>
+                                <span x-show="artStyle === 'custom'" class="text-blue-500 font-bold">Mode Kustom</span>
+                            </label>
+                            <div class="relative">
+                                <select x-model="artStyle" class="w-full p-3.5 pl-4 pr-10 rounded-xl ios-input text-[13px] font-medium appearance-none cursor-pointer">
+                                    <option value="auto">✨ Auto / Serahkan pada AI</option>
+                                    <option value="custom">✏️ Kustom (Ketik Sendiri)</option>
+                                    <optgroup label="Paper & Craft">
+                                        <option value="layered_papercut">✂️ 1. Layered Papercut</option>
+                                        <option value="paper_cut_diorama">🎭 2. 3D Paper Cut Diorama</option>
+                                        <option value="papercraft_3d">📦 3. 3D Papercraft</option>
+                                        <option value="islamic_papercraft">🕌 4. Islamic 3D Papercraft</option>
+                                        <option value="origami_art">🦢 5. Origami Art</option>
+                                    </optgroup>
+                                    <optgroup label="3D & Voxel">
+                                        <option value="low_poly_3d">💎 6. Low Poly 3D</option>
+                                        <option value="isometric_papercraft_lowpoly">📐 7. 3D Isometric Papercraft Low Poly</option>
+                                        <option value="voxel_art">🧱 8. Voxel Art</option>
+                                        <option value="pixar_3d">🎬 9. Pixar Inspired 3D Animation</option>
+                                    </optgroup>
+                                    <optgroup label="Textile & Craft">
+                                        <option value="knit_crochet">🧶 10. Premium Knit & Crochet 3D</option>
+                                        <option value="needle_felting">🪡 11. Premium Needle Felting 3D</option>
+                                        <option value="quilted_patchwork">🧵 12. Premium Quilted Patchwork 3D</option>
+                                    </optgroup>
+                                    <optgroup label="Illustration & 2D">
+                                        <option value="vintage_storybook">📖 13. Vintage Storybook</option>
+                                        <option value="cutaway_illustration">🏗️ 14. Cutaway Illustration</option>
+                                        <option value="whimsical_doodle">✒️ 15. Ink & Watercolor Whimsical Doodle</option>
+                                        <option value="studygram_journal">📓 16. Studygram Digital Journaling</option>
+                                        <option value="watercolor_ink">🎨 17. Watercolor & Ink Illustration</option>
+                                        <option value="wimmelbilderbuch">🏘️ 18. Wimmelbilderbuch (Teeming Detail)</option>
+                                        <option value="comic_studio">🗯️ 19. Comic Studio (Webtoon Style)</option>
+                                        <option value="grunge_streetwear">🛹 20. Grunge Streetwear Photocopy</option>
+                                    </optgroup>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                            </div>
+                            <!-- Custom Art Style Input -->
+                            <div x-show="artStyle === 'custom'" x-transition class="mt-3">
+                                <textarea x-model="customArtStyle" placeholder="Ketik deskripsi gaya seni kustom (contoh: Anime 90s, Ghibli style...)" class="w-full p-3.5 rounded-xl bg-blue-50/50 border border-blue-100 text-[13px] font-medium h-20 resize-none focus:outline-none focus:border-blue-300 transition-colors"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- TYPOGRAPHY (20 Options) -->
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1 flex justify-between">
+                                <span>Tipografi (Font Selection)</span>
+                                <span x-show="typographyChoice === 'custom'" class="text-blue-500 font-bold">Mode Kustom</span>
+                            </label>
+                            <div class="relative">
+                                <select x-model="typographyChoice" class="w-full p-3.5 pl-4 pr-10 rounded-xl ios-input text-[13px] font-medium appearance-none cursor-pointer">
+                                    <option value="auto">✨ Auto / Pilih Acak Sesuai Topik</option>
+                                    <option value="custom">✏️ Kustom (Ketik Sendiri)</option>
+                                    <template x-for="(font, index) in typographyDNA" :key="index">
+                                        <option :value="index" x-text="'Aa - ' + (index + 1) + '. ' + font.name"></option>
+                                    </template>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                            </div>
+                            <!-- Custom Typography Input -->
+                            <div x-show="typographyChoice === 'custom'" x-transition class="mt-3">
+                                <input x-model="customTypography" type="text" placeholder="Ketik deskripsi tipografi (contoh: Font Serif klasik yang elegan...)" class="w-full p-3.5 rounded-xl bg-blue-50/50 border border-blue-100 text-[13px] font-medium focus:outline-none focus:border-blue-300 transition-colors">
+                            </div>
+                        </div>
+
+                        <!-- CHARACTER TYPE -->
+                        <div class="sm:col-span-2 md:col-span-1">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1 flex justify-between">
+                                <span>Karakter (Faceless)</span>
+                                <span x-show="characterType === 'custom'" class="text-blue-500 font-bold">Kustom</span>
+                            </label>
+                            <div class="relative">
+                                <select x-model="characterType" class="w-full p-3.5 pl-4 rounded-xl ios-input text-[13px] font-medium appearance-none cursor-pointer">
+                                    <option value="random">🎲 Bebas / Sesuai Konteks</option>
+                                    <option value="male">👨 Pria (Casual/Modest)</option>
+                                    <option value="female">🧕 Wanita (Khimar & Rok)</option>
+                                    <option value="couple">👫 Pasangan Suami Istri</option>
+                                    <option value="family">👨‍👩‍👧‍👦 Keluarga</option>
+                                    <option value="custom">✏️ Kustom (Ketik Sendiri)</option>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                            </div>
+                            <!-- Custom Character Input -->
+                            <div x-show="characterType === 'custom'" x-transition class="mt-3">
+                                <input x-model="customCharacter" type="text" placeholder="Contoh: Kakek bijak dengan jubah..." class="w-full p-3.5 rounded-xl bg-blue-50/50 border border-blue-100 text-[13px] font-medium focus:outline-none focus:border-blue-300 transition-colors">
+                            </div>
+                        </div>
+
+                        <!-- COLOR PALETTE -->
+                        <div class="sm:col-span-2 md:col-span-1">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1 flex justify-between">
+                                <span>Palet Warna</span>
+                                <span x-show="colorPalette === 'custom'" class="text-blue-500 font-bold">Kustom</span>
+                            </label>
+                            <div class="relative">
+                                <select x-model="colorPalette" class="w-full p-3.5 pl-4 rounded-xl ios-input text-[13px] font-medium appearance-none cursor-pointer">
+                                    <option value="auto">🎨 Auto Sesuai Topik</option>
+                                    <option value="earth">🍂 Earth (Krem, Sage, Coklat)</option>
+                                    <option value="pastel">🌸 Pastel (Soft Pink, Mint)</option>
+                                    <option value="monochrome">⚫ Monochrome (Hitam Abu)</option>
+                                    <option value="warm">☀️ Warm (Terracotta, Emas)</option>
+                                    <option value="cool">❄️ Cool (Navy, Biru Muda)</option>
+                                    <option value="custom">✏️ Kustom (Ketik Sendiri)</option>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                            </div>
+                            <!-- Custom Palette Input -->
+                            <div x-show="colorPalette === 'custom'" x-transition class="mt-3">
+                                <input x-model="customPalette" type="text" placeholder="Contoh: Neon cyberpunk, warna ungu dominan..." class="w-full p-3.5 rounded-xl bg-blue-50/50 border border-blue-100 text-[13px] font-medium focus:outline-none focus:border-blue-300 transition-colors">
+                            </div>
+                        </div>
+                        
+                        <!-- WATERMARK -->
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase mb-2 ml-1">Credit Username (Untuk Footer)</label>
+                            <input x-model="credit" type="text" placeholder="@username" class="w-full p-3.5 rounded-xl ios-input text-[13px] font-medium placeholder-gray-400">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. HASIL GENERATE -->
+            <section class="pb-10">
+                <button @click="generateCarouselPrompts()" class="w-full bg-[#007AFF] hover:bg-[#0066D6] text-white font-semibold py-4 rounded-2xl shadow-sm active:scale-95 transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fas fa-wand-magic-sparkles"></i> Rakit Prompt Carousel
+                </button>
+
+                <!-- Output Cards Container -->
+                <div x-show="generatedSlides.length > 0" x-transition class="mt-6 space-y-4">
+                    
+                    <div class="flex justify-between items-center px-1 mb-2">
+                        <h3 class="font-bold text-lg">Hasil Rakitan Prompts</h3>
+                        <button @click="copyAll()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fas fa-copy"></i> Copy Semua
+                        </button>
+                    </div>
+
+                    <!-- Loop through generated slide blocks -->
+                    <template x-for="(slide, index) in generatedSlides" :key="index">
+                        <div x-data="{ isOpen: index === 0 }" class="ios-card overflow-hidden border border-gray-100 group relative">
+                            <!-- Card Header (Clickable Accordion) -->
+                            <div @click="isOpen = !isOpen" class="bg-gray-50 px-4 py-3 flex justify-between items-center border-b border-gray-100 cursor-pointer hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-chevron-right text-gray-400 text-[10px] transition-transform duration-300" :class="isOpen ? 'rotate-90' : ''"></i>
+                                    <span class="text-xs font-bold text-gray-700" x-text="slide.title"></span>
+                                </div>
+                                <button @click.stop="copyText(slide.content)" class="text-blue-500 hover:bg-blue-100 bg-white shadow-sm border border-gray-200 px-2 py-1.5 rounded-md transition flex items-center gap-1" title="Salin Kartu Ini">
+                                    <i class="far fa-copy text-xs"></i> <span class="text-[10px] font-bold hidden sm:inline">Salin</span>
+                                </button>
+                            </div>
+                            <!-- Card Content (Plaintext format) -->
+                            <div x-show="isOpen" 
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0 -translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 class="p-4 bg-[#1E1E1E]">
+                                <pre class="prompt-text text-green-400" x-text="slide.content"></pre>
+                            </div>
+                        </div>
+                    </template>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function appData() {
+            return {
+                topic: '',
+                additionalInstructions: '',
+                numSlides: 5, // Default 5 slides
+                artStyle: 'auto',
+                typographyChoice: 'auto',
+                characterType: 'random',
+                colorPalette: 'auto',
+                credit: '',
+                
+                // Variabel untuk Input Kustom
+                customArtStyle: '',
+                customTypography: '',
+                customCharacter: '',
+                customPalette: '',
+                
+                feedbackMessage: '',
+                generatedSlides: [], // Array of objects {title: '', content: ''}
+
+                // 20 Typography DNA from instructions
+                typographyDNA: [
+                    { name: "Friendly Rounded Handwritten", desc: "Friendly rounded handwritten lettering, casual monoline handwriting, soft rounded terminals, natural marker-pen appearance, playful yet highly legible, clean handwritten typography, slightly irregular organic letterforms, warm and approachable, storybook-inspired, consistent stroke width, comfortable spacing, organic handcrafted feeling, not cursive, not brush lettering." },
+                    { name: "Soft Brush Handwriting", desc: "Soft dry-brush handwritten lettering, natural paintbrush texture, slightly textured edges, gentle pressure variation, casual artistic brush script, organic ink flow, relaxed handwritten rhythm, modern handcrafted feel, soft expressive strokes, not overly decorative, high readability." },
+                    { name: "Modern Editorial Serif", desc: "Elegant editorial serif typography, high contrast letterforms, refined proportions, graceful thin and thick strokes, luxury magazine aesthetic, clean spacing, premium publishing style, timeless sophistication, minimal decorative details, high readability." },
+                    { name: "Humanist Sans", desc: "Modern humanist sans-serif, clean geometric structure, soft rounded corners, balanced proportions, friendly professional appearance, excellent readability, minimalist editorial aesthetic, comfortable spacing, contemporary visual identity." },
+                    { name: "Geometric Sans", desc: "Bold geometric sans-serif, precise circular letterforms, strong visual impact, modern minimalist typography, balanced proportions, clean edges, confident contemporary design, excellent readability, large headline style." },
+                    { name: "Rounded Sans", desc: "Rounded sans-serif lettering, soft geometric forms, smooth corners, friendly modern appearance, clean balanced spacing, approachable personality, minimalist visual style, comfortable readability, playful professionalism." },
+                    { name: "Storybook Typography", desc: "Whimsical storybook lettering, soft rounded handwritten forms, warm illustrated aesthetic, gentle playful curves, storybook title appearance, friendly children's book typography, organic handcrafted look, highly legible, clean monoline strokes, cozy emotional atmosphere." },
+                    { name: "Notebook Handwriting", desc: "Natural notebook handwriting, casual pen-written lettering, slightly imperfect baseline, comfortable handwritten rhythm, clean educational notes, simple rounded letterforms, organic spacing, friendly learning atmosphere." },
+                    { name: "Premium Calligraphy", desc: "Elegant flowing calligraphy, graceful connected letterforms, refined pen pressure variation, luxury invitation aesthetic, delicate flourishes, balanced composition, timeless sophistication, formal handcrafted beauty." },
+                    { name: "Modern Script", desc: "Modern handwritten script, smooth flowing connections, minimal decorative flourishes, natural ink pen appearance, clean premium branding, organic movement, comfortable readability, contemporary elegance." },
+                    { name: "Vintage Sign Painting", desc: "Retro hand-painted signage lettering, vintage storefront typography, bold handcrafted strokes, classic painted appearance, slightly textured edges, nostalgic artisan feel, balanced proportions, warm handcrafted character." },
+                    { name: "Chalkboard", desc: "Hand-drawn chalk lettering, powdery chalk texture, slightly rough edges, casual classroom appearance, organic handwritten rhythm, friendly educational atmosphere, soft imperfect strokes." },
+                    { name: "Pencil Sketch", desc: "Handwritten pencil lettering, light graphite texture, soft sketch lines, natural pressure variation, casual notebook aesthetic, organic handmade appearance." },
+                    { name: "Ink Pen", desc: "Fine ink handwritten lettering, clean pen strokes, slight pressure variation, classic journal aesthetic, organic handcrafted rhythm, high readability, minimal imperfections." },
+                    { name: "Comic Friendly", desc: "Playful comic-style lettering, rounded bold forms, friendly expressive curves, clean outlines, fun educational appearance, balanced spacing, high readability, lighthearted personality." },
+                    { name: "Children's Book", desc: "Cute children's book typography, rounded playful lettering, friendly educational style, warm illustrated atmosphere, organic handcrafted appearance, soft expressive curves, highly legible for all ages." },
+                    { name: "Scandinavian Minimal", desc: "Minimal Scandinavian typography, clean understated elegance, soft balanced proportions, airy spacing, modern editorial design, warm minimalist aesthetic, calm visual hierarchy." },
+                    { name: "Japanese Lifestyle", desc: "Minimal Japanese-inspired typography, clean handwritten elegance, soft organic balance, airy composition, calm visual rhythm, simple handcrafted beauty, editorial lifestyle aesthetic." },
+                    { name: "Luxury Magazine", desc: "Luxury editorial typography, fashion magazine aesthetic, high-contrast elegance, refined proportions, premium publishing design, timeless visual sophistication, minimal decorative details." },
+                    { name: "Cozy Journal", desc: "Cozy journal handwriting, warm handwritten notes, soft rounded marker lettering, casual diary aesthetic, friendly storytelling appearance, organic handwritten rhythm, comfortable spacing, gentle emotional atmosphere, natural handcrafted feel." }
+                ],
+
+                // 20 Art Styles
+                styleDefinitions: {
+                    'layered_papercut': "Premium layered papercut illustration, handcrafted multi-layer paper sculpture, precision laser-cut paper craftsmanship, intricately stacked paper layers, dimensional paper relief composition, elegant handcrafted cutout artwork, realistic premium cardstock texture, crisp paper edges, delicate negative space design, refined paper engineering, soft layered depth shadows, subtle ambient occlusion between paper layers, warm matte paper finish, tactile handcrafted appearance, artistic storytelling composition, decorative editorial illustration, museum-quality paper art, premium stationery aesthetic, harmonious color layering, clean silhouette design, sophisticated paper carving details, balanced visual hierarchy, handcrafted artisan craftsmanship, ultra detailed paper construction, premium gallery-quality illustration, masterpiece, ultra quality.",
+                    'paper_cut_diorama': "Premium 3D paper cut diorama illustration, handcrafted layered paper sculpture, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, precision paper cut craftsmanship, multiple dimensional paper layers, realistic premium cardstock texture, crisp cut paper edges, intricate paper carving details, elegant stacked paper construction, tactile handcrafted paper surfaces, soft depth shadows between layers, refined paper engineering, decorative storytelling composition, premium editorial illustration aesthetic, museum-quality paper artistry, balanced visual hierarchy, harmonious layered color palette, handcrafted miniature world, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, realistic physical paper object appearance, ultra detailed paper modeling, masterpiece, ultra quality, 8K render.",
+                    'papercraft_3d': "Premium 3D papercraft illustration, handcrafted paper diorama, realistic folded paper construction, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, precision paper engineering, layered cardstock assembly, visible folded paper edges, realistic paper creases, premium matte cardstock texture, intricate handcrafted paper craftsmanship, dimensional paper architecture, tactile paper surfaces, clean geometric construction, soft ambient lighting, global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, handcrafted miniature world, museum-quality paper sculpture, premium editorial illustration, elegant storytelling composition, realistic physical paper object appearance, ultra detailed paper modeling, masterpiece, ultra quality, 8K render.",
+                    'islamic_papercraft': "Premium 3D isometric Islamic papercraft illustration, handcrafted layered paper diorama, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, precision paper engineering, realistic folded paper construction, premium matte cardstock texture, intricate layered paper architecture, elegant Islamic geometric ornaments, mosque-inspired architectural details, faceless minimalist Muslim characters, modest Islamic clothing, handcrafted paper vegetation, dimensional storytelling composition, warm beige background, harmonious sage green, terracotta, cream, and muted earth-tone palette, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, tactile handcrafted paper surfaces, museum-quality paper sculpture aesthetic, premium Islamic editorial illustration, educational visual storytelling, ultra detailed paper craftsmanship, masterpiece, ultra quality, 8K render.",
+                    'low_poly_3d': "Premium low poly 3D illustration, geometric polygonal artwork, stylized low poly environment, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, clean faceted surfaces, angular polygon construction, optimized low polygon topology, crisp geometric silhouettes, minimalist digital sculpture aesthetic, vibrant contemporary color palette, smooth matte materials, subtle beveled edges, modern game art visual language, premium environment modeling, clean isometric or cinematic perspective, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, balanced geometric composition, AAA indie game aesthetic, collectible digital diorama appearance, ultra detailed polygon modeling, professional real-time rendering quality, masterpiece, ultra quality, 8K render.",
+                    'isometric_papercraft_lowpoly': "Premium 3D isometric papercraft low poly illustration, handcrafted miniature paper diorama, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, geometric low poly construction, precision folded paper engineering, layered cardstock assembly, crisp faceted polygon surfaces, realistic matte paper texture, clean folded paper edges, dimensional handcrafted architecture, stylized low poly environment, modern infographic aesthetic, elegant minimalist composition, tactile handcrafted paper materials, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, premium editorial visualization, museum-quality paper craftsmanship, educational storytelling design, balanced geometric forms, collectible miniature world, ultra detailed paper modeling, masterpiece, ultra quality, 8K render.",
+                    'origami_art': "Premium origami paper art illustration, handcrafted folded paper sculpture, traditional Japanese origami craftsmanship, precision paper engineering, realistic folded paper construction, crisp geometric folds, intricate crease patterns, sharp paper edges, premium matte washi paper texture, elegant polygonal paper forms, dimensional paper architecture, clean minimalist composition, harmonious geometric balance, handcrafted artisan aesthetic, tactile paper surface, realistic paper thickness, sophisticated folding techniques, museum-quality paper sculpture, decorative editorial illustration, subtle layered depth, soft ambient lighting, gentle contact shadows, refined paper craftsmanship, premium stationery aesthetic, artistic storytelling composition, ultra detailed folded paper rendering, masterpiece, ultra quality, 8K render.",
+                    'vintage_storybook': "Premium vintage storybook illustration, timeless classic children's book aesthetic, nostalgic hand-painted artwork, elegant hand-drawn linework, traditional ink and watercolor technique, softly aged paper texture, antique parchment finish, muted vintage color palette, warm earthy tones, delicate painterly brushstrokes, subtle ink outlines, handcrafted artistic imperfections, classic European fairytale illustration style, richly detailed environmental storytelling, whimsical countryside atmosphere, charming historical architecture, decorative ornamental details, balanced storybook composition, soft natural lighting, cozy nostalgic ambiance, museum-quality illustration craftsmanship, premium printed book aesthetic, heirloom-quality artwork, editorial publishing illustration, authentic traditional media appearance, ultra detailed painterly rendering, masterpiece quality.",
+                    'cutaway_illustration': "Premium cutaway illustration, detailed cross-section visualization, architectural cutaway artwork, isometric cutaway perspective, precision technical illustration, educational infographic aesthetic, realistic structural anatomy, exposed interior spaces, layered construction details, clean sectional composition, highly informative visual storytelling, accurate spatial relationships, organized visual hierarchy, premium editorial diagram style, crisp technical linework, refined digital illustration, realistic material differentiation, balanced exploded-view presentation, museum-quality educational artwork, professional architectural visualization, engineering-inspired precision, soft ambient lighting, subtle depth shading, clean matte finish, publication-quality infographic design, ultra detailed structural rendering, masterpiece quality.",
+                    'voxel_art': "Premium voxel art illustration, cubic block-based 3D world, pixel-inspired voxel construction, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, handcrafted cubic modeling, clean modular block structures, crisp right-angle geometry, stylized miniature environment, vibrant game-inspired color palette, smooth matte voxel materials, detailed voxel assets, isometric or cinematic perspective, premium sandbox game aesthetic, collectible miniature diorama appearance, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, balanced environmental composition, playful digital craftsmanship, modern indie game visual language, professional game asset quality, ultra detailed voxel rendering, masterpiece, ultra quality, 8K render.",
+                    'knit_crochet': "Premium 3D realistic isometric knit & crochet illustration, handcrafted knitted wool diorama, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, handcrafted crochet craftsmanship, highly detailed knitted wool environment, intricate yarn construction, visible woven stitches, tactile textile surfaces, realistic wool fiber texture, soft matte fabric materials, cozy handcrafted atmosphere, knitted clothing, smooth latex skin material, realistic fabric folds, premium artisan craftsmanship, collectible miniature diorama, physical object appearance, dimensional depth, soft global illumination, ambient occlusion, realistic contact shadows, cinematic studio lighting, shallow depth of field, premium material realism, storytelling composition, museum-quality handcrafted aesthetic, ultra detailed rendering, masterpiece, ultra quality, 8K render.",
+                    'needle_felting': "Premium 3D realistic isometric needle felting illustration, handcrafted wool sculpting diorama, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, handcrafted felted wool construction, dense matted wool roving material, seamless organic fiber surface, highly detailed fuzzy wool texture, soft natural fiber halo effect, delicate stray wool fibers, realistic felted sculpting craftsmanship, cozy artisan aesthetic, tactile textile realism, soft matte materials, premium handcrafted miniature world, collectible wool sculpture appearance, dimensional depth, smooth organic contours, museum-quality fiber art, warm ambient atmosphere, soft global illumination, ambient occlusion, realistic contact shadows, cinematic studio lighting, shallow depth of field, premium material realism, storytelling composition, ultra detailed rendering, masterpiece, ultra quality, 8K render.",
+                    'quilted_patchwork': "Premium 3D realistic isometric quilted patchwork illustration, handcrafted stitched fabric diorama, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, handcrafted patchwork construction, layered stitched fabric patches, soft puffed batting padding, highly detailed quilting craftsmanship, visible seam lines, realistic embroidered stitches, tactile woven fabric texture, cushioned textile surfaces, mixed patchwork patterns, plaid fabric, floral prints, solid color fabric panels, premium handcrafted miniature world, cozy artisan aesthetic, smooth latex skin material, realistic fabric folds, dimensional depth, physical handcrafted object appearance, collectible textile sculpture, museum-quality craftsmanship, warm ambient atmosphere, soft global illumination, ambient occlusion, realistic contact shadows, cinematic studio lighting, shallow depth of field, premium material realism, storytelling composition, ultra detailed rendering, masterpiece, ultra quality, 8K render.",
+                    'whimsical_doodle': "Whimsical hand-drawn watercolor and ink doodle illustration, traditional analog watercolor painting, delicate sketchbook aesthetic, expressive ink and wash technique, micro-fine 0.05pt needle-point black ink outlines, razor-sharp yet faint linework, imperfect hand-drawn strokes, naturally broken contour lines, loose observational sketching, organic watercolor washes, messy watercolor fills, soft pigment bleeding beyond the outlines, intentional white paper gaps, subtle color blooms, wet-on-wet watercolor technique, transparent layered pigments, gentle color blending, hand-painted artistic imperfections, rough cold press watercolor paper texture, visible paper grain, tactile traditional media appearance, charming storybook atmosphere, warm handcrafted illustration, elegant visual storytelling, balanced negative space, museum-quality watercolor artwork, authentic mixed media craftsmanship, editorial illustration quality, ultra detailed traditional rendering, masterpiece quality.",
+                    'studygram_journal': "Premium digital journaling and scrapbook illustration, modern studygram aesthetic, high-quality 2D digital illustration, GoodNotes and Notion inspired visual style, clean editorial stationery design, white graph paper background, subtle grid paper texture, handcrafted paper collage composition, layered paper cutouts, matte paper materials, realistic paper stickers, decorative washi tapes, torn paper edges, pastel sticky notes, pastel highlighter marks, hand-drawn doodles, minimalist line illustrations, realistic paper clips, binder clips, polaroid photo frames, pressed dried flowers, notebook annotations, handwritten note aesthetic, clean visual hierarchy, balanced editorial layout, soft muted pastel palette, cozy academic atmosphere, productivity workspace aesthetic, tactile paper textures, premium planner design, elegant stationery composition, ultra detailed digital rendering, masterpiece quality.",
+                    'watercolor_ink': "Premium watercolor and ink illustration, traditional handcrafted painting, expressive black ink contour lines, loose organic linework, elegant freehand sketch aesthetic, transparent layered watercolor washes, vibrant saturated pigments, luminous color overlays, soft organic gradients, natural watercolor blooms, wet-on-wet painting technique, subtle wet-on-dry detailing, delicate pigment granulation, expressive brush textures, handcrafted artistic imperfections, realistic watercolor paper texture, visible cold press paper grain, matte traditional media finish, balanced composition, editorial illustration quality, storybook-inspired visual storytelling, soft atmospheric depth, harmonious color transitions, museum-quality watercolor craftsmanship, authentic mixed media appearance, fine art illustration, ultra detailed traditional rendering, masterpiece quality.",
+                    'wimmelbilderbuch': "Premium Wimmelbilderbuch illustration, teeming picture book aesthetic, highly detailed children's search-and-find artwork, bustling miniature world, extremely dense visual storytelling, hundreds of unique characters and objects, countless interconnected mini-stories, hidden details throughout the scene, isometric or high-angle bird's-eye perspective, expansive panoramic environment, clean hand-drawn line art, refined vector illustration quality, crisp outlines, vibrant flat color palette, matte paper finish, balanced visual hierarchy despite high complexity, playful educational composition, whimsical storytelling atmosphere, charming everyday life scenes, rich environmental details, lively urban and natural settings, editorial children's book quality, museum-quality illustration craftsmanship, premium printed picture book aesthetic, ultra detailed 2D rendering, masterpiece quality.",
+                    'comic_studio': "Premium high-fidelity Islamic comic illustration, professional webtoon and graphic novel aesthetic, 2D/2.5D cel-shaded rendering, crisp black ink outlines, clean professional line art, expressive digital inking, vibrant digital coloring, smooth flat cel shading, subtle rim lighting, dramatic comic lighting, refined halftone patterns, screentone textures, dynamic panel-ready composition, cinematic framing, expressive character poses, detailed environmental storytelling, polished editorial comic quality, premium manga and webtoon production aesthetic, balanced visual hierarchy, high-contrast color treatment, clean typography-friendly layout, sharp edges, matte printed comic finish, premium publishing craftsmanship, modern entertainment industry quality, ultra detailed comic rendering, masterpiece quality.",
+                    'grunge_streetwear': "Premium grunge streetwear collage illustration, mixed media digital collage aesthetic, handcrafted editorial poster design, flat 2D paper composition, photocopy xerography texture, distressed black-and-white photocopy effect, gritty halftone screen tones, visible paper grain, torn paper edges, ripped poster layers, black duct tape elements, masking tape details, rough paper collage construction, neon spray paint accents, spray paint splatters, graffiti-inspired marks, bold stencil typography aesthetic, high-contrast monochrome foundation with vibrant neon highlights, flat paper cutout characters, sticker-like human figures, zero volumetric depth, matte printed paper finish, urban underground visual language, punk and skate culture influence, raw handcrafted imperfections, worn print artifacts, distressed editorial composition, zine publication aesthetic, street fashion campaign artwork, ultra detailed mixed media rendering, masterpiece quality.",
+                    'pixar_3d': "Premium Pixar-inspired 3D animation, cinematic animated movie aesthetic, high-end character-driven storytelling, expressive stylized character design, realistic proportions with charming appeal, vibrant colorful palette, physically based rendering (PBR), realistic volumetric geometry, soft global illumination, cinematic volumetric lighting, subsurface scattering skin, ultra detailed facial expressions, realistic fabric simulation, premium clothing materials, highly detailed environmental assets, polished surface materials, dynamic camera composition, cinematic depth of field, ambient occlusion, realistic contact shadows, atmospheric perspective, emotional visual storytelling, professional animation studio quality, feature film production aesthetic, collectible-quality character rendering, ultra detailed textures, warm cinematic atmosphere, masterpiece, ultra quality, 8K render."
+                },
+
+                showFeedback(msg) {
+                    this.feedbackMessage = msg;
+                    setTimeout(() => this.feedbackMessage = '', 3000);
+                },
+
+                generateCarouselPrompts() {
+                    if (!this.topic) {
+                        this.showFeedback("Harap isi Topik Utama terlebih dahulu!");
+                        return;
+                    }
+
+                    this.generatedSlides = []; // Reset
+
+                    // 1. Setup Configurations
+                    let handle = this.credit.trim() || "username";
+                    if (!handle.startsWith('@')) handle = '@' + handle;
+                    const footerString = `[minimalist monochrome vector instagram logo icon] [minimalist monochrome vector threads logo icon] ${handle}`;
+
+                    let activeStyleName, activeStyleDesc;
+                    if (this.artStyle === 'custom') {
+                        activeStyleName = "Custom Style";
+                        activeStyleDesc = this.customArtStyle || "Gaya seni ilustrasi yang relevan dengan instruksi.";
+                    } else if (this.artStyle === 'auto' || !this.styleDefinitions[this.artStyle]) {
+                        // Default
+                        activeStyleName = "Layered Papercut";
+                        activeStyleDesc = this.styleDefinitions['layered_papercut'];
+                    } else {
+                        activeStyleName = this.artStyle;
+                        activeStyleDesc = this.styleDefinitions[this.artStyle];
+                    }
+
+                    let activeFontIndex = 0;
+                    let fontTitle = "";
+                    let fontDesc = "";
+                    
+                    if (this.typographyChoice === 'custom') {
+                        fontTitle = "CUSTOM FONT";
+                        fontDesc = this.customTypography || "Tipografi yang menyesuaikan gaya ilustrasi dan relevan.";
+                    } else if (this.typographyChoice === 'auto') {
+                        activeFontIndex = Math.floor(Math.random() * this.typographyDNA.length);
+                        const activeFont = this.typographyDNA[activeFontIndex];
+                        fontTitle = `FONT ${activeFontIndex + 1}. ${activeFont.name}`;
+                        fontDesc = activeFont.desc;
+                    } else {
+                        activeFontIndex = parseInt(this.typographyChoice);
+                        const activeFont = this.typographyDNA[activeFontIndex];
+                        fontTitle = `FONT ${activeFontIndex + 1}. ${activeFont.name}`;
+                        fontDesc = activeFont.desc;
+                    }
+
+                    let paletteDesc = "";
+                    if (this.colorPalette === 'custom') {
+                        paletteDesc = this.customPalette || "Palette warna menyesuaikan konteks visual.";
+                    } else {
+                        switch (this.colorPalette) {
+                            case 'earth': paletteDesc = "Terracotta, Sage Green, Warm Beige (Comfortable, natural)"; break;
+                            case 'pastel': paletteDesc = "Soft Pink, Mint Green, Light Blue (Gentle, soft)"; break;
+                            case 'monochrome': paletteDesc = "White, Light Grey, Charcoal (Minimalist)"; break;
+                            case 'warm': paletteDesc = "Amber, Gold, Deep Orange (Energetic, warning)"; break;
+                            case 'cool': paletteDesc = "Teal, Navy Blue, Slate (Calm, peaceful)"; break;
+                            default: paletteDesc = "Contextual bright yet eye-catching palette, comfortable for the eyes, vibrant and lively background environment.";
+                        }
+                    }
+
+                    let mcDesc = "";
+                    const charRules = `MANDATORY: FACELESS NO EYES.`;
+                    
+                    if (this.characterType === 'custom') {
+                        mcDesc = `* MAIN CHARACTER: ${this.customCharacter || 'Context-dependent'}. ${charRules}`;
+                    } else {
+                        switch (this.characterType) {
+                            case 'male': mcDesc = `* MC PRIA: Modest casual or context-appropriate clothes (e.g., shirt, jacket, ankle-length trousers). ${charRules}`; break;
+                            case 'female': mcDesc = `* MC WANITA: Modest wide and loose gamis suit, long wide khimar covering from shoulders to arms/upper half body, socks/shoes covering feet completely, dark colors preferred. ${charRules}`; break;
+                            case 'couple': mcDesc = `* MC PRIA: Modest clothes. ${charRules}\n  * MC WANITA: Loose gamis, long khimar covering shoulders/arms, covered feet. ${charRules}`; break;
+                            case 'family': mcDesc = `* FAMILY: Parents and children in modest clothing. Females in khimar/gamis. Males in modest wear. ${charRules}`; break;
+                            default: mcDesc = `* MAIN CHARACTER: Context-dependent. If female, mandatory wide gamis and long khimar covering shoulders/arms. ${charRules}`;
+                        }
+                    }
+
+                    // Generate Slide 1 (Global Config + Hook)
+                    let slide1 = `Bertindaklah sebagai AI Islamic Content Strategist & Visual Architect.\n`;
+                    slide1 += `Tugasmu adalah merancang blueprint carousel Instagram (${this.numSlides} slide) berdasarkan input referensi berikut:\n"${this.topic}"\n`;
+                    if (this.additionalInstructions) slide1 += `Instruksi tambahan: ${this.additionalInstructions}\n`;
+                    slide1 += `\nATURAN WAJIB:\n`;
+                    slide1 += `1. Gunakan kerangka analogi sederhana dan intuitif, TAPI JANGAN PERNAH memunculkan atau menyebut kata "Feynman" di dalam naskah, gambar, maupun caption.\n`;
+                    slide1 += `2. STRICT ANICONISM (Semua karakter wajib FACELESS NO EYES).\n`;
+                    slide1 += `3. Tulis naskah dalam Bahasa Indonesia (poin-poin singkat).\n`;
+                    slide1 += `4. ADAPTASI INPUT USER: Jika input user di atas berupa DRAFT NASKAH LENGKAP, maka JANGAN UBAH NASKAHNYA! Gunakan teks dari user tersebut sebagai [NASKAH] Header/Body di setiap slide, dan tugas utama AI hanyalah merancang [VISUAL GUIDE] & [GEN_AI PROMPT] yang selaras dengan naskah user. NAMUN, jika input hanya berupa Topik/Ide Singkat, maka buatkan [NASKAH] secara kreatif dari nol.\n`;
+                    slide1 += `5. JANGAN PERNAH memuat teks berbahasa Arab atau memuat gambar dengan teks Arab (karena AI sering typo yang menurunkan trust). Gunakan terjemahan untuk dalil. Jika teks Arab terpaksa ada untuk elemen visual latar belakang, WAJIB teks Arab gundul (tanpa harakat)!\n\n`;
+                    
+                    slide1 += `=== GLOBAL CONFIGURATION & SLIDE 1 ===\n\n`;
+                    slide1 += `[GLOBAL CONFIGURATION]\n`;
+                    slide1 += `- Aspect Ratio: 3:4\n`;
+                    slide1 += `- Safe Margin: Top 100 px, Bottom 100 px, Left 100 px, Right 100 px\n`;
+                    slide1 += `- Style Art: ${activeStyleName.toUpperCase()} (${activeStyleDesc})\n`;
+                    slide1 += `- Color Palette: ${paletteDesc}\n`;
+                    slide1 += `- Typography: ${fontTitle} (${fontDesc})\n`;
+                    slide1 += `- Target Audience: Umum / Kontekstual\n`;
+                    slide1 += `- Characters (Used contextually): \n  ${mcDesc}\n`;
+                    slide1 += `- General Visual Constraints: STRICT ANICONISM. All humans, figures, NPCs, animals, or dolls MUST BE FACELESS WITH NO EYES. No Arabic text on visuals. Absolute prohibition on living beings displayed in wall photo frames or paintings. No music elements, no dating, no gold for men.\n\n`;
+
+                    slide1 += `---------------------------------------------------\n\n`;
+
+                    slide1 += `[SPECS]\n`;
+                    slide1 += `- Aspect Ratio: 3:4\n`;
+                    slide1 += `- Safe Margin: Top 100 px, Bottom 100 px, Left 100 px, Right 100 px\n`;
+                    slide1 += `- Typography: ${fontTitle} (Center-aligned for Slide 1 Cover)\n`;
+                    slide1 += `- Color Palette: ${paletteDesc}\n`;
+                    slide1 += `- Visual Constraint: MANDATORY FACELESS NO EYES for all figures. NO ARABIC TEXT. No wall frames with living beings.\n`;
+                    slide1 += `- Footer: ${footerString} | 1/${this.numSlides}\n\n`;
+
+                    slide1 += `[VISUAL GUIDE]\n`;
+                    slide1 += `- Composition: High-impact central focus serving as a powerful visual curiosity hook.\n`;
+                    slide1 += `- Storytelling: [TUGAS AI: Deskripsikan adegan visual yang sangat menarik dan memancing rasa penasaran untuk Cover slide ini selaras dengan naskah]\n`;
+                    slide1 += `- Characters: [TUGAS AI: Deskripsikan aksi karakter jika ada, wajib faceless no eyes]\n\n`;
+
+                    slide1 += `[GEN_AI PROMPT]\n`;
+                    slide1 += `[TUGAS AI: Tuliskan prompt bahasa Inggris untuk AI gambar berdasarkan adegan di atas. Sebutkan gaya seni, faceless, no arabic text, dan detail background. Masterpiece, 8K.]\n\n`;
+
+                    slide1 += `[NASKAH]\n`;
+                    slide1 += `- HEADER: [TUGAS AI: Isi Judul Hook di sini (Gunakan teks draft user jika ada, atau buat baru jika input hanya topik singkat)]\n`;
+                    slide1 += `- SUB HEADER: Tanpa Sub Header\n`;
+                    slide1 += `- FOOTER: ${footerString} | 1/${this.numSlides}\n\n`;
+                    slide1 += `Make the aspect ratio 3:4`;
+
+                    this.generatedSlides.push({ title: "Card 1 (Cover & Config)", content: slide1 });
+
+                    // Generate Slide 2 to N-1 (Body Slides)
+                    for (let i = 2; i <= this.numSlides; i++) {
+                        let slideRole = "Materi Pembahasan / Logika";
+                        if (i === 2) slideRole = "Mengangkat Masalah / Keresahan (Anxiety)";
+                        if (i === Math.floor(this.numSlides / 2) + 1) slideRole = "Dalil Solusi (Ingat: Hanya Terjemahan)";
+                        if (i === this.numSlides) slideRole = "Kesimpulan & Call to Action (CTA)";
+
+                        let slideText = `=== SLIDE ${i} ===\n`;
+                        slideText += `[SPECS]\n`;
+                        slideText += `- Aspect Ratio: 3:4\n`;
+                        slideText += `- Safe Margin: Top 100 px, Bottom 100 px, Left 100 px, Right 100 px\n`;
+                        slideText += `- Typography: ${fontTitle} (Left-aligned, consistent typography style and size)\n`;
+                        slideText += `- Color Palette: ${paletteDesc}\n`;
+                        slideText += `- Visual Constraint: MANDATORY FACELESS NO EYES for all figures. NO ARABIC TEXT. No wall frames with living beings.\n`;
+                        slideText += `- Footer: ${footerString} | ${i}/${this.numSlides}\n\n`;
+
+                        slideText += `[VISUAL GUIDE]\n`;
+                        slideText += `- Composition: Text aligned seamlessly on the left half, illustration on the right half (or balanced accordingly).\n`;
+                        slideText += `- Storytelling: [TUGAS AI: Deskripsikan adegan visual selaras dengan naskah untuk menceritakan: ${slideRole}]\n`;
+                        slideText += `- Characters: [TUGAS AI: Deskripsikan aksi karakter jika ada, wajib faceless no eyes dan syar'i]\n\n`;
+
+                        slideText += `[GEN_AI PROMPT]\n`;
+                        slideText += `[TUGAS AI: Tuliskan prompt bahasa Inggris untuk AI gambar berdasarkan adegan di atas. Sebutkan gaya seni, faceless, no arabic text. Masterpiece, 8K.]\n\n`;
+
+                        slideText += `[NASKAH]\n`;
+                        slideText += `- HEADER: [TUGAS AI: Isi Sub-judul di sini (Gunakan dari draft user jika ada, atau buat baru)]\n`;
+                        slideText += `- DIVIDER: ---------------------------------------------------\n`;
+                        slideText += `- BODY:\n  * [TUGAS AI: Isi narasi/penjelasan di sini (Pindahkan dari draft user secara berurutan, atau buat teks baru secara kreatif jika input hanya topik singkat)]\n`;
+                        slideText += `- FOOTER: ${footerString} | ${i}/${this.numSlides}\n\n`;
+                        slideText += `Make the aspect ratio 3:4`;
+
+                        this.generatedSlides.push({ title: `Card ${i} (${slideRole})`, content: slideText });
+                    }
+
+                    // Final Caption Card
+                    let caption = `=== CAPTION ===\n`;
+                    caption += `[TUGAS AI: Tuliskan caption Instagram yang menarik, emosional, dan persuasif berdasarkan keseluruhan carousel ini. Gunakan gaya bahasa yang hangat dan akhiri dengan Call to Action (CTA) serta Hashtag yang relevan. INGAT: Jangan sebut kata Feynman]`;
+                    this.generatedSlides.push({ title: "Caption (Sosmed)", content: caption });
+
+                    this.showFeedback("Blueprint Carousel berhasil dirakit!");
+                },
+
+                // Copy single text block
+                copyText(text) {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = text;
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    this.showFeedback("Kartu berhasil disalin!");
+                },
+
+                // Copy all blocks compiled
+                copyAll() {
+                    let fullText = "";
+                    this.generatedSlides.forEach((slide, index) => {
+                        fullText += `[Card ${index + 1}]\n`;
+                        fullText += slide.content;
+                        fullText += `\n\n\n`;
+                    });
+                    
+                    const textarea = document.createElement('textarea');
+                    textarea.value = fullText.trim();
+                    document.body.appendChild(textarea);
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    this.showFeedback("Semua slide berhasil disalin!");
+                }
+            }
+        }
+    </script>
+</body>
+</html>
