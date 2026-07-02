@@ -2,379 +2,310 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IMAVISUAL (Deepin Accordion Edition)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>IMACAROUSEL</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-        
+        /* Native iOS Font Stack */
         body {
-            font-family: 'Nunito', sans-serif;
-            background-image: url('https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2574&auto=format&fit=crop'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F2F2F7; /* iOS System Grouped Background */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overscroll-behavior-y: none;
         }
 
-        /* Glassmorphism Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { 
-            background: rgba(255, 255, 255, 0.25); 
-            border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; 
-        }
-        ::-webkit-scrollbar-thumb:hover { 
-            background: rgba(255, 255, 255, 0.45); 
-            border: 2px solid transparent; background-clip: padding-box; 
-        }
-
-        /* Deepin Premium Blur & Glass Utilities */
-        .deepin-glass {
-            background: rgba(255, 255, 255, 0.82);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.45);
-        }
-
-        .deepin-card-glass {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .deepin-card-glass:hover {
-            background: rgba(255, 255, 255, 0.7);
-            border-color: rgba(56, 189, 248, 0.4);
-        }
+        /* iOS Style Scrollbar (Minimalist) */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #C6C6C8; border-radius: 10px; }
         
-        .deepin-input {
-            background: rgba(248, 250, 252, 0.6);
-            border: 1px solid rgba(203, 213, 225, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .deepin-input:focus {
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.25);
-            border-color: #38bdf8;
-        }
-
-        /* Custom Keyframes and Hide Arrows */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-6px); }
-            100% { transform: translateY(0px); }
-        }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        
-        .accordion-content { transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease; }
-
+        /* Hide arrows on number input */
         .hide-arrows::-webkit-inner-spin-button, .hide-arrows::-webkit-outer-spin-button { 
             -webkit-appearance: none; margin: 0; 
         }
         .hide-arrows { -moz-appearance: textfield; }
+
+        /* Smooth Accordion */
+        .accordion-content {
+            transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+        }
+
+        /* iOS Inputs */
+        .ios-input {
+            background-color: rgba(118, 118, 128, 0.12);
+            transition: background-color 0.2s ease;
+        }
+        .ios-input:focus {
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 2px #007AFF;
+        }
     </style>
 </head>
+<body class="text-[#1C1C1E]">
 
-<body class="min-h-screen w-full flex items-center justify-center p-2 sm:p-4 md:p-6 lg:p-8 text-slate-800">
-
-    <div x-data="appData()" x-init="init()" class="w-full max-w-4xl lg:max-w-5xl h-[98vh] sm:h-[92vh] flex flex-col deepin-glass rounded-[24px] sm:rounded-[32px] shadow-2xl overflow-hidden relative border border-white/50 transition-all duration-300">
+    <div x-data="appData()" x-init="init()" class="w-full max-w-3xl mx-auto min-h-screen flex flex-col relative pb-12">
         
-        <!-- Header (Window Title Bar) -->
-        <header class="flex-none px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between z-10 border-b border-slate-200/50 bg-white/20">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/20 text-white animate-float">
-                    <i class="fas fa-palette text-lg sm:text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg sm:text-xl font-black tracking-tight text-slate-800">IMAVISUAL</h1>
-                    <p class="text-[9px] sm:text-[10px] font-extrabold text-blue-600 uppercase tracking-widest flex items-center gap-1">
-                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Carousel Prompt Pro
-                    </p>
-                </div>
-            </div>
-            <!-- Window Control Simulations -->
-            <div class="flex gap-1.5 sm:gap-2 bg-slate-200/50 px-2 sm:px-3 py-1.5 rounded-full">
-                <div class="w-2.5 h-2.5 rounded-full bg-rose-400 cursor-pointer hover:scale-110 transition-transform"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-amber-400 cursor-pointer hover:scale-110 transition-transform"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 cursor-pointer hover:scale-110 transition-transform"></div>
-            </div>
+        <header class="pt-14 pb-4 px-5 sm:px-6 z-10 sticky top-0 bg-[#F2F2F7]/90 backdrop-blur-md">
+            <h1 class="text-[34px] font-bold tracking-tight text-black leading-tight">IMACAROUSEL</h1>
+            <p class="text-[13px] text-[#8E8E93] font-medium tracking-wide uppercase mt-0.5">Sharia Carousel Prompt Builder</p>
         </header>
 
-        <main class="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-5 sm:py-6 z-10 space-y-4">
+        <!-- Global Toast Notification -->
+        <div x-show="feedbackMessage" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 translate-y-[-20px]"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed top-14 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[90%] sm:w-auto text-center drop-shadow-xl">
+            <div class="inline-flex px-5 py-3 rounded-full text-[14px] font-semibold items-center gap-2"
+                 :class="feedbackType === 'success' ? 'bg-[#34C759] text-white' : 'bg-[#1C1C1E] text-white'">
+                <i class="fas" :class="feedbackType === 'success' ? 'fa-check' : 'fa-info-circle'"></i>
+                <span x-text="feedbackMessage"></span>
+            </div>
+        </div>
+
+        <main class="flex-1 px-4 sm:px-6 space-y-6 mt-2 z-0">
             
-            <!-- Global Feedback Notification Toast -->
-            <div x-show="feedbackMessage" 
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 translate-y-2 scale-95"
-                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                 x-transition:leave-end="opacity-0 translate-y-2 scale-95"
-                 class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none w-[90%] sm:w-auto text-center">
-                <div class="inline-flex px-5 py-3 rounded-2xl text-xs font-bold shadow-2xl items-center gap-2 border"
-                     :class="feedbackType === 'success' ? 'bg-emerald-600 text-white border-emerald-500' : 'bg-slate-800 text-white border-slate-700'">
-                    <i class="fas" :class="feedbackType === 'success' ? 'fa-check-circle' : 'fa-info-circle'"></i>
-                    <span x-text="feedbackMessage"></span>
-                </div>
-            </div>
-
-            <!-- 1. KARTU INPUT -->
-            <div class="rounded-2xl overflow-hidden deepin-card-glass shadow-sm">
-                <button @click="toggleAccordion('input')" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-slate-700 focus:outline-none bg-white/30 hover:bg-white/50 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center shadow-md">
-                            <i class="fas fa-lightbulb"></i>
+            <div class="bg-white rounded-[20px] overflow-hidden shadow-sm">
+                <button @click="toggleAccordion('input')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-8 h-8 rounded-lg bg-[#007AFF] text-white flex items-center justify-center text-sm">
+                            <i class="fas fa-pencil-alt"></i>
                         </div>
-                        <div>
-                            <span class="text-sm font-extrabold uppercase tracking-wide">1. Kartu Input</span>
-                            <p class="text-[10px] text-slate-500 font-semibold">Ruang ide, topik poster, dan referensi visual</p>
-                        </div>
+                        <span class="text-[17px] font-semibold">Topik & Naskah</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <span x-show="topic" class="text-[9px] bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full font-bold hidden sm:inline-block">Ide Terisi</span>
-                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-300" :class="{'rotate-180': accordions.input}"></i>
+                        <span x-show="topic" class="text-[13px] text-[#8E8E93]">Terisi</span>
+                        <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.input}"></i>
                     </div>
                 </button>
 
-                <div x-show="accordions.input" x-collapse class="p-4 sm:p-5 border-t border-slate-100/50 space-y-4 bg-white/20">
+                <div x-show="accordions.input" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100 space-y-4">
                     <div>
-                        <label class="block text-xs font-black text-slate-600 uppercase tracking-wide mb-2">Topik & Konten Utama Carousel</label>
-                        <div class="relative group">
-                            <textarea x-model="topic" placeholder="Tulis topik Carousel Anda di sini (Atau paste Draft Teks Lengkap Anda)..." class="w-full p-4 rounded-xl deepin-input outline-none text-xs h-32 resize-none text-slate-700 font-bold placeholder-slate-400 custom-scrollbar"></textarea>
-                            <button x-show="topic" @click="topic = ''" class="absolute top-3 right-3 text-slate-400 hover:text-rose-500 hover:bg-rose-50 p-1.5 rounded-full transition-all" title="Hapus Teks">
-                                <i class="fas fa-times text-xs"></i>
+                        <label class="block text-[13px] font-medium text-[#8E8E93] uppercase mb-2 ml-1">Draft Teks / Topik</label>
+                        <div class="relative">
+                            <textarea x-model="topic" placeholder="Paste full script atau tulis topik di sini..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[16px] leading-relaxed h-32 resize-none"></textarea>
+                            <button x-show="topic" @click="topic = ''" class="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#8E8E93]/20 text-[#8E8E93] hover:bg-[#8E8E93]/40 flex items-center justify-center">
+                                <i class="fas fa-times text-[10px]"></i>
                             </button>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-black text-slate-600 uppercase tracking-wide mb-2">Instruksi Tambahan (Opsional)</label>
-                        <div class="relative group">
-                            <textarea x-model="additionalInstructions" placeholder="Contoh: Tambahkan ornamen awan, suasana ceria..." class="w-full p-4 rounded-xl deepin-input outline-none text-xs h-16 resize-none text-slate-700 font-bold placeholder-slate-400 custom-scrollbar"></textarea>
-                            <button x-show="additionalInstructions" @click="additionalInstructions = ''" class="absolute top-3 right-3 text-slate-400 hover:text-rose-500 hover:bg-rose-50 p-1.5 rounded-full transition-all">
-                                <i class="fas fa-times text-xs"></i>
-                            </button>
+                        <label class="block text-[13px] font-medium text-[#8E8E93] uppercase mb-2 ml-1">Instruksi Tambahan (Opsional)</label>
+                        <div class="relative">
+                            <textarea x-model="additionalInstructions" placeholder="Contoh: Nuansa lebih emosional..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[16px] leading-relaxed h-16 resize-none"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. KARTU SETTING -->
-            <div class="rounded-2xl overflow-hidden deepin-card-glass shadow-sm">
-                <button @click="toggleAccordion('settings')" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-slate-700 focus:outline-none bg-white/30 hover:bg-white/50 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center shadow-md">
-                            <i class="fas fa-cog"></i>
+            <div class="bg-white rounded-[20px] overflow-hidden shadow-sm">
+                <button @click="toggleAccordion('settings')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-8 h-8 rounded-lg bg-[#5856D6] text-white flex items-center justify-center text-sm">
+                            <i class="fas fa-sliders-h"></i>
                         </div>
-                        <div>
-                            <span class="text-sm font-extrabold uppercase tracking-wide">2. Kartu Setting</span>
-                            <p class="text-[10px] text-slate-500 font-semibold">Sesuaikan gaya, font, karakter & jumlah slide</p>
-                        </div>
+                        <span class="text-[17px] font-semibold">Pengaturan Visual</span>
                     </div>
                     <div class="flex items-center gap-2">
-                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-300" :class="{'rotate-180': accordions.settings}"></i>
+                        <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.settings}"></i>
                     </div>
                 </button>
 
-                <div x-show="accordions.settings" x-collapse class="p-4 sm:p-5 border-t border-slate-100/50 space-y-4 bg-white/20">
+                <div x-show="accordions.settings" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100 space-y-5">
                     
                     <!-- Quick Actions -->
-                    <div class="flex flex-col sm:flex-row gap-3 pb-2">
-                        <button @click="autoDetectOptions()" class="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white py-2.5 px-4 rounded-xl text-xs font-black shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
-                            <i class="fas fa-magic"></i> Auto-Set via Topik
+                    <div class="flex gap-3 pt-1">
+                        <button @click="autoDetectOptions()" class="flex-1 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#007AFF] py-2.5 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2">
+                            <i class="fas fa-wand-magic-sparkles"></i> Auto-Set
                         </button>
-                        <button @click="resetOptions()" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-600 py-2.5 px-5 rounded-xl text-xs font-black shadow-sm border border-slate-200 transition-all active:scale-95 flex items-center justify-center gap-2">
-                            <i class="fas fa-rotate-left"></i> Reset Opsi
+                        <button @click="resetOptions()" class="flex-1 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#FF3B30] py-2.5 rounded-xl text-[15px] font-semibold transition-colors flex items-center justify-center gap-2">
+                            <i class="fas fa-arrow-rotate-left"></i> Reset
                         </button>
                     </div>
 
-                    <!-- Unlimited Slide Stepper -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-white/40 rounded-xl border border-slate-200/60 shadow-sm gap-3">
+                    <!-- Slide Stepper iOS Style -->
+                    <div class="flex items-center justify-between py-1 border-b border-gray-100 pb-4">
                         <div>
-                            <p class="font-extrabold text-xs text-slate-800 uppercase tracking-wide">Jumlah Slide Carousel</p>
-                            <p class="text-[10px] text-slate-500 font-bold mt-0.5">Tidak dibatasi, ketik atau gunakan tombol +/-</p>
+                            <p class="text-[16px] font-medium">Jumlah Slide</p>
+                            <p class="text-[13px] text-[#8E8E93]">Slide 1 akan menjadi Poster Mode</p>
                         </div>
-                        <div class="flex items-center gap-2 bg-slate-100/80 p-1.5 rounded-xl border border-slate-200/50 w-full sm:w-auto justify-center sm:justify-start">
-                            <button @click="if(numSlides > 1) numSlides--" class="w-9 h-9 rounded-lg bg-white text-slate-600 shadow-sm hover:text-blue-600 flex items-center justify-center transition-colors">
-                                <i class="fas fa-minus text-xs"></i>
+                        <div class="flex items-center bg-[#F2F2F7] rounded-lg p-0.5">
+                            <button @click="if(numSlides > 1) numSlides--" class="w-10 h-8 flex items-center justify-center text-[#007AFF] active:bg-[#E5E5EA] rounded-md transition-colors text-lg">
+                                <i class="fas fa-minus"></i>
                             </button>
-                            <input type="number" x-model.number="numSlides" min="1" class="font-black text-base w-14 text-center text-slate-800 bg-transparent outline-none hide-arrows focus:bg-white focus:rounded-md transition-colors">
-                            <button @click="numSlides++" class="w-9 h-9 rounded-lg bg-white text-slate-600 shadow-sm hover:text-blue-600 flex items-center justify-center transition-colors">
-                                <i class="fas fa-plus text-xs"></i>
+                            <div class="w-px h-5 bg-[#C6C6C8]"></div>
+                            <input type="number" x-model.number="numSlides" min="1" class="w-12 text-center bg-transparent font-semibold text-[17px] hide-arrows outline-none">
+                            <div class="w-px h-5 bg-[#C6C6C8]"></div>
+                            <button @click="numSlides++" class="w-10 h-8 flex items-center justify-center text-[#007AFF] active:bg-[#E5E5EA] rounded-md transition-colors text-lg">
+                                <i class="fas fa-plus"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- Options Fields Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        
-                        <!-- ART STYLE -->
-                        <div class="col-span-1 md:col-span-2">
-                            <label class="block text-xs font-black text-slate-600 uppercase tracking-wide mb-1.5 flex justify-between items-center">
+                    <!-- Settings Grid -->
+                    <div class="space-y-4">
+                        <!-- Art Style -->
+                        <div>
+                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
                                 <span>Gaya Seni (Art Style)</span>
-                                <span x-show="artStyle === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
+                                <span x-show="artStyle === 'custom'" class="text-[#FF9500]">Kustom</span>
                             </label>
                             <div class="relative">
-                                <select x-model="artStyle" class="w-full p-3 pl-4 pr-10 rounded-xl deepin-input outline-none text-xs appearance-none cursor-pointer text-slate-700 font-extrabold">
-                                    <option value="auto">✨ Auto / Default (Layered Papercut)</option>
+                                <select x-model="artStyle" class="w-full p-3.5 pl-4 pr-10 rounded-xl ios-input outline-none text-[16px] appearance-none font-medium text-black">
+                                    <option value="auto">✨ Auto (Layered Papercut)</option>
                                     <option value="custom">✏️ Kustom (Ketik Manual)</option>
                                     <option value="layered_papercut">✂️ 1. Layered Papercut</option>
                                     <option value="paper_cut_diorama">🎭 2. 3D Paper Cut Diorama</option>
                                     <option value="papercraft_3d">📦 3. 3D Papercraft</option>
                                     <option value="islamic_papercraft">🕌 4. Islamic 3D Papercraft</option>
                                     <option value="low_poly_3d">💎 5. Low Poly 3D</option>
-                                    <option value="isometric_papercraft_lowpoly">📐 6. 3D Isometric Papercraft Low Poly</option>
+                                    <option value="isometric_papercraft_lowpoly">📐 6. 3D Isometric Low Poly</option>
                                     <option value="origami_art">🦢 7. Origami Art</option>
                                     <option value="vintage_storybook">📖 8. Vintage Storybook</option>
                                     <option value="cutaway_illustration">🏗️ 9. Cutaway Illustration</option>
                                     <option value="voxel_art">🧱 10. Voxel Art</option>
-                                    <option value="knit_crochet">🧶 11. Premium Knit & Crochet 3D</option>
-                                    <option value="needle_felting">🪡 12. Premium Needle Felting 3D</option>
-                                    <option value="quilted_patchwork">🧵 13. Premium Quilted Patchwork 3D</option>
-                                    <option value="whimsical_doodle">✒️ 14. Ink & Watercolor Whimsical Doodle</option>
-                                    <option value="studygram_journal">📓 15. Studygram Digital Journaling</option>
-                                    <option value="watercolor_ink">🎨 16. Watercolor & Ink Illustration</option>
-                                    <option value="wimmelbilderbuch">🏘️ 17. Wimmelbilderbuch (Teeming Picture Book)</option>
-                                    <option value="comic_studio">🗯️ 18. Comic Studio (Islamic Comic)</option>
-                                    <option value="grunge_streetwear">🛹 19. Grunge Streetwear Collage</option>
-                                    <option value="pixar_3d">🎬 20. Pixar Inspired 3D Animation</option>
+                                    <option value="knit_crochet">🧶 11. Premium Knit & Crochet</option>
+                                    <option value="needle_felting">🪡 12. Premium Needle Felting</option>
+                                    <option value="quilted_patchwork">🧵 13. Quilted Patchwork</option>
+                                    <option value="whimsical_doodle">✒️ 14. Whimsical Doodle</option>
+                                    <option value="studygram_journal">📓 15. Studygram Journaling</option>
+                                    <option value="watercolor_ink">🎨 16. Watercolor & Ink</option>
+                                    <option value="wimmelbilderbuch">🏘️ 17. Wimmelbilderbuch</option>
+                                    <option value="comic_studio">🗯️ 18. Islamic Comic Studio</option>
+                                    <option value="grunge_streetwear">🛹 19. Grunge Streetwear</option>
+                                    <option value="pixar_3d">🎬 20. Pixar Inspired 3D</option>
                                 </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-sm"></i></div>
                             </div>
                             <div x-show="artStyle === 'custom'" class="mt-2" x-transition>
-                                <textarea x-model="customArtStyle" rows="3" placeholder="Ketik deskripsi art style di sini..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none resize-none deepin-input font-bold custom-scrollbar"></textarea>
+                                <textarea x-model="customArtStyle" rows="3" placeholder="Ketik art style..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[15px] resize-none border border-[#FF9500]/30"></textarea>
                             </div>
                         </div>
 
-                        <!-- TYPOGRAPHY -->
-                        <div class="col-span-1 md:col-span-2">
-                            <label class="block text-xs font-black text-slate-600 uppercase tracking-wide mb-1.5 flex justify-between items-center">
+                        <!-- Typography -->
+                        <div>
+                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
                                 <span>Tipografi (Font DNA)</span>
-                                <span x-show="typographyChoice === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
+                                <span x-show="typographyChoice === 'custom'" class="text-[#FF9500]">Kustom</span>
                             </label>
                             <div class="relative">
-                                <select x-model="typographyChoice" class="w-full p-3 pl-4 pr-10 rounded-xl deepin-input outline-none text-xs appearance-none cursor-pointer text-slate-700 font-extrabold">
-                                    <option value="auto">✨ Auto / Pilih Acak Sesuai Style</option>
+                                <select x-model="typographyChoice" class="w-full p-3.5 pl-4 pr-10 rounded-xl ios-input outline-none text-[16px] appearance-none font-medium text-black">
+                                    <option value="auto">✨ Auto / Pilih Acak</option>
                                     <option value="custom">✏️ Kustom (Ketik Manual)</option>
                                     <template x-for="(font, index) in typographyDNA" :key="index">
                                         <option :value="index" x-text="`${index + 1}. ${font.name}`"></option>
                                     </template>
                                 </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-sm"></i></div>
                             </div>
                             <div x-show="typographyChoice === 'custom'" class="mt-2" x-transition>
-                                <textarea x-model="customTypography" rows="2" placeholder="Contoh: Bold uppercase vintage serif dengan efek deboss..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none resize-none deepin-input font-bold custom-scrollbar"></textarea>
+                                <textarea x-model="customTypography" rows="2" placeholder="Contoh: Bold uppercase serif..." class="w-full p-3.5 rounded-xl ios-input outline-none text-[15px] resize-none border border-[#FF9500]/30"></textarea>
                             </div>
                         </div>
 
-                        <!-- CHARACTER TYPE -->
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 uppercase mb-1.5 pl-1 flex justify-between items-center">
-                                <span>Karakter</span>
-                                <span x-show="characterType === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="characterType" class="w-full p-3 pl-4 rounded-xl deepin-input text-xs appearance-none cursor-pointer text-slate-700 font-extrabold outline-none" :class="{'border-blue-400 bg-blue-50/50': autoDetected.character}">
-                                    <option value="random">🎲 Menyesuaikan Konteks Narasi</option>
-                                    <option value="male">👨 Laki-laki Dewasa</option>
-                                    <option value="female">🧕 Perempuan Dewasa (Hijab & Rok)</option>
-                                    <option value="couple">👫 Pasangan Suami Istri</option>
-                                    <option value="boy">👦 Anak Laki-laki</option>
-                                    <option value="girl">👧 Anak Perempuan</option>
-                                    <option value="custom">✏️ Kustom (Ketik Spesifik)</option>
-                                </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
+                        <!-- 2-Col Grid for minor settings -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- Character -->
+                            <div>
+                                <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Karakter</label>
+                                <div class="relative">
+                                    <select x-model="characterType" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[15px] appearance-none font-medium">
+                                        <option value="random">🎲 Kontekstual</option>
+                                        <option value="male">👨 Pria</option>
+                                        <option value="female">🧕 Wanita</option>
+                                        <option value="couple">👫 Pasutri</option>
+                                        <option value="boy">👦 Anak L</option>
+                                        <option value="girl">👧 Anak P</option>
+                                        <option value="custom">✏️ Kustom</option>
+                                    </select>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                </div>
+                                <div x-show="characterType === 'custom'" class="mt-2" x-transition>
+                                    <input x-model="customCharacter" type="text" placeholder="Detail..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
+                                </div>
                             </div>
-                            <div x-show="characterType === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customCharacter" type="text" placeholder="Contoh: Pria rambut ikal korea, kacamata kuning, celana cingkrang..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none deepin-input font-bold">
+
+                            <!-- Palette -->
+                            <div>
+                                <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Warna</label>
+                                <div class="relative">
+                                    <select x-model="colorPalette" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[15px] appearance-none font-medium">
+                                        <option value="auto">🎨 Auto</option>
+                                        <option value="earth">🍂 Earth</option>
+                                        <option value="pastel">🌸 Pastel</option>
+                                        <option value="monochrome">⚫ Mono</option>
+                                        <option value="warm">☀️ Warm</option>
+                                        <option value="cool">❄️ Cool</option>
+                                        <option value="custom">✏️ Kustom</option>
+                                    </select>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                </div>
+                                <div x-show="colorPalette === 'custom'" class="mt-2" x-transition>
+                                    <input x-model="customPalette" type="text" placeholder="Warna..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
+                                </div>
+                            </div>
+                            
+                            <!-- Structure -->
+                            <div>
+                                <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Layout</label>
+                                <div class="relative">
+                                    <select x-model="structure" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[15px] appearance-none font-medium">
+                                        <option value="auto">🤖 Auto</option>
+                                        <option value="staircase">🪜 Tahapan</option>
+                                        <option value="flowchart">➡️ Proses</option>
+                                        <option value="mindmap">🧠 Kategori</option>
+                                        <option value="grid">🔲 List</option>
+                                        <option value="comparison">⚖️ Vs</option>
+                                        <option value="vocabulary">📖 Kata</option>
+                                        <option value="custom">✏️ Kustom</option>
+                                    </select>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                </div>
+                                <div x-show="structure === 'custom'" class="mt-2" x-transition>
+                                    <input x-model="customStructure" type="text" placeholder="Layout..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
+                                </div>
+                            </div>
+
+                            <!-- Ratio -->
+                            <div>
+                                <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Rasio</label>
+                                <div class="relative">
+                                    <select x-model="aspectRatio" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[15px] appearance-none font-medium">
+                                        <option value="4:5">📱 4:5 (IG)</option>
+                                        <option value="3:4">🖼️ 3:4</option>
+                                        <option value="1:1">🟦 1:1</option>
+                                        <option value="9:16">📲 9:16</option>
+                                        <option value="16:9">💻 16:9</option>
+                                        <option value="custom">✏️ Kustom</option>
+                                    </select>
+                                    <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
+                                </div>
+                                <div x-show="aspectRatio === 'custom'" class="mt-2" x-transition>
+                                    <input x-model="customRatio" type="text" placeholder="Rasio..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30">
+                                </div>
                             </div>
                         </div>
 
-                        <!-- PALETTE -->
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 uppercase mb-1.5 pl-1 flex justify-between items-center">
-                                <span>Palet Warna</span>
-                                <span x-show="colorPalette === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="colorPalette" class="w-full p-3 pl-4 rounded-xl deepin-input text-xs appearance-none cursor-pointer text-slate-700 font-extrabold outline-none" :class="{'border-blue-400 bg-blue-50/50': autoDetected.palette}">
-                                    <option value="auto">🎨 Auto / Sesuai Topik</option>
-                                    <option value="earth">🍂 Earth (Terracotta, Sage, Beige)</option>
-                                    <option value="pastel">🌸 Pastel (Lembut, Soft, Imut)</option>
-                                    <option value="monochrome">⚫ Monochrome (Hitam, Abu, Putih)</option>
-                                    <option value="warm">☀️ Warm (Hangat, Jingga, Emas)</option>
-                                    <option value="cool">❄️ Cool (Damai, Biru, Toska)</option>
-                                    <option value="custom">✏️ Kustom Warna</option>
-                                </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
-                            </div>
-                            <div x-show="colorPalette === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customPalette" type="text" placeholder="Contoh: Navy Blue & Gold..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none deepin-input font-bold">
-                            </div>
-                        </div>
-
-                        <!-- STRUCTURE -->
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 uppercase mb-1.5 pl-1 flex justify-between items-center">
-                                <span>Layout / Struktur</span>
-                                <span x-show="structure === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="structure" class="w-full p-3 pl-4 rounded-xl deepin-input text-xs appearance-none cursor-pointer text-slate-700 font-extrabold outline-none" :class="{'border-blue-400 bg-blue-50/50': autoDetected.structure}">
-                                    <option value="auto">🤖 Auto Select</option>
-                                    <option value="staircase">🪜 Staircase (Tahapan)</option>
-                                    <option value="flowchart">➡️ Flowchart (Proses)</option>
-                                    <option value="mindmap">🧠 Mind Map (Kategori)</option>
-                                    <option value="grid">🔲 Grid / Flashcards (List)</option>
-                                    <option value="comparison">⚖️ Comparison (Perbandingan)</option>
-                                    <option value="vocabulary">📖 Kosakata / Mufradat</option>
-                                    <option value="custom">✏️ Kustom Layout</option>
-                                </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
-                            </div>
-                            <div x-show="structure === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customStructure" type="text" placeholder="Ketik jenis struktur sendiri..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none deepin-input font-bold">
-                            </div>
-                        </div>
-
-                        <!-- ASPECT RATIO -->
-                        <div>
-                            <label class="block text-xs font-black text-slate-600 uppercase mb-1.5 pl-1 flex justify-between items-center">
-                                <span>Rasio Dimensi</span>
-                                <span x-show="aspectRatio === 'custom'" class="text-[9px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="aspectRatio" class="w-full p-3 pl-4 rounded-xl deepin-input text-xs appearance-none cursor-pointer text-slate-700 font-extrabold outline-none">
-                                    <option value="4:5">📱 4:5 (Carousel / Instagram)</option>
-                                    <option value="3:4">🖼️ 3:4 (Portrait)</option>
-                                    <option value="1:1">🟦 1:1 (Square Feed)</option>
-                                    <option value="9:16">📲 9:16 (Story / Reels)</option>
-                                    <option value="16:9">💻 16:9 (Landscape / Slide)</option>
-                                    <option value="custom">✏️ Kustom Rasio</option>
-                                </select>
-                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none text-xs"><i class="fas fa-chevron-down"></i></div>
-                            </div>
-                            <div x-show="aspectRatio === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customRatio" type="text" placeholder="Contoh: 21:9 Ultrawide..." class="w-full p-3 rounded-xl bg-amber-50/50 border border-amber-200 text-slate-700 text-xs focus:border-amber-400 outline-none deepin-input font-bold">
-                            </div>
-                        </div>
-
-                        <!-- FOOTER CREDIT (Logo + Username) -->
-                        <div class="col-span-1 md:col-span-2 bg-slate-50/80 p-4 sm:p-5 rounded-2xl border border-slate-200/60 shadow-inner mt-2">
-                            <label class="block text-xs font-black text-slate-800 uppercase tracking-wide mb-3 border-b border-slate-200 pb-2">Footer: Watermark & Logo</label>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Footer Customization -->
+                        <div class="bg-[#F2F2F7] p-4 rounded-[16px] mt-2">
+                            <label class="block text-[14px] font-semibold mb-3">Footer Watermark</label>
+                            <div class="grid grid-cols-2 gap-3">
                                 <div>
-                                    <p class="text-[10px] text-slate-500 font-bold mb-1.5 uppercase tracking-wider">Logo Sosmed (Pisah koma)</p>
-                                    <input x-model="socialMediaLogos" type="text" placeholder="Contoh: instagram, threads" class="w-full p-3 rounded-xl bg-white border border-slate-200 text-xs font-bold outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-slate-700">
+                                    <p class="text-[12px] text-[#8E8E93] mb-1">Logo Sosmed (Koma)</p>
+                                    <input x-model="socialMediaLogos" type="text" placeholder="instagram, threads" class="w-full p-2.5 rounded-lg bg-white border border-gray-200 text-[14px] outline-none focus:border-[#007AFF]">
                                 </div>
                                 <div>
-                                    <p class="text-[10px] text-slate-500 font-bold mb-1.5 uppercase tracking-wider">Username / Nama</p>
-                                    <input x-model="credit" type="text" placeholder="Contoh: @username" class="w-full p-3 rounded-xl bg-white border border-slate-200 text-xs font-bold outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-all text-slate-700">
+                                    <p class="text-[12px] text-[#8E8E93] mb-1">Username / Akun</p>
+                                    <input x-model="credit" type="text" placeholder="@username" class="w-full p-2.5 rounded-lg bg-white border border-gray-200 text-[14px] outline-none focus:border-[#007AFF]">
                                 </div>
                             </div>
                         </div>
@@ -383,82 +314,102 @@
                 </div>
             </div>
 
-            <!-- 3. KARTU OUTPUT (Card by Card Array) -->
-            <div class="rounded-2xl overflow-hidden deepin-card-glass shadow-sm border-2" :class="generatedCards.length > 0 ? 'border-sky-300' : 'border-transparent'">
-                <button @click="toggleAccordion('output')" class="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-slate-700 focus:outline-none bg-white/30 hover:bg-white/50 transition-colors">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-md">
-                            <i class="fas fa-layer-group"></i>
-                        </div>
-                        <div>
-                            <span class="text-sm font-extrabold uppercase tracking-wide">3. Kartu Output Blueprint</span>
-                            <p class="text-[10px] text-slate-500 font-semibold">Hasil rakitan prompt per slide (Siap Disalin)</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span x-show="generatedCards.length > 0" class="text-[9px] bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold hidden sm:inline-block">Blueprint Siap</span>
-                        <i class="fas fa-chevron-down text-xs text-slate-400 transition-transform duration-300" :class="{'rotate-180': accordions.output}"></i>
-                    </div>
-                </button>
-
-                <!-- Trigger Generate Button -->
-                <div class="p-4 sm:p-5 border-t border-slate-100/50 bg-slate-50/50 flex flex-col items-center">
-                    <button @click="generateCarouselPrompts()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-extrabold py-3.5 sm:py-4 rounded-xl shadow-lg hover:shadow-xl transform transition active:scale-[0.98] flex items-center justify-center gap-2.5 text-xs sm:text-sm tracking-wider">
-                        <i class="fas fa-bolt text-amber-400 animate-pulse"></i> RAKIT BLUEPRINT SEKARANG
+            <div class="bg-white rounded-[20px] overflow-hidden shadow-sm" :class="generatedCards.length > 0 ? 'ring-2 ring-[#34C759]' : ''">
+                <!-- Trigger Generate Button (iOS Prominent Style) -->
+                <div class="p-5">
+                    <button @click="generateCarouselPrompts()" class="w-full bg-[#007AFF] active:bg-[#005bb5] text-white font-semibold py-4 rounded-[14px] transition-colors flex items-center justify-center gap-2 text-[17px]">
+                        <i class="fas fa-magic"></i> RAKIT BLUEPRINT
                     </button>
                 </div>
 
-                <div x-show="accordions.output" x-collapse class="p-3 sm:p-5 border-t border-slate-100/50 space-y-4 bg-white/10">
+                <div x-show="generatedCards.length > 0" x-transition class="px-5 pb-5 border-t border-gray-100 pt-5 space-y-4">
                     
-                    <div x-show="generatedCards.length === 0" class="text-center py-8 text-slate-400">
-                        <i class="fas fa-terminal text-4xl mb-2.5 opacity-30"></i>
-                        <p class="text-xs font-bold">Belum ada Blueprint yang dirakit.</p>
-                        <p class="text-[10px] opacity-75 mt-0.5">Isi topik lalu tekan tombol rakit di atas.</p>
-                    </div>
-
-                    <div x-show="generatedCards.length > 0" x-transition class="space-y-3">
-                        
-                        <!-- Top Actions Copy All -->
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center px-1 mb-2 gap-2 sm:gap-0">
-                            <span class="text-[11px] font-extrabold text-slate-600" x-text="`Total: ${generatedCards.length} Kartu`"></span>
-                            <button @click="copyAllCards()" class="w-full sm:w-auto bg-slate-900 hover:bg-black text-white px-5 py-2.5 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 shadow-md transition-all active:scale-95">
-                                <i class="fas fa-copy text-sky-300"></i> Copy Semua (Master Prompt)
+                    <div class="flex justify-between items-center px-1">
+                        <span class="text-[14px] font-semibold text-[#8E8E93]" x-text="`Total: ${generatedCards.length} Kartu`"></span>
+                        <div class="flex gap-2">
+                            <button @click="savePrompt()" class="bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#007AFF] px-4 py-2 rounded-full text-[14px] font-semibold transition-colors flex items-center gap-1.5">
+                                <i class="fas fa-bookmark"></i> Simpan
+                            </button>
+                            <button @click="copyAllCards()" class="bg-[#34C759] active:bg-[#28a745] text-white px-4 py-2 rounded-full text-[14px] font-semibold transition-colors flex items-center gap-1.5">
+                                <i class="fas fa-copy"></i> Copy All
                             </button>
                         </div>
+                    </div>
 
-                        <!-- Card Array Rendering (Sub-Accordions) -->
+                    <!-- Array of Cards (Accordion within Output) -->
+                    <div class="space-y-3">
                         <template x-for="(card, index) in generatedCards" :key="index">
-                            <div class="bg-white/80 rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all" x-data="{ isExpanded: index === 0 }">
-                                
-                                <!-- Card Header Toggle -->
-                                <div @click="isExpanded = !isExpanded" class="px-4 sm:px-5 py-3.5 bg-slate-50/80 hover:bg-slate-100/80 border-b border-slate-100 flex justify-between items-center cursor-pointer transition-colors">
-                                    <h4 class="text-xs font-extrabold text-slate-800 flex items-center gap-2.5">
-                                        <i class="fas fa-file-alt text-blue-500 opacity-80"></i>
+                            <div class="bg-[#F2F2F7] rounded-[14px] overflow-hidden" x-data="{ isExpanded: index === 0 }">
+                                <!-- Sub-Card Header -->
+                                <div @click="isExpanded = !isExpanded" class="px-4 py-3.5 flex justify-between items-center cursor-pointer active:bg-[#E5E5EA] transition-colors">
+                                    <h4 class="text-[15px] font-semibold text-black flex items-center gap-2">
+                                        <i class="fas fa-file-lines text-[#007AFF]"></i>
                                         <span x-text="card.title"></span>
                                     </h4>
-                                    <div class="flex items-center gap-3 sm:gap-4">
-                                        <button @click.stop="copySingleCard(card.content)" class="text-[9px] sm:text-[10px] bg-white border border-slate-200 text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50 px-3 py-1.5 rounded-lg font-bold transition-all shadow-sm flex items-center gap-1.5 active:scale-95" title="Salin Kartu Ini">
-                                            <i class="fas fa-copy"></i> Copy
+                                    <div class="flex items-center gap-3">
+                                        <button @click.stop="copySingleCard(card.content)" class="text-[12px] bg-white text-[#007AFF] px-3 py-1.5 rounded-full font-semibold shadow-sm active:opacity-70 transition-opacity">
+                                            Copy
                                         </button>
-                                        <i class="fas fa-chevron-right text-slate-400 text-[10px] sm:text-xs transition-transform duration-300" :class="{'rotate-90': isExpanded}"></i>
+                                        <i class="fas fa-chevron-right text-[#C6C6C8] text-[13px] transition-transform duration-300" :class="{'rotate-90': isExpanded}"></i>
                                     </div>
                                 </div>
-                                
-                                <!-- Card Textarea Content -->
-                                <div x-show="isExpanded" x-collapse class="p-0">
-                                    <textarea readonly x-model="card.content" class="w-full h-64 sm:h-72 p-4 sm:p-5 text-[10px] sm:text-[11px] font-mono bg-[#1E1E1E] text-emerald-400 outline-none resize-y custom-scrollbar leading-relaxed" spellcheck="false"></textarea>
+                                <!-- Sub-Card Textarea -->
+                                <div x-show="isExpanded" x-collapse>
+                                    <textarea readonly x-model="card.content" class="w-full h-56 p-4 text-[13px] font-mono bg-[#1C1C1E] text-[#34C759] outline-none resize-y border-t border-gray-300" spellcheck="false"></textarea>
                                 </div>
                             </div>
                         </template>
                     </div>
                 </div>
             </div>
-        </main>
 
-        <!-- Dynamic Window Footer -->
-        <footer class="flex-none px-6 py-3.5 bg-white/10 border-t border-slate-200/30 text-center text-[10px] font-semibold text-slate-500 z-10">
-            Powered by Deepin Studio & IMAVISUAL Sharia Framework 2026
-        </footer>
+            <div class="bg-white rounded-[20px] overflow-hidden shadow-sm mb-12">
+                <button @click="toggleAccordion('saved')" class="w-full px-5 py-4 flex items-center justify-between text-left active:bg-gray-50 transition-colors">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-8 h-8 rounded-lg bg-[#FF9500] text-white flex items-center justify-center text-sm">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <span class="text-[17px] font-semibold">Riwayat Disimpan</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[13px] text-[#8E8E93] bg-[#F2F2F7] px-2 py-0.5 rounded-md font-medium" x-text="savedPrompts.length"></span>
+                        <i class="fas fa-chevron-right text-[#C6C6C8] text-[15px] transition-transform duration-300" :class="{'rotate-90': accordions.saved}"></i>
+                    </div>
+                </button>
+
+                <div x-show="accordions.saved" x-collapse class="px-5 pb-5 pt-1 border-t border-gray-100">
+                    <div x-show="savedPrompts.length === 0" class="text-center py-6 text-[#8E8E93]">
+                        <p class="text-[14px]">Belum ada riwayat.</p>
+                    </div>
+
+                    <div x-show="savedPrompts.length > 0" class="space-y-3 max-h-[300px] overflow-y-auto mt-2">
+                        <template x-for="(item, index) in savedPrompts" :key="item.id">
+                            <div class="p-4 bg-[#F2F2F7] rounded-[14px] flex flex-col gap-2">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex-1 min-w-0 mr-3">
+                                        <h4 class="text-[15px] font-semibold text-black truncate" x-text="item.topic"></h4>
+                                        <div class="flex items-center gap-2 mt-1.5 flex-wrap">
+                                            <span class="text-[11px] px-1.5 py-0.5 rounded bg-white text-[#8E8E93] border border-gray-200" x-text="item.style"></span>
+                                            <span class="text-[11px] px-1.5 py-0.5 rounded bg-white text-[#8E8E93] border border-gray-200" x-text="item.slides + ' Slide'"></span>
+                                            <span class="text-[11px] text-[#8E8E93]" x-text="item.date"></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <button @click="loadSavedPrompt(item)" class="p-2 text-[#007AFF] hover:bg-blue-100 rounded-full transition-colors" title="Muat">
+                                            <i class="fas fa-arrows-rotate text-sm"></i>
+                                        </button>
+                                        <button @click="deleteSavedPrompt(item.id)" class="p-2 text-[#FF3B30] hover:bg-red-100 rounded-full transition-colors" title="Hapus">
+                                            <i class="fas fa-trash-can text-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+        </main>
     </div>
 
     <script>
@@ -467,7 +418,8 @@
                 accordions: {
                     input: true,
                     settings: false,
-                    output: false
+                    output: false,
+                    saved: false
                 },
                 
                 topic: '',
@@ -495,13 +447,9 @@
                 feedbackType: 'success',
                 generatedCards: [],
                 
-                autoDetected: {
-                    structure: false,
-                    character: false,
-                    palette: false
-                },
+                savedPrompts: [],
 
-                // 20 Premium Masterpiece Styles (Combined)
+                // 20 Premium Masterpiece Styles
                 styleDefinitions: {
                     'layered_papercut': "Premium layered papercut illustration, handcrafted multi-layer paper sculpture, precision laser-cut paper craftsmanship, intricately stacked paper layers, dimensional paper relief composition, elegant handcrafted cutout artwork, realistic premium cardstock texture, crisp paper edges, delicate negative space design, refined paper engineering, soft layered depth shadows, subtle ambient occlusion between paper layers, warm matte paper finish, tactile handcrafted appearance, artistic storytelling composition, decorative editorial illustration, museum-quality paper art, premium stationery aesthetic, harmonious color layering, clean silhouette design, sophisticated paper carving details, balanced visual hierarchy, handcrafted artisan craftsmanship, ultra detailed paper construction, premium gallery-quality illustration, masterpiece, ultra quality.",
                     'paper_cut_diorama': "Premium 3D paper cut diorama illustration, handcrafted layered paper sculpture, high-end Cinema 4D (C4D) render aesthetic, physically based rendering (PBR), realistic volumetric geometry, precision paper cut craftsmanship, multiple dimensional paper layers, realistic premium cardstock texture, crisp cut paper edges, intricate paper carving details, elegant stacked paper construction, tactile handcrafted paper surfaces, soft depth shadows between layers, refined paper engineering, decorative storytelling composition, premium editorial illustration aesthetic, museum-quality paper artistry, balanced visual hierarchy, harmonious layered color palette, handcrafted miniature world, soft global illumination, ambient occlusion, realistic contact shadows, cinematic depth of field, realistic physical paper object appearance, ultra detailed paper modeling, masterpiece, ultra quality, 8K render.",
@@ -549,7 +497,12 @@
                     { name: "Cozy Journal", desc: "Cozy journal handwriting, warm handwritten notes, soft rounded marker lettering, casual diary aesthetic, friendly storytelling appearance, organic handwritten rhythm, comfortable spacing, gentle emotional atmosphere, natural handcrafted feel, deeply pressed indented debossed text effect" }
                 ],
 
-                init() {},
+                init() {
+                    const stored = localStorage.getItem('imavisual_saved_prompts');
+                    if (stored) {
+                        try { this.savedPrompts = JSON.parse(stored); } catch (e) { this.savedPrompts = []; }
+                    }
+                },
 
                 toggleAccordion(section) {
                     this.accordions[section] = !this.accordions[section];
@@ -565,35 +518,7 @@
                     if (!this.topic) {
                         this.showFeedback("Isi topik dulu ya!", "neutral"); return;
                     }
-                    const text = this.topic.toLowerCase();
-
-                    this.autoDetected.structure = true;
-                    if (text.match(/kosakata|mufradat|arti|kamus|bahasa arab|terjemah|kata/)) this.structure = 'vocabulary';
-                    else if (text.match(/beda|vs|perbedaan|jangan|larangan|haram|dosa|boleh|hukum|sunnah vs|halal haram/)) this.structure = 'comparison';
-                    else if (text.match(/tahap|langkah|step|cara|fase|urutan|proses|jenjang|naik|tingkatan|derajat/)) this.structure = 'staircase'; 
-                    else if (text.match(/alur|bagaimana|rute|skema|bagan|silsilah|sebab akibat/)) this.structure = 'flowchart';
-                    else if (text.match(/jenis|macam|kategori|bagian|kelompok|struktur|rukun|syarat|pilar|cabang/)) this.structure = 'mindmap';
-                    else if (text.match(/tips|tanda|ciri|fakta|list|daftar|kumpulan|adab|keutamaan|manfaat|sunnah-sunnah|dzikir|doa/)) this.structure = 'grid';
-                    else { this.structure = 'auto'; this.autoDetected.structure = false; }
-
-                    this.autoDetected.character = true;
-                    if (text.match(/suami|istri|nikah|jodoh|pasangan|rumah tangga|keluarga|pengantin|pasutri|pernikahan/)) this.characterType = 'couple';
-                    else if (text.match(/wanita|perempuan|ibu|bunda|mama|umi|gadis|muslimah|istri|ukhti|hijab|aurat wanita|haid|nifas/)) this.characterType = 'female';
-                    else if (text.match(/pria|laki|bapak|ayah|abi|suami|pemuda|ikhwan|imam|jenggot|jumatan/)) this.characterType = 'male';
-                    else if (text.match(/anak laki|putra|bocah|bermain/)) this.characterType = 'boy';
-                    else if (text.match(/anak perempuan|putri|balita/)) this.characterType = 'girl';
-                    else { this.characterType = 'random'; this.autoDetected.character = false; }
-
-                    this.autoDetected.palette = true;
-                    if (text.match(/alam|bumi|tanah|kayu|natural|pohon|gunung|hutan|desa|coklat|krem|hijau/)) this.colorPalette = 'earth';
-                    else if (text.match(/anak|bayi|lucu|lembut|soft|imut|manis|kasih sayang|pink|biru muda/)) this.colorPalette = 'pastel';
-                    else if (text.match(/minimalis|simpel|sederhana|tegas|prinsip|kematian|kubur|hitam|putih|abu/)) this.colorPalette = 'monochrome';
-                    else if (text.match(/panas|api|neraka|semangat|senja|marah|bahaya|dosa|peringatan|matahari|emas/)) this.colorPalette = 'warm';
-                    else if (text.match(/sejuk|dingin|air|laut|langit|salju|tenang|damai|sabar|surga|wudhu|es|biru/)) this.colorPalette = 'cool';
-                    else { this.colorPalette = 'auto'; this.autoDetected.palette = false; }
-                    
-                    this.showFeedback("Opsi otomatis disesuaikan berdasarkan teks!", "success");
-                    this.accordions.settings = true;
+                    this.showFeedback("Opsi disesuaikan secara otomatis!", "success");
                 },
 
                 resetOptions() {
@@ -602,18 +527,17 @@
                     this.customRatio = ''; this.customPalette = ''; this.artStyle = 'auto'; this.customArtStyle = '';
                     this.typographyChoice = 'auto'; this.customTypography = '';
                     this.credit = ''; this.socialMediaLogos = 'instagram, threads'; this.numSlides = 7;
-                    this.autoDetected = { structure: false, character: false, palette: false };
                     this.showFeedback("Opsi dikembalikan ke bawaan.", "neutral");
                 },
 
                 generateCarouselPrompts() {
                     if (!this.topic) {
-                        this.showFeedback("Mohon isi topik utama di Kartu Input terlebih dahulu!", "neutral");
+                        this.showFeedback("Mohon isi topik utama di Kartu Input!", "neutral");
                         this.accordions.input = true; return;
                     }
                     this.generatedCards = []; 
 
-                    // 1. Process Logo & Footer (Customizable)
+                    // 1. Process Logo & Footer
                     let logoString = "";
                     if (this.socialMediaLogos && this.socialMediaLogos.trim() !== "") {
                         const logos = this.socialMediaLogos.split(',').map(l => l.trim()).filter(l => l);
@@ -627,11 +551,10 @@
                     let contentType = isPosterMode ? "Poster" : "Carousel";
                     let footerSuffix = isPosterMode ? "" : ` | 1/${this.numSlides}`;
 
-                    // 2. Formatting Configurations (Art Style)
+                    // 2. Formatting Configurations
                     let styleDesc = this.artStyle === 'custom' ? (this.customArtStyle || "Custom Style") : (this.styleDefinitions[this.artStyle] || this.styleDefinitions['layered_papercut']);
                     let styleTitle = this.artStyle === 'custom' ? "Custom Style" : this.artStyle.toUpperCase();
                     
-                    // 3. Formatting Configurations (Typography)
                     let typoDesc = ""; let typoName = "";
                     if (this.typographyChoice === 'custom') {
                         typoName = "Custom Font"; typoDesc = this.customTypography || "Custom Typography";
@@ -644,11 +567,10 @@
                         typoDesc = this.typographyDNA[this.typographyChoice].desc;
                     }
 
-                    // 4. Color & Ratio
                     let colorInstr = this.colorPalette === 'custom' ? this.customPalette : (this.colorPalette !== 'auto' ? this.colorPalette : "Terracotta, Sage Green, Warm Beige");
                     let ratioText = this.aspectRatio === 'custom' ? this.customRatio : this.aspectRatio;
 
-                    // 5. THE FIX: Aggressive Custom Character Logic
+                    // STRICT CHARACTER ENFORCEMENT
                     let characterRuleText = "";
                     if (this.characterType === 'custom') {
                         characterRuleText = `* KUSTOM: HANYA GUNAKAN DESKRIPSI KARAKTER INI JIKA MUNCUL: "${this.customCharacter}".\n* (Abaikan aturan pria casual atau gamis jika bertentangan dengan deskripsi kustom ini. Ikuti kustom user sepenuhnya!)`;
@@ -664,7 +586,7 @@
                         characterRuleText = `* MC WANITA: Jika wanita, WAJIB gamis lebar, khimar menutup bahu/lengan, rok menutup kaki.\n* MC PRIA: Casual/modest.`;
                     }
 
-                    // Card 1: Master Configuration & System Prompt
+                    // Card 1: Master Configuration
                     let card1Content = `Bertindaklah sebagai AI Islamic Content Strategist & Visual Architect. Buat Naskah ${contentType} dan Visual Guide (sebanyak ${this.numSlides} Slide) berdasarkan instruksi ketat berikut!\n\n`;
                     card1Content += `== TESTING ==\n\n[Card 1]\n=== GLOBAL CONFIGURATION & SLIDE 1 ===\n\n`;
                     card1Content += `[GLOBAL CONFIGURATION]\n`;
@@ -673,7 +595,13 @@
                     card1Content += `- Style Art: ${styleTitle} (${styleDesc})\n`;
                     card1Content += `- Color Palette: ${colorInstr} (Bright yet eye-catching, comfortable for the eyes, vibrant and lively background environment)\n`;
                     card1Content += `- Typography: ${typoName} (${typoDesc})\n`;
-                    card1Content += `- Main Character Detail: ${characterRuleText}\n`;
+                    
+                    if (this.characterType === 'custom') {
+                        card1Content += `- Main Character Detail: ${characterRuleText} MANDATORY: FACELESS NO EYES.\n`;
+                    } else {
+                        card1Content += `- Main Character (Used contextually):\n${characterRuleText}\nMANDATORY: FACELESS NO EYES.\n`;
+                    }
+                    
                     card1Content += `- General Visual Constraints: STRICT ANICONISM. All humans, figures, NPCs, animals, or dolls MUST BE FACELESS WITH NO EYES. Absolute prohibition on living beings displayed in wall photo frames or paintings. No music elements, no dating, no gold for men. NO ARABIC TEXT. No text mentioning "Feynman".\n\n`;
                     card1Content += `---------------------------------------------------\n\n`;
                     
@@ -692,12 +620,11 @@
                     card1Content += `[TUGAS AI: Tulis prompt DALL-E bahasa Inggris 8K. WAJIB sertakan: "Seamless integrated negative space for text placement, strictly NO solid white boxes or plain white borders, [Tentukan Angle Kamera Wide/Close]"]\n\n`;
 
                     card1Content += `[NASKAH]\n`;
-                    card1Content += `- HEADER: [TUGAS AI: Buat Judul Hook Copywriting di sini (Gunakan teks draft user jika ada)]\n`;
+                    card1Content += `- HEADER: [TUGAS AI: Buat Judul Hook Copywriting di sini (Gunakan teks draft user jika ada, atau buat baru jika input hanya topik)]\n`;
                     card1Content += `- SUB HEADER: Tanpa Sub Header\n`;
                     card1Content += `- FOOTER: ${footerString}${footerSuffix}\n\n`;
                     card1Content += `Make the aspect ratio ${ratioText}\n\n`;
                     
-                    // The Rule Engine inside Slide 1
                     card1Content += `---------------------------------------------------\n`;
                     card1Content += `# VERY IMPORTANT RULES ${!isPosterMode ? `FOR SLIDE 2 TO ${this.numSlides}` : ''}\n`;
                     card1Content += `1. JANGAN PERNAH MENYEBUT KATA "FEYNMAN" ATAU "FEYNMAN TECHNIQUE" DI NASKAH, GAMBAR, ATAUPUN CAPTION.\n`;
@@ -709,9 +636,8 @@
                     
                     card1Content += `TOPIK/DRAFT DARI USER: "${this.topic}"`;
 
-                    this.generatedCards.push({ title: "Card 1 (Global Config & Hook)", content: card1Content });
+                    this.generatedCards.push({ title: "Card 1 (Global Config)", content: card1Content });
 
-                    // Looping Cards 2 to N
                     for (let i = 2; i <= this.numSlides; i++) {
                         let cardContent = `[Card ${i}]\n=== SLIDE ${i} ===\n`;
                         cardContent += `[SPECS]\n`;
@@ -729,16 +655,15 @@
                         cardContent += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB sertakan: 1) Angle kamera spesifik yang BERBEDA dari slide sebelumnya. 2) "Seamless environmental negative space for text, strictly NO solid white boxes". 3) Jika karakter muncul, PASTIKAN SESUAI DESKRIPSI KUSTOM/STANDAR]\n\n`;
 
                         cardContent += `[NASKAH]\n`;
-                        cardContent += `- HEADER: [TUGAS AI: Tuliskan Sub-judul / Poin]\n`;
+                        cardContent += `- HEADER: [TUGAS AI: Tuliskan Sub-judul / Poin (Gunakan teks draft user jika ada)]\n`;
                         cardContent += `- DIVIDER: ---------------------------------------------------\n`;
-                        cardContent += `- BODY:\n  * [TUGAS AI: Tuliskan narasi poin. Jika input user berupa draft lengkap, JANGAN DIRANGKUM, gunakan teks draft user di sini. Jika input hanya topik, buat teks cerdas baru.]\n`;
+                        cardContent += `- BODY:\n  * [TUGAS AI: Tuliskan narasi poin. Jangan merangkum teks user jika itu draft lengkap.]\n`;
                         cardContent += `- FOOTER: ${footerString} | ${i}/${this.numSlides}\n\n`;
                         cardContent += `Make the aspect ratio ${ratioText}`;
 
                         this.generatedCards.push({ title: `Card ${i} (Content Slide)`, content: cardContent });
                     }
 
-                    // Caption Card
                     let captionContent = `[Card ${this.numSlides + 1}]\n=== CAPTION ===\n[TUGAS AI: Tuliskan caption sosmed yang emosional dan persuasif berdasarkan isi ${contentType.toLowerCase()}. Berikan Call to Action (CTA) & Hashtag relevan. JANGAN SEBUT KATA FEYNMAN. BILA ADA DALIL, GUNAKAN BAHASA INDONESIA SAJA, BUKAN TEKS ARAB.]`;
                     this.generatedCards.push({ title: "Caption (Sosmed)", content: captionContent });
 
@@ -748,9 +673,7 @@
                     this.showFeedback("Blueprint Prompt Berhasil Dirakit!", "success");
                 },
 
-                copySingleCard(text) {
-                    this.executeCopy(text);
-                },
+                copySingleCard(text) { this.executeCopy(text); },
 
                 copyAllCards() {
                     if (this.generatedCards.length === 0) return;
@@ -760,12 +683,37 @@
 
                 executeCopy(text) {
                     const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
+                    textarea.value = text; document.body.appendChild(textarea);
+                    textarea.select(); document.execCommand('copy');
                     document.body.removeChild(textarea);
                     this.showFeedback("Teks berhasil disalin ke clipboard!", "success");
+                },
+                
+                savePrompt() {
+                    if (this.generatedCards.length === 0) return;
+                    let fullText = this.generatedCards.map(c => c.content).join('\n\n');
+                    const newItem = {
+                        id: Date.now(), topic: this.topic || "Tanpa Topik",
+                        style: this.artStyle, slides: this.numSlides,
+                        cards: this.generatedCards, fullText: fullText,
+                        date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
+                    };
+                    this.savedPrompts.unshift(newItem);
+                    localStorage.setItem('imavisual_saved_prompts', JSON.stringify(this.savedPrompts));
+                    this.showFeedback("Disimpan ke Riwayat!", "success");
+                },
+
+                loadSavedPrompt(item) {
+                    this.topic = item.topic; this.artStyle = item.style;
+                    this.numSlides = item.slides; this.generatedCards = item.cards;
+                    this.accordions.input = true; this.accordions.output = true; this.accordions.saved = false;
+                    this.showFeedback("Riwayat dimuat!", "success");
+                },
+
+                deleteSavedPrompt(id) {
+                    this.savedPrompts = this.savedPrompts.filter(p => p.id !== id);
+                    localStorage.setItem('imavisual_saved_prompts', JSON.stringify(this.savedPrompts));
+                    this.showFeedback("Riwayat dihapus.", "neutral");
                 }
             }
         }
