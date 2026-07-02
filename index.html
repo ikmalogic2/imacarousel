@@ -522,11 +522,11 @@
                 },
 
                 resetOptions() {
-                    this.structure = 'auto'; this.aspectRatio = '3:4'; this.colorPalette = 'auto';
+                    this.structure = 'auto'; this.aspectRatio = '4:5'; this.colorPalette = 'auto';
                     this.characterType = 'random'; this.customCharacter = ''; this.customStructure = '';
                     this.customRatio = ''; this.customPalette = ''; this.artStyle = 'auto'; this.customArtStyle = '';
                     this.typographyChoice = 'auto'; this.customTypography = '';
-                    this.credit = ''; this.socialMediaLogos = 'instagram, threads'; this.numSlides = 7;
+                    this.credit = ''; this.socialMediaLogos = 'instagram, threads';
                     this.showFeedback("Opsi dikembalikan ke bawaan.", "neutral");
                 },
 
@@ -588,7 +588,7 @@
 
                     // Card 1: Master Configuration
                     let card1Content = `Bertindaklah sebagai AI Islamic Content Strategist & Visual Architect. Buat Naskah ${contentType} dan Visual Guide (sebanyak ${this.numSlides} Slide) berdasarkan instruksi ketat berikut!\n\n`;
-                    card1Content += `== TESTING ==\n\n[Card 1]\n=== GLOBAL CONFIGURATION & SLIDE 1 ===\n\n`;
+                    card1Content += `[Card 1]\n=== GLOBAL CONFIGURATION & SLIDE 1 ===\n\n`;
                     card1Content += `[GLOBAL CONFIGURATION]\n`;
                     card1Content += `- Aspect Ratio: ${ratioText}\n`;
                     card1Content += `- Safe Margin: Top 100 px, Bottom 100 px, Left 100 px, Right 100 px\n`;
@@ -602,7 +602,8 @@
                         card1Content += `- Main Character (Used contextually):\n${characterRuleText}\nMANDATORY: FACELESS NO EYES.\n`;
                     }
                     
-                    card1Content += `- General Visual Constraints: STRICT ANICONISM. All humans, figures, NPCs, animals, or dolls MUST BE FACELESS WITH NO EYES. Absolute prohibition on living beings displayed in wall photo frames or paintings. No music elements, no dating, no gold for men. NO ARABIC TEXT. No text mentioning "Feynman".\n\n`;
+                    // PENAMBAHAN PROTOKOL ANTI-GRID DI SINI
+                    card1Content += `- General Visual Constraints: STRICT ANICONISM. All humans, figures, NPCs, animals, or dolls MUST BE FACELESS WITH NO EYES. Absolute prohibition on living beings displayed in wall photo frames or paintings. No music elements, no dating, no gold for men. NO ARABIC TEXT. No text mentioning "Feynman". ABSOLUTELY NO GRID, NO COLLAGE, NO SPLIT-SCREEN PANELS. EACH SLIDE MUST BE A SINGLE, STANDALONE FULL-CANVAS IMAGE.\n\n`;
                     card1Content += `---------------------------------------------------\n\n`;
                     
                     card1Content += `[SPECS]\n`;
@@ -617,7 +618,8 @@
                     card1Content += `- Storytelling: [TUGAS AI: Buat deskripsi objek/metafora yang memancing penasaran untuk Cover.]\n\n`;
 
                     card1Content += `[GEN_AI PROMPT]\n`;
-                    card1Content += `[TUGAS AI: Tulis prompt DALL-E bahasa Inggris 8K. WAJIB sertakan: "Seamless integrated negative space for text placement, strictly NO solid white boxes or plain white borders, [Tentukan Angle Kamera Wide/Close]"]\n\n`;
+                    // PROTOKOL ANTI GRID DI AWAL PROMPT
+                    card1Content += `[TUGAS AI: Tulis prompt DALL-E bahasa Inggris 8K. WAJIB AWALI DENGAN KATA: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN sertakan: "Seamless integrated negative space for text placement, strictly NO solid white boxes or plain white borders, [Tentukan Angle Kamera Wide/Close]"]\n\n`;
 
                     card1Content += `[NASKAH]\n`;
                     card1Content += `- HEADER: [TUGAS AI: Buat Judul Hook Copywriting di sini (Gunakan teks draft user jika ada, atau buat baru jika input hanya topik)]\n`;
@@ -632,7 +634,9 @@
                     card1Content += `3. WAJIB DINAMIS: Ubah Angle Kamera (Close up, Wide, High angle, Isometric, dll) di setiap slide agar tidak monoton!\n`;
                     card1Content += `4. ADAPTASI INPUT USER: Jika input berupa draft paragraf lengkap, HANYA pecah menjadi slide dan letakkan di area NASKAH. JANGAN MERANGKUM teks draft tersebut. Jika input hanya topik pendek, barulah kembangkan menjadi konten utuh.\n`;
                     card1Content += `5. SEAMLESS BACKGROUND: Wajib instruksikan DALL-E agar background menyatu dengan teks (Seamless negative space). Dilarang keras menggunakan kotak putih polos (solid white boxes) untuk area teks.\n`;
-                    card1Content += `6. KARAKTER FLEKSIBEL & METAFORA VISUAL: Karakter manusia BOLEH dimunculkan JIKA KONTEKS narasi slide tersebut menceritakan interaksi atau perasaan. Namun jika narasi slide murni membahas konsep abstrak (seperti waktu, fondasi, kesabaran), HILANGKAN manusia dan gantikan dengan BENDA METAFORA VISUAL (seperti jam dinding, batu fondasi, jembatan) agar variatif. Jika manusia muncul, WAJIB Faceless No Eyes dan ikuti spesifikasi karakter.\n\n`;
+                    card1Content += `6. KARAKTER FLEKSIBEL & METAFORA VISUAL: Karakter manusia BOLEH dimunculkan JIKA KONTEKS narasi slide tersebut menceritakan interaksi atau perasaan. Namun jika narasi slide murni membahas konsep abstrak (seperti waktu, fondasi, kesabaran), HILANGKAN manusia dan gantikan dengan BENDA METAFORA VISUAL (seperti jam dinding, batu fondasi, jembatan) agar variatif. Jika manusia muncul, WAJIB Faceless No Eyes dan ikuti spesifikasi karakter.\n`;
+                    // TAMBAHAN ATURAN KE-7 UNTUK CHATGPT
+                    card1Content += `7. DILARANG KERAS MEMBUAT GRID/KOLASE: Jika kamu (AI) diminta untuk meng-generate gambar, WAJIB generate satu per satu secara terpisah. JANGAN PERNAH menggabungkan beberapa slide menjadi satu gambar kanvas (seperti komik, grid, atau kolase). 1 Slide WAJIB 1 Gambar terpisah!\n\n`;
                     
                     card1Content += `TOPIK/DRAFT DARI USER: "${this.topic}"`;
 
@@ -652,7 +656,8 @@
                         cardContent += `- Storytelling: [TUGAS AI: Buat deskripsi visual yang selaras dengan naskah.]\n\n`;
 
                         cardContent += `[GEN_AI PROMPT]\n`;
-                        cardContent += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB sertakan: 1) Angle kamera spesifik yang BERBEDA dari slide sebelumnya. 2) "Seamless environmental negative space for text, strictly NO solid white boxes". 3) Jika karakter muncul, PASTIKAN SESUAI DESKRIPSI KUSTOM/STANDAR]\n\n`;
+                        // PROTOKOL ANTI GRID DI PROMPT MASING-MASING SLIDE
+                        cardContent += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB AWALI DENGAN KATA: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN sertakan: 1) Angle kamera spesifik yang BERBEDA dari slide sebelumnya. 2) "Seamless environmental negative space for text, strictly NO solid white boxes". 3) Jika karakter muncul, PASTIKAN SESUAI DESKRIPSI KUSTOM/STANDAR]\n\n`;
 
                         cardContent += `[NASKAH]\n`;
                         cardContent += `- HEADER: [TUGAS AI: Tuliskan Sub-judul / Poin (Gunakan teks draft user jika ada)]\n`;
