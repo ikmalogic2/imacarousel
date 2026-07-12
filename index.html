@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic Content Strategist Studio v3.0</title>
+    <title>NOMUKA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -13,8 +13,6 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .card-section { display: none; }
-        .card-section.active { display: flex; }
         
         /* Smooth transitions */
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
@@ -30,8 +28,8 @@
                     <i class="fa-solid fa-kaaba"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-amber-400">ISLAMIC CONTENT STRATEGIST</h1>
-                    <p class="text-xs text-emerald-200 uppercase font-semibold tracking-wider">Dual-Mode Visual Architect Engine • v3.0</p>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-amber-400">NOMUKA</h1>
+                    <p class="text-xs text-emerald-200 uppercase font-semibold tracking-wider">Dual-Mode Visual Architect Engine • v4.0</p>
                 </div>
             </div>
             
@@ -47,36 +45,19 @@
         </div>
     </header>
 
-    <div class="bg-white border-b border-slate-200 shadow-sm sticky top-[84px] z-40">
-        <div class="max-w-7xl mx-auto flex overflow-x-auto hide-scrollbar">
-            <button onclick="switchCard('input')" id="nav-input" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-emerald-600 text-emerald-700 transition-all uppercase tracking-wide">
-                1. Kartu Input
-            </button>
-            <button onclick="switchCard('setting')" id="nav-setting" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
-                2. Kartu Setting
-            </button>
-            <button onclick="switchCard('output')" id="nav-output" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
-                3. Kartu Output
-            </button>
-            <button onclick="switchCard('saved')" id="nav-saved" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
-                4. Kartu Saved
-            </button>
-        </div>
-    </div>
-
-    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-6 pb-20">
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-6 pb-20 flex flex-col gap-6">
         
         <!-- ========================================== -->
         <!-- 1. KARTU INPUT -->
         <!-- ========================================== -->
-        <section id="card-input" class="card-section active flex-col gap-6 fade-in">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <div class="mb-4">
-                    <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-keyboard text-emerald-600"></i> Kartu Input
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-1">Tuangkan ide, topik, gagasan, atau paste artikel/materi Anda di sini.</p>
-                </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <button onclick="toggleMainAccordion('card-input')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-keyboard text-emerald-600"></i> 1. Kartu Input
+                </h2>
+                <i id="icon-card-input" class="fa-solid fa-chevron-up text-slate-500 transition-transform"></i>
+            </button>
+            <section id="card-input" class="flex flex-col gap-6 p-6 fade-in">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Kolom A -->
@@ -101,59 +82,54 @@
                         <textarea id="input-instructions" rows="10" class="w-full p-4 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan instruksi spesifik jika ada (misal: Fokus pada peran ayah, hindari dalil yang terlalu berat, buat gaya bahasa anak muda...)"></textarea>
                     </div>
                 </div>
-
-                <div class="mt-6 flex justify-end">
-                    <button onclick="goToNextStep('setting')" class="px-6 py-3 bg-emerald-800 hover:bg-emerald-700 text-white font-extrabold rounded-xl transition-all shadow-md uppercase tracking-wide">
-                        Lanjut ke Setting <i class="fa-solid fa-arrow-right ml-1"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- ========================================== -->
         <!-- 2. KARTU SETTING -->
         <!-- ========================================== -->
-        <section id="card-setting" class="card-section flex-col gap-6 fade-in">
-            <!-- Peringatan Mode A -->
-            <div id="setting-mode-a-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-2xl shadow-sm text-center">
-                <i class="fa-solid fa-flask text-4xl mb-3 opacity-50"></i>
-                <h3 class="font-extrabold text-lg uppercase">Kartu Setting Tidak Tersedia di Mode A</h3>
-                <p class="text-sm mt-2">Mode A (Researcher) hanya menghasilkan ide/topik murni dan tidak memerlukan konfigurasi visual.<br>Silakan langsung menuju <strong>Kartu Output</strong> atau klik tombol Generate di bawah.</p>
-            </div>
-
-            <!-- Konten Setting Mode B -->
-            <div id="setting-mode-b-content" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-6">
-                
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-emerald-600"></i> Kartu Setting (Mode B)
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">Konfigurasi parameter visual secara manual atau gunakan bantuan AI.</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="autoSetSettings()" class="px-4 py-2 bg-indigo-100 text-indigo-800 hover:bg-indigo-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Set by AI
-                        </button>
-                        <button onclick="resetSettings()" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-rotate-left"></i> Reset
-                        </button>
-                    </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <button onclick="toggleMainAccordion('card-setting')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-600"></i> 2. Kartu Setting
+                </h2>
+                <i id="icon-card-setting" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+            </button>
+            <section id="card-setting" class="hidden flex-col gap-6 p-6 fade-in">
+                <!-- Peringatan Mode A -->
+                <div id="setting-mode-a-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-2xl shadow-sm text-center">
+                    <i class="fa-solid fa-flask text-4xl mb-3 opacity-50"></i>
+                    <h3 class="font-extrabold text-lg uppercase">Kartu Setting Tidak Tersedia di Mode A</h3>
+                    <p class="text-sm mt-2">Mode A (Researcher) hanya menghasilkan ide/topik murni dan tidak memerlukan konfigurasi visual.<br>Silakan langsung menuju <strong>Kartu Output</strong> atau klik tombol Generate di bawah.</p>
                 </div>
+
+                <!-- Konten Setting Mode B -->
+                <div id="setting-mode-b-content" class="flex flex-col gap-6">
+                    
+                    <div class="flex flex-col md:flex-row justify-end items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                        <div class="flex gap-2">
+                            <button onclick="autoSetSettings()" class="px-4 py-2 bg-indigo-100 text-indigo-800 hover:bg-indigo-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Set
+                            </button>
+                            <button onclick="resetSettings()" class="px-4 py-2 bg-slate-100 text-slate-800 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </button>
+                        </div>
+                    </div>
 
                 <!-- Grid Form Settings -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     
-                    <!-- C. Jumlah Slide -->
+                    <!-- A. Jumlah Slide -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">C. Jumlah Slide (1 - 30)</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">A. Jumlah Slide (1 - 30)</label>
                         <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
                         <p class="text-[10px] text-slate-400 mt-1">*Default: 7 Slide + 1 Caption</p>
                     </div>
 
-                    <!-- H. Aspect Ratio -->
+                    <!-- B. Aspect Ratio -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">H. Aspect Ratio</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">B. Aspect Ratio</label>
                         <select id="set-ratio" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Auto-Set by AI">Auto-Set by AI</option>
                             <option value="1:1">1:1 (Square)</option>
@@ -168,9 +144,9 @@
                         <input type="text" id="set-ratio-kustom" placeholder="Ketik rasio..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
                     </div>
 
-                    <!-- M. Karakter Utama -->
+                    <!-- C. Karakter Utama -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">M. Karakter Utama</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">C. Karakter Utama</label>
                         <select id="set-character" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Auto-Set by AI">Auto-Set by AI</option>
                             <option value="Pria Dewasa">Pria Dewasa</option>
@@ -275,9 +251,9 @@
                         <input type="text" id="set-alignment-kustom" placeholder="Ketik alignment..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
                     </div>
 
-                    <!-- I. Komposisi -->
+                    <!-- H. Komposisi -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">I. Komposisi Teks & Visual</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">H. Komposisi Teks & Visual</label>
                         <select id="set-composition" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
                             <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
@@ -289,9 +265,9 @@
                         <input type="text" id="set-composition-kustom" placeholder="Ketik komposisi..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
                     </div>
 
-                    <!-- J. Format Body -->
+                    <!-- I. Format Body -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">J. Format Body Text</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">I. Format Body Text</label>
                         <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
                             <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
@@ -301,9 +277,9 @@
                         <input type="text" id="set-bodyformat-kustom" placeholder="Ketik format body..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
                     </div>
 
-                    <!-- L. Palet Warna -->
+                    <!-- J. Palet Warna -->
                     <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">L. Palet Warna</label>
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">J. Palet Warna</label>
                         <select id="set-palette" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
                             <option value="EARTH TONE">EARTH TONE</option>
@@ -336,9 +312,9 @@
                     </div>
                 </div>
 
-                <!-- N. Watermark Footer -->
+                <!-- L. Watermark Footer -->
                 <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
-                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">N. Watermark Footer</label>
+                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">L. Watermark Footer</label>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] text-slate-500 uppercase mb-1">Logo Sosmed (Koma separator)</label>
@@ -354,8 +330,9 @@
 
             </div>
         </section>
+        </div>
 
-        <div class="my-8 flex justify-center sticky top-[150px] z-30">
+        <div class="my-6 flex justify-center sticky top-[90px] z-30">
             <button onclick="processGenerate()" id="btn-global-generate" class="group relative px-10 py-5 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-lg rounded-2xl shadow-xl transition-all uppercase tracking-wide flex items-center justify-center gap-3 w-full max-w-md overflow-hidden">
                 <div class="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
                 <i class="fa-solid fa-bolt text-amber-300 text-xl"></i> 
@@ -366,16 +343,15 @@
         <!-- ========================================== -->
         <!-- 3. KARTU OUTPUT -->
         <!-- ========================================== -->
-        <section id="card-output" class="card-section flex-col gap-6 fade-in">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-4">
-                
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                            <i class="fa-solid fa-file-export text-emerald-600"></i> Kartu Output
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">Hasil generate siap disalin. Block terpisah untuk memudahkan manajemen.</p>
-                    </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <button onclick="toggleMainAccordion('card-output')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-file-export text-emerald-600"></i> 3. Kartu Output
+                </h2>
+                <i id="icon-card-output" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+            </button>
+            <section id="card-output" class="hidden flex-col gap-6 p-6 fade-in">
+                <div class="flex flex-col md:flex-row justify-end items-start md:items-center gap-4 border-b border-slate-100 pb-4">
                     <div class="flex gap-2">
                         <button onclick="copyAllOutputBlocks()" class="px-4 py-2 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
                             <i class="fa-solid fa-copy"></i> Copy All
@@ -393,24 +369,20 @@
                         <p class="text-sm font-semibold">Output akan muncul di sini setelah Anda menekan tombol Generate.</p>
                     </div>
                 </div>
-
-            </div>
-        </section>
+            </section>
+        </div>
 
         <!-- ========================================== -->
         <!-- 4. KARTU SAVED -->
         <!-- ========================================== -->
-        <section id="card-saved" class="card-section flex-col gap-6 fade-in">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-6">
-                
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                            <i class="fa-solid fa-hard-drive text-emerald-600"></i> Kartu Saved
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">Riwayat prompt yang disimpan di Local Storage browser Anda.</p>
-                    </div>
-                </div>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <button onclick="toggleMainAccordion('card-saved')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-hard-drive text-emerald-600"></i> 4. Kartu Saved
+                </h2>
+                <i id="icon-card-saved" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+            </button>
+            <section id="card-saved" class="hidden flex-col gap-6 p-6 fade-in">
 
                 <!-- Sub Tab Saved -->
                 <div class="flex gap-2 border-b border-slate-200">
@@ -424,8 +396,7 @@
                 </div>
 
                 <!-- Export Import Actions -->
-                <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <p class="text-[11px] text-slate-500 italic max-w-md">Eksport data untuk membackup seluruh prompt tersimpan ke file JSON. Import data tidak akan menimpa data lama, melainkan menambahkannya.</p>
+                <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-end items-center gap-4">
                     <div class="flex gap-2">
                         <input type="file" id="file-import-json" accept=".json" class="hidden" onchange="handleImportJSON(event)">
                         <button onclick="document.getElementById('file-import-json').click()" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
@@ -436,9 +407,8 @@
                         </button>
                     </div>
                 </div>
-
-            </div>
-        </section>
+            </section>
+        </div>
 
     </main>
 
@@ -447,7 +417,6 @@
 
     <script>
         let currentMode = 'B'; 
-        let activeCard = 'input'; 
         let currentSavedTab = 'A';
 
         // Fake DB arrays based on the exhaustive instructions
@@ -489,32 +458,45 @@
             }
         }
 
-        function switchCard(cardId) {
-            activeCard = cardId;
-            document.querySelectorAll('.card-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`card-${cardId}`).classList.add('active');
-
-            // Nav bar styling update
-            const navs = ['input', 'setting', 'output', 'saved'];
-            navs.forEach(nav => {
-                const el = document.getElementById(`nav-${nav}`);
-                if (nav === cardId) {
-                    el.className = `flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-emerald-600 text-emerald-700 transition-all uppercase tracking-wide`;
-                } else {
-                    el.className = `flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide`;
+        function toggleMainAccordion(cardId) {
+            const section = document.getElementById(cardId);
+            const icon = document.getElementById(`icon-${cardId}`);
+            
+            if (section.classList.contains('hidden')) {
+                // Buka Akordion
+                section.classList.remove('hidden');
+                section.classList.add('flex');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+                
+                if (cardId === 'card-saved') {
+                    renderSaved(currentSavedTab);
                 }
-            });
-
-            if (cardId === 'saved') {
-                renderSaved(currentSavedTab);
+            } else {
+                // Tutup Akordion
+                section.classList.add('hidden');
+                section.classList.remove('flex');
+                icon.classList.add('fa-chevron-down');
+                icon.classList.remove('fa-chevron-up');
             }
         }
 
+        function openAccordion(cardId) {
+            const section = document.getElementById(cardId);
+            const icon = document.getElementById(`icon-${cardId}`);
+            section.classList.remove('hidden');
+            section.classList.add('flex');
+            icon.classList.remove('fa-chevron-down');
+            icon.classList.add('fa-chevron-up');
+        }
+
         function goToNextStep(cardId) {
-            if (currentMode === 'A' && cardId === 'setting') {
-                switchCard('output'); // Skip setting if Mode A
+            if (currentMode === 'A' && cardId === 'card-setting') {
+                openAccordion('card-output'); 
+                document.getElementById('card-output').scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                switchCard(cardId);
+                openAccordion(cardId);
+                document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
@@ -602,7 +584,8 @@
                 generateModeB(topic, instructions, container);
             }
 
-            switchCard('output');
+            openAccordion('card-output');
+            document.getElementById('card-output').scrollIntoView({ behavior: 'smooth', block: 'center' });
             showToast(`Generate Mode ${currentMode} Selesai!`);
         }
 
@@ -782,27 +765,60 @@
             localStorage.setItem(storageKey, JSON.stringify(existing));
             
             showToast("Block berhasil disimpan ke Local Storage!");
-            if (activeCard === 'saved') renderSaved(currentSavedTab); // live update if open
+            
+            const savedSection = document.getElementById('card-saved');
+            if(!savedSection.classList.contains('hidden')) {
+                renderSaved(currentSavedTab);
+            }
         }
 
         function saveAllOutputBlocks() {
             const container = document.getElementById('output-blocks-container');
             const wrappers = container.children;
-            let savedCount = 0;
+            let blocks = [];
             
             Array.from(wrappers).forEach(wrap => {
-                if (wrap.querySelector('textarea')) {
-                    const id = wrap.querySelector('textarea').id;
-                    const modeMatch = id.match(/output-(a|b)/);
-                    if (modeMatch) {
-                        const mode = modeMatch[1].toUpperCase();
-                        const title = wrap.querySelector('span').innerText.trim();
-                        saveSingleBlock(id, mode, title);
-                        savedCount++;
-                    }
+                const ta = wrap.querySelector('textarea');
+                if (ta) {
+                    const titleEl = wrap.querySelector('span');
+                    const title = titleEl ? titleEl.innerText.trim() : 'Block';
+                    blocks.push({
+                        id: ta.id,
+                        title: title,
+                        content: ta.value
+                    });
                 }
             });
-            if (savedCount > 0) showToast(`${savedCount} Block berhasil disimpan!`);
+
+            if (blocks.length === 0) {
+                showToast("Tidak ada output untuk disimpan!");
+                return;
+            }
+
+            const topic = document.getElementById('input-topic').value.trim() || "Generated Prompt";
+            const groupTitle = `BUNDLE - ${topic.substring(0, 30)}`;
+
+            const savedItem = {
+                id: 'saved-group-' + Date.now(),
+                mode: currentMode,
+                title: groupTitle,
+                type: 'group',
+                blocks: blocks,
+                image: null,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+            
+            const storageKey = currentMode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+            let existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            existing.unshift(savedItem); // prepend
+            localStorage.setItem(storageKey, JSON.stringify(existing));
+            
+            showToast(`Semua Block berhasil disimpan sebagai 1 Grup!`);
+            
+            const savedSection = document.getElementById('card-saved');
+            if(!savedSection.classList.contains('hidden')) {
+                renderSaved(currentSavedTab);
+            }
         }
 
         function renderSaved(mode) {
@@ -833,28 +849,90 @@
                 
                 let imgHtml = '';
                 if (item.image) {
-                    imgHtml = `<div class="w-full h-32 rounded-lg overflow-hidden border border-slate-200 mb-2"><img src="${item.image}" class="w-full h-full object-cover"></div>`;
+                    // Update agar gambar tidak terpotong (menggunakan object-contain dan membiarkan max-h dinamis)
+                    imgHtml = `<div class="w-full bg-slate-200/50 rounded-lg overflow-hidden border border-slate-200 mb-2 flex justify-center p-2"><img src="${item.image}" class="max-w-full h-auto max-h-80 object-contain rounded"></div>`;
                 }
 
-                card.innerHTML = `
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                        <div>
-                            <span class="font-extrabold text-[11px] text-emerald-800 uppercase block">${item.title}</span>
-                            <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                if (item.type === 'group') {
+                    let blocksHtml = item.blocks.map(b => `
+                        <div class="flex flex-col gap-1 mb-3 bg-white p-3 border border-slate-200 rounded-lg shadow-sm">
+                            <span class="font-extrabold text-[10px] text-emerald-700 uppercase"><i class="fa-solid fa-cube mr-1"></i> ${b.title}</span>
+                            <textarea id="${item.id}-${b.id}-text" class="w-full h-40 p-2 text-[10px] font-mono bg-stone-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${b.content}</textarea>
                         </div>
-                    </div>
-                    ${imgHtml}
-                    <textarea id="${item.id}-text" class="w-full h-32 p-3 text-[10px] font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${item.content}</textarea>
-                    <div class="flex flex-wrap gap-2 mt-1">
-                        <button onclick="copySaved('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy</button>
-                        <button onclick="editSaved('${item.id}', '${mode}')" id="btn-edit-${item.id}" class="flex-1 py-1.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded uppercase hover:bg-amber-200 transition-all"><i class="fa-solid fa-pen"></i> Edit</button>
-                        <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
-                        <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah</button>
-                        <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                `;
+                    `).join('');
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2 cursor-pointer group" onclick="toggleSavedGroup('${item.id}')">
+                            <div>
+                                <span class="font-extrabold text-[11px] text-emerald-800 uppercase block"><i class="fa-solid fa-layer-group mr-1 text-emerald-600"></i> ${item.title}</span>
+                                <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                            </div>
+                            <i id="icon-group-${item.id}" class="fa-solid fa-chevron-down text-slate-400 group-hover:text-emerald-600 transition-transform"></i>
+                        </div>
+                        ${imgHtml}
+                        <div id="content-group-${item.id}" class="hidden flex-col gap-2 mt-2">
+                            ${blocksHtml}
+                            <div class="flex flex-wrap gap-2 mt-1 border-t border-slate-200 pt-3">
+                                <button onclick="copySavedGroup('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy All Group</button>
+                                <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
+                                <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah Gambar</button>
+                                <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                            <div>
+                                <span class="font-extrabold text-[11px] text-emerald-800 uppercase block">${item.title}</span>
+                                <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                            </div>
+                        </div>
+                        ${imgHtml}
+                        <textarea id="${item.id}-text" class="w-full h-32 p-3 text-[10px] font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${item.content}</textarea>
+                        <div class="flex flex-wrap gap-2 mt-1">
+                            <button onclick="copySaved('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy</button>
+                            <button onclick="editSaved('${item.id}', '${mode}')" id="btn-edit-${item.id}" class="flex-1 py-1.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded uppercase hover:bg-amber-200 transition-all"><i class="fa-solid fa-pen"></i> Edit</button>
+                            <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
+                            <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah</button>
+                            <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                }
                 container.appendChild(card);
             });
+        }
+
+        function toggleSavedGroup(id) {
+            const content = document.getElementById(`content-group-${id}`);
+            const icon = document.getElementById(`icon-group-${id}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                content.classList.add('flex');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                content.classList.add('hidden');
+                content.classList.remove('flex');
+                icon.classList.add('fa-chevron-down');
+                icon.classList.remove('fa-chevron-up');
+            }
+        }
+
+        function copySavedGroup(id) {
+            const contentDiv = document.getElementById(`content-group-${id}`);
+            const textareas = contentDiv.querySelectorAll('textarea');
+            let combined = "";
+            textareas.forEach(ta => {
+                combined += ta.value + "\n\n";
+            });
+            const temp = document.createElement('textarea');
+            temp.value = combined;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("Seluruh isi grup berhasil disalin!");
         }
 
         function copySaved(id) {
