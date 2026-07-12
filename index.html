@@ -3,708 +3,1002 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IMACAROUSEL - Prompt Builder Pro</title>
+    <title>Islamic Content Strategist Studio v3.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js" defer></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .card-section { display: none; }
+        .card-section.active { display: flex; }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: #F2F2F7; /* iOS System Gray 6 */
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .ios-glass {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.15);
-        }
-
-        .ios-card {
-            background-color: #FFFFFF;
-            border-radius: 20px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        }
-
-        .ios-input {
-            background-color: #7676801F; /* iOS Fill Tertiary */
-            border: none;
-            transition: all 0.2s ease;
-        }
-        
-        .ios-input:focus {
-            background-color: #76768029; /* iOS Fill Secondary */
-            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.15);
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #C7C7CC; border-radius: 10px; }
-        
-        .accordion-content {
-            transition: max-height 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease-in-out;
-        }
-
-        /* Hide Number Input Arrows */
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
+        /* Smooth transitions */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="min-h-screen w-full flex items-center justify-center p-2 sm:p-4 md:p-8 text-black">
+<body class="bg-stone-50 text-slate-800 min-h-screen flex flex-col">
 
-    <div x-data="appData()" class="w-full max-w-4xl h-[95vh] flex flex-col bg-[#F2F2F7] sm:rounded-[32px] rounded-[24px] shadow-2xl overflow-hidden relative border border-gray-200/50">
-        
-        <header class="flex-none ios-glass px-5 sm:px-6 py-4 flex items-center justify-between z-20 sticky top-0">
+    <header class="bg-emerald-950 text-stone-100 py-4 px-6 shadow-md border-b-4 border-amber-500 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-b from-[#007AFF] to-[#0056B3] flex items-center justify-center shadow-sm text-white">
-                    <i class="fas fa-layer-group text-lg"></i>
+                <div class="bg-amber-500 text-emerald-950 p-2.5 rounded-xl shadow-inner font-bold text-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-kaaba"></i>
                 </div>
                 <div>
-                    <h1 class="text-[17px] font-bold tracking-tight text-black leading-tight">IMACAROUSEL</h1>
-                    <p class="text-[11px] font-medium text-[#8E8E93] uppercase tracking-wider">Blueprint Pro</p>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-amber-400">ISLAMIC CONTENT STRATEGIST</h1>
+                    <p class="text-xs text-emerald-200 uppercase font-semibold tracking-wider">Dual-Mode Visual Architect Engine • v3.0</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <div class="w-3 h-3 rounded-full bg-[#FF3B30] border border-[#FF3B30]/20"></div>
-                <div class="w-3 h-3 rounded-full bg-[#FFCC00] border border-[#FFCC00]/20"></div>
-                <div class="w-3 h-3 rounded-full bg-[#34C759] border border-[#34C759]/20"></div>
-            </div>
-        </header>
-
-        <main class="flex-1 overflow-y-auto px-3 sm:px-6 py-6 z-10 space-y-5 pb-24">
             
-            <div x-show="feedbackMessage" 
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 translate-y-4"
-                 x-transition:enter-end="opacity-100 translate-y-0"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 translate-y-0"
-                 x-transition:leave-end="opacity-0 translate-y-4"
-                 class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-                <div class="px-6 py-3 rounded-full text-[13px] font-semibold shadow-lg flex items-center gap-2"
-                     :class="feedbackType === 'success' ? 'bg-[#34C759] text-white' : 'bg-[#1C1C1E] text-white'">
-                    <i class="fas" :class="feedbackType === 'success' ? 'fa-check' : 'fa-info-circle'"></i>
-                    <span x-text="feedbackMessage"></span>
-                </div>
-            </div>
-
-            <div class="ios-card overflow-hidden">
-                <button @click="accordions.input = !accordions.input" class="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none bg-white hover:bg-gray-50 transition-colors">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-8 h-8 rounded-full bg-[#FF9500]/10 text-[#FF9500] flex items-center justify-center">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div>
-                            <span class="text-[15px] font-semibold text-black">1. Kartu Input</span>
-                            <p class="text-[12px] text-[#8E8E93]">Tulis topik atau draft naskah slide di sini</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right text-[13px] text-[#C7C7CC] transition-transform duration-300" :class="{'rotate-90': accordions.input}"></i>
+            <!-- Mode Switcher -->
+            <div class="flex bg-emerald-900 rounded-xl p-1 border border-emerald-800">
+                <button onclick="setMode('A')" id="btn-mode-a" class="px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-flask mr-1"></i> Mode A (Researcher)
                 </button>
-
-                <div x-show="accordions.input" x-collapse class="px-5 pb-5 pt-1">
-                    <textarea x-model="topic" placeholder="Tulis Topik atau paste Draft Naskah lengkap Anda di sini... (Contoh: 5 Cara Sabar Menghadapi Pasangan, atau paste teks lengkap untuk slide 1-7)" class="w-full p-4 rounded-xl ios-input outline-none text-[14px] h-32 resize-none text-black placeholder-[#8E8E93] font-medium leading-relaxed"></textarea>
-                </div>
-            </div>
-
-            <div class="ios-card overflow-hidden">
-                <button @click="accordions.settings = !accordions.settings" class="w-full px-5 py-4 flex items-center justify-between text-left focus:outline-none bg-white hover:bg-gray-50 transition-colors border-t border-gray-100">
-                    <div class="flex items-center gap-3.5">
-                        <div class="w-8 h-8 rounded-full bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center">
-                            <i class="fas fa-sliders-h"></i>
-                        </div>
-                        <div>
-                            <span class="text-[15px] font-semibold text-black">2. Kartu Setting</span>
-                            <p class="text-[12px] text-[#8E8E93]">Visual, Font, Komposisi, Alignment, Jumlah Slide</p>
-                        </div>
-                    </div>
-                    <i class="fas fa-chevron-right text-[13px] text-[#C7C7CC] transition-transform duration-300" :class="{'rotate-90': accordions.settings}"></i>
+                <button onclick="setMode('B')" id="btn-mode-b" class="px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-emerald-950 shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Mode B (Feynman)
                 </button>
-
-                <div x-show="accordions.settings" x-collapse class="px-5 pb-5 pt-1">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        
-                        <!-- Art Style -->
-                        <div class="col-span-1 sm:col-span-2">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Gaya Seni (Art Style)</span>
-                                <span x-show="artStyle === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="artStyle" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="auto">✨ Auto / Default (Layered Papercut)</option>
-                                    <option value="custom">✏️ Kustom (Ketik Manual)</option>
-                                    <option value="layered_papercut">✂️ 1. Layered Papercut</option>
-                                    <option value="paper_cut_diorama">🎭 2. 3D Paper Cut Diorama</option>
-                                    <option value="papercraft_3d">📦 3. 3D Papercraft</option>
-                                    <option value="islamic_papercraft">🕌 4. Islamic 3D Papercraft</option>
-                                    <option value="low_poly_3d">💎 5. Low Poly 3D</option>
-                                    <option value="isometric_papercraft_lowpoly">📐 6. 3D Isometric Papercraft Low Poly</option>
-                                    <option value="origami_art">🦢 7. Origami Art</option>
-                                    <option value="vintage_storybook">📖 8. Vintage Storybook</option>
-                                    <option value="cutaway_illustration">🏗️ 9. Cutaway Illustration</option>
-                                    <option value="voxel_art">🧱 10. Voxel Art</option>
-                                    <option value="knit_crochet">🧶 11. Premium Knit & Crochet 3D</option>
-                                    <option value="needle_felting">🪡 12. Premium Needle Felting 3D</option>
-                                    <option value="quilted_patchwork">🧵 13. Premium Quilted Patchwork 3D</option>
-                                    <option value="whimsical_doodle">✒️ 14. Ink & Watercolor Doodle</option>
-                                    <option value="studygram_journal">📓 15. Studygram Digital Journaling</option>
-                                    <option value="watercolor_ink">🎨 16. Watercolor & Ink Illustration</option>
-                                    <option value="wimmelbilderbuch">🏘️ 17. Wimmelbilderbuch</option>
-                                    <option value="comic_studio">🗯️ 18. Comic Studio</option>
-                                    <option value="grunge_streetwear">🛹 19. Grunge Streetwear</option>
-                                    <option value="pixar_3d">🎬 20. Pixar Inspired 3D</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="artStyle === 'custom'" class="mt-2" x-transition>
-                                <textarea x-model="customArtStyle" rows="2" placeholder="Deskripsikan gaya seni yang Anda inginkan..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 resize-none text-black"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Tipografi (Font) -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Tipografi (DNA Font)</span>
-                                <span x-show="typographyChoice === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="typographyChoice" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="auto">✨ Auto / Acak</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                    <option value="Friendly Rounded Handwritten">1. Friendly Rounded (Edukasi)</option>
-                                    <option value="Soft Brush Handwriting">2. Soft Brush (Artistik)</option>
-                                    <option value="Modern Editorial Serif">3. Modern Serif (Luxury)</option>
-                                    <option value="Humanist Sans">4. Humanist Sans (Profesional)</option>
-                                    <option value="Geometric Sans">5. Geometric Sans (Tegas)</option>
-                                    <option value="Rounded Sans">6. Rounded Sans (Ramah)</option>
-                                    <option value="Storybook Typography">7. Storybook (Ilustrasi)</option>
-                                    <option value="Notebook Handwriting">8. Notebook (Catatan)</option>
-                                    <option value="Premium Calligraphy">9. Calligraphy (Anggun)</option>
-                                    <option value="Modern Script">10. Modern Script (Elegan)</option>
-                                    <option value="Vintage Sign Painting">11. Vintage Sign (Retro)</option>
-                                    <option value="Chalkboard">12. Chalkboard (Sekolah)</option>
-                                    <option value="Pencil Sketch">13. Pencil Sketch (Sketsa)</option>
-                                    <option value="Ink Pen">14. Ink Pen (Jurnal Klasik)</option>
-                                    <option value="Comic Friendly">15. Comic (Bermain)</option>
-                                    <option value="Childrens Book">16. Children's Book (Anak)</option>
-                                    <option value="Scandinavian Minimal">17. Scandinavian (Minimalis)</option>
-                                    <option value="Japanese Lifestyle">18. Japanese (Estetik)</option>
-                                    <option value="Luxury Magazine">19. Luxury Magazine (Fashion)</option>
-                                    <option value="Cozy Journal">20. Cozy Journal (Intim)</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="typographyChoice === 'custom'" class="mt-2" x-transition>
-                                <textarea x-model="customTypography" rows="2" placeholder="Karakteristik font..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 resize-none text-black"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Efek Teks -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Efek Teks (Header & Body)</span>
-                                <span x-show="textEffect === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="textEffect" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="flat">🎨 Flat (Bawaan Font)</option>
-                                    <option value="embossed">🪨 3D Embossed (Timbul)</option>
-                                    <option value="neon">💡 Neon Glow (Menyala)</option>
-                                    <option value="foil">✨ Metallic Foil (Emas/Perak)</option>
-                                    <option value="chalk">🖍️ Chalk / Textural (Kapur/Kasar)</option>
-                                    <option value="watercolor">🖌️ Watercolor Blend (Menyatu Air)</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="textEffect === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customTextEffect" type="text" placeholder="Deskripsikan efek teks..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-
-                        <!-- Alignment Teks -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Rata Teks (Alignment)</span>
-                                <span x-show="textAlign === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="textAlign" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="auto">🔀 Auto (Dinamis / Seamless)</option>
-                                    <option value="left">⬅️ Rata Kiri (Left-aligned)</option>
-                                    <option value="center">↔️ Rata Tengah (Center-aligned)</option>
-                                    <option value="right">➡️ Rata Kanan (Right-aligned)</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="textAlign === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customTextAlign" type="text" placeholder="Instruksi rata teks kustom..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-
-                        <!-- Jumlah Slide -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Jumlah Slide (1 = Poster Mode)</label>
-                            <div class="flex items-center bg-[#7676801F] rounded-xl p-1 w-full justify-between">
-                                <button @click="if(numSlides > 1) numSlides--" class="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-[#007AFF] hover:bg-gray-50 active:scale-95 transition-all">
-                                    <i class="fas fa-minus text-sm"></i>
-                                </button>
-                                <input type="number" x-model="numSlides" min="1" class="w-16 text-center bg-transparent border-none outline-none font-bold text-[16px] text-black">
-                                <button @click="numSlides++" class="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center text-[#007AFF] hover:bg-gray-50 active:scale-95 transition-all">
-                                    <i class="fas fa-plus text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Ratio -->
-                        <div>
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Rasio Aspect</span>
-                                <span x-show="aspectRatio === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="aspectRatio" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="4:5">📱 4:5 (IG Portrait)</option>
-                                    <option value="3:4">🖼️ 3:4</option>
-                                    <option value="1:1">🟦 1:1 (Square)</option>
-                                    <option value="9:16">📲 9:16 (Reels/Story)</option>
-                                    <option value="16:9">💻 16:9 (Landscape)</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="aspectRatio === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customRatio" type="text" placeholder="Rasio (misal 2:1)..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-                        
-                        <!-- Komposisi Teks vs Visual -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Komposisi (Teks : Visual)</span>
-                                <span x-show="composition === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="composition" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="auto">⚖️ Auto / Seimbang (50:50)</option>
-                                    <option value="text_heavy">📝 Teks Dominan (60% Teks : 40% Visual)</option>
-                                    <option value="visual_heavy">🖼️ Visual Dominan (40% Teks : 60% Visual)</option>
-                                    <option value="minimal_text">🎨 Minimalis Teks (30% Teks : 70% Visual)</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="composition === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customComposition" type="text" placeholder="Contoh: Teks 70%, Ilustrasi 30%..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-
-                        <!-- Format Teks Body -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1">Format Teks Body</label>
-                            <div class="relative">
-                                <select x-model="bodyTextFormat" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="bullet">📝 Dengan Point-point (List)</option>
-                                    <option value="paragraph">📄 Tanpa Point-point (Paragraf)</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                        </div>
-
-                        <!-- Palet Warna -->
-                        <div class="col-span-1">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Palet Warna</span>
-                                <span x-show="colorPalette === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="colorPalette" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="auto">🎨 Auto / Topik</option>
-                                    <option value="earth">🍂 Earth Tones</option>
-                                    <option value="pastel">🌸 Soft Pastel</option>
-                                    <option value="monochrome">⚫ Monochrome</option>
-                                    <option value="warm">☀️ Warm / Amber</option>
-                                    <option value="cool">❄️ Cool / Blue</option>
-                                    <option value="custom">✏️ Kustom</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="colorPalette === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customPalette" type="text" placeholder="Warna spesifik..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-
-                        <!-- Model Karakter -->
-                        <div class="col-span-1 sm:col-span-2">
-                            <label class="block text-[13px] font-medium text-[#8E8E93] mb-1.5 ml-1 flex justify-between">
-                                <span>Karakter (Hanya jika Konteks Membutuhkan)</span>
-                                <span x-show="characterType === 'custom'" class="text-[10px] bg-[#FF9500]/20 text-[#FF9500] px-2 py-0.5 rounded-full font-bold">Kustom</span>
-                            </label>
-                            <div class="relative">
-                                <select x-model="characterType" class="w-full p-3.5 pl-4 pr-8 rounded-xl ios-input outline-none text-[14px] appearance-none font-medium text-black">
-                                    <option value="random">🎲 Auto Contextual</option>
-                                    <option value="male">👨 Pria Dewasa</option>
-                                    <option value="female">🧕 Wanita (Hijab)</option>
-                                    <option value="couple">👫 Pasutri</option>
-                                    <option value="boy">👦 Anak Laki-laki</option>
-                                    <option value="girl">👧 Anak Perempuan</option>
-                                    <option value="custom">✏️ Kustom (Ganti Aturan Standar)</option>
-                                </select>
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2 text-[#8E8E93] pointer-events-none"><i class="fas fa-chevron-down text-[11px]"></i></div>
-                            </div>
-                            <div x-show="characterType === 'custom'" class="mt-2" x-transition>
-                                <input x-model="customCharacter" type="text" placeholder="Karakteristik spesifik (Contoh: Pria berjaket kulit)..." class="w-full p-3 rounded-xl ios-input outline-none text-[14px] border border-[#FF9500]/30 text-black">
-                            </div>
-                        </div>
-
-                        <!-- Footer Customization -->
-                        <div class="bg-gray-50 border border-gray-100 p-4 rounded-[16px] mt-2 col-span-1 sm:col-span-2 grid grid-cols-2 gap-3">
-                            <div class="col-span-2">
-                                <p class="text-[12px] font-bold text-[#8E8E93] uppercase tracking-wider mb-2">Watermark Footer</p>
-                            </div>
-                            <div class="col-span-1">
-                                <label class="block text-[11px] font-medium text-[#8E8E93] mb-1 ml-1">Logo Sosmed (Koma)</label>
-                                <input x-model="socialMediaLogos" type="text" placeholder="Misal: instagram, tiktok" class="w-full p-3 rounded-xl ios-input bg-white outline-none text-[14px] font-medium border border-gray-200 text-black">
-                            </div>
-                            <div class="col-span-1">
-                                <label class="block text-[11px] font-medium text-[#8E8E93] mb-1 ml-1">Username / Credit</label>
-                                <input x-model="credit" type="text" placeholder="@username" class="w-full p-3 rounded-xl ios-input bg-white outline-none text-[14px] font-medium border border-gray-200 text-black">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
             </div>
+        </div>
+    </header>
 
-            <!-- 3. ACTION & OUTPUT -->
-            <div>
-                <!-- Generate Button -->
-                <button @click="generateCarouselPrompts()" class="w-full bg-[#007AFF] hover:bg-[#0056B3] active:bg-[#003d82] text-white font-semibold py-4 rounded-[20px] shadow-md transition-colors text-[16px] flex items-center justify-center gap-2 mb-4">
-                    <i class="fas fa-magic"></i> RAKIT BLUEPRINT PROMPT
-                </button>
-
-                <!-- Output Area (Cards) -->
-                <div x-show="generatedCards.length > 0" x-transition class="space-y-4">
-                    <div class="flex justify-between items-center px-1">
-                        <h3 class="text-[14px] font-bold text-[#8E8E93] uppercase tracking-wider">Hasil Generate (<span x-text="generatedCards.length"></span> Blok)</h3>
-                        <button @click="copyAll()" class="bg-[#34C759] hover:bg-[#28a745] text-white px-4 py-2 rounded-full text-[13px] font-bold shadow-sm transition-colors flex items-center gap-1.5">
-                            <i class="fas fa-copy"></i> Copy Semua
-                        </button>
-                    </div>
-
-                    <!-- Iteration of Cards -->
-                    <template x-for="(card, index) in generatedCards" :key="index">
-                        <div class="ios-card overflow-hidden border border-gray-100 shadow-sm" x-data="{ isOpen: index === 0 }">
-                            
-                            <!-- Card Header -->
-                            <div @click="isOpen = !isOpen" class="px-4 py-3 bg-[#F9F9FB] border-b border-gray-100 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition-colors">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-6 h-6 rounded-md bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center text-[11px] font-bold" x-text="index + 1"></div>
-                                    <span class="text-[14px] font-bold text-black" x-text="card.title"></span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <button @click.stop="copySingle(card.content)" class="w-8 h-8 rounded-full bg-white text-[#007AFF] shadow-sm flex items-center justify-center hover:bg-[#007AFF] hover:text-white transition-colors" title="Copy Card Ini">
-                                        <i class="fas fa-copy text-[12px]"></i>
-                                    </button>
-                                    <i class="fas fa-chevron-right text-[12px] text-[#C7C7CC] transition-transform duration-300" :class="{'rotate-90': isOpen}"></i>
-                                </div>
-                            </div>
-                            
-                            <!-- Card Content (Textarea) -->
-                            <div x-show="isOpen" x-collapse>
-                                <textarea readonly x-model="card.content" class="w-full p-4 text-[13px] font-mono bg-white text-gray-800 h-64 outline-none resize-y border-none" spellcheck="false"></textarea>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
-
-        </main>
+    <div class="bg-white border-b border-slate-200 shadow-sm sticky top-[84px] z-40">
+        <div class="max-w-7xl mx-auto flex overflow-x-auto hide-scrollbar">
+            <button onclick="switchCard('input')" id="nav-input" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-emerald-600 text-emerald-700 transition-all uppercase tracking-wide">
+                1. Kartu Input
+            </button>
+            <button onclick="switchCard('setting')" id="nav-setting" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
+                2. Kartu Setting
+            </button>
+            <button onclick="switchCard('output')" id="nav-output" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
+                3. Kartu Output
+            </button>
+            <button onclick="switchCard('saved')" id="nav-saved" class="flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide">
+                4. Kartu Saved
+            </button>
+        </div>
     </div>
 
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-6 pb-20">
+        
+        <!-- ========================================== -->
+        <!-- 1. KARTU INPUT -->
+        <!-- ========================================== -->
+        <section id="card-input" class="card-section active flex-col gap-6 fade-in">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="mb-4">
+                    <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-keyboard text-emerald-600"></i> Kartu Input
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Tuangkan ide, topik, gagasan, atau paste artikel/materi Anda di sini.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Kolom A -->
+                    <div class="flex flex-col gap-2 relative">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-slate-600 uppercase">A. Ide / Topik / Paste Artikel</label>
+                            <button onclick="clearInput('input-topic')" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded transition-all">
+                                <i class="fa-solid fa-xmark mr-1"></i> Hapus
+                            </button>
+                        </div>
+                        <textarea id="input-topic" rows="10" class="w-full p-4 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan topik utama (misal: Sabar Menghadapi Ujian, atau paste artikel panjang di sini...)"></textarea>
+                    </div>
+                    
+                    <!-- Kolom B -->
+                    <div class="flex flex-col gap-2 relative">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-bold text-slate-600 uppercase">B. Instruksi Tambahan (Opsional)</label>
+                            <button onclick="clearInput('input-instructions')" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded transition-all">
+                                <i class="fa-solid fa-xmark mr-1"></i> Hapus
+                            </button>
+                        </div>
+                        <textarea id="input-instructions" rows="10" class="w-full p-4 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan instruksi spesifik jika ada (misal: Fokus pada peran ayah, hindari dalil yang terlalu berat, buat gaya bahasa anak muda...)"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex justify-end">
+                    <button onclick="goToNextStep('setting')" class="px-6 py-3 bg-emerald-800 hover:bg-emerald-700 text-white font-extrabold rounded-xl transition-all shadow-md uppercase tracking-wide">
+                        Lanjut ke Setting <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. KARTU SETTING -->
+        <!-- ========================================== -->
+        <section id="card-setting" class="card-section flex-col gap-6 fade-in">
+            <!-- Peringatan Mode A -->
+            <div id="setting-mode-a-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-2xl shadow-sm text-center">
+                <i class="fa-solid fa-flask text-4xl mb-3 opacity-50"></i>
+                <h3 class="font-extrabold text-lg uppercase">Kartu Setting Tidak Tersedia di Mode A</h3>
+                <p class="text-sm mt-2">Mode A (Researcher) hanya menghasilkan ide/topik murni dan tidak memerlukan konfigurasi visual.<br>Silakan langsung menuju <strong>Kartu Output</strong> atau klik tombol Generate di bawah.</p>
+            </div>
+
+            <!-- Konten Setting Mode B -->
+            <div id="setting-mode-b-content" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-emerald-600"></i> Kartu Setting (Mode B)
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Konfigurasi parameter visual secara manual atau gunakan bantuan AI.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="autoSetSettings()" class="px-4 py-2 bg-indigo-100 text-indigo-800 hover:bg-indigo-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Set by AI
+                        </button>
+                        <button onclick="resetSettings()" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid Form Settings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- C. Jumlah Slide -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">C. Jumlah Slide (1 - 30)</label>
+                        <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
+                        <p class="text-[10px] text-slate-400 mt-1">*Default: 7 Slide + 1 Caption</p>
+                    </div>
+
+                    <!-- H. Aspect Ratio -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">H. Aspect Ratio</label>
+                        <select id="set-ratio" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI">Auto-Set by AI</option>
+                            <option value="1:1">1:1 (Square)</option>
+                            <option value="3:4" selected>3:4 (Portrait/Feed)</option>
+                            <option value="4:5">4:5</option>
+                            <option value="9:16">9:16 (Stories/Reels)</option>
+                            <option value="16:9">16:9</option>
+                            <option value="5:4">5:4</option>
+                            <option value="4:3">4:3</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-ratio-kustom" placeholder="Ketik rasio..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- M. Karakter Utama -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">M. Karakter Utama</label>
+                        <select id="set-character" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI">Auto-Set by AI</option>
+                            <option value="Pria Dewasa">Pria Dewasa</option>
+                            <option value="Wanita" selected>Wanita</option>
+                            <option value="Pasutri">Pasutri</option>
+                            <option value="Anak Laki-laki">Anak Laki-laki</option>
+                            <option value="Anak Perempuan">Anak Perempuan</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-character-kustom" placeholder="Ketik karakter..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        <p class="text-[10px] text-amber-600 font-bold mt-1">*Aturan Faceless & No Eyes mutlak berlaku.</p>
+                    </div>
+
+                    <!-- D. Style Art -->
+                    <div class="setting-group lg:col-span-3">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">D. Gaya Seni (Art Style)</label>
+                        <select id="set-style" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI">Auto-Set by AI</option>
+                            <option value="1. GAYA 1 / 3D Papercraft">1. GAYA 1 / 3D Papercraft</option>
+                            <option value="2. GAYA 2 / Layered Papercut">2. GAYA 2 / Layered Papercut</option>
+                            <option value="3. GAYA 3 / Origami Paper Art">3. GAYA 3 / Origami Paper Art</option>
+                            <option value="4. GAYA 4 / Paper Diorama">4. GAYA 4 / Paper Diorama</option>
+                            <option value="5. GAYA 5 / Islamic Layered Papercut" selected>5. GAYA 5 / Islamic Layered Papercut</option>
+                            <option value="6. GAYA 6 / Paper Quilling">6. GAYA 6 / Paper Quilling</option>
+                            <option value="7. GAYA 7 / Kirigami Illustration">7. GAYA 7 / Kirigami Illustration</option>
+                            <option value="8. GAYA 8 / Cut Paper Collage">8. GAYA 8 / Cut Paper Collage</option>
+                            <option value="9. GAYA 9 / Cardboard Craft">9. GAYA 9 / Cardboard Craft</option>
+                            <option value="10. GAYA 10 / Paper Sculpture">10. GAYA 10 / Paper Sculpture</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-style-kustom" placeholder="Ketik gaya seni custom..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- E. Font DNA -->
+                    <div class="setting-group lg:col-span-3">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">E. Tipografi (Font DNA)</label>
+                        <select id="set-font" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI">Auto-Set by AI</option>
+                            <option value="FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐">FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 2. Soft Brush Handwriting">FONT 2. Soft Brush Handwriting</option>
+                            <option value="FONT 3. Modern Editorial Serif">FONT 3. Modern Editorial Serif</option>
+                            <option value="FONT 4. Humanist Sans">FONT 4. Humanist Sans</option>
+                            <option value="FONT 5. Geometric Sans">FONT 5. Geometric Sans</option>
+                            <option value="FONT 6. Rounded Sans">FONT 6. Rounded Sans</option>
+                            <option value="FONT 7. Storybook Typography ⭐⭐⭐⭐⭐" selected>FONT 7. Storybook Typography ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 8. Notebook Handwriting">FONT 8. Notebook Handwriting</option>
+                            <option value="FONT 9. Premium Calligraphy">FONT 9. Premium Calligraphy</option>
+                            <option value="FONT 10. Modern Script">FONT 10. Modern Script</option>
+                            <option value="FONT 11. Vintage Sign Painting">FONT 11. Vintage Sign Painting</option>
+                            <option value="FONT 12. Chalkboard">FONT 12. Chalkboard</option>
+                            <option value="FONT 13. Pencil Sketch">FONT 13. Pencil Sketch</option>
+                            <option value="FONT 14. Ink Pen">FONT 14. Ink Pen</option>
+                            <option value="FONT 15. Comic Friendly">FONT 15. Comic Friendly</option>
+                            <option value="FONT 16. Children's Book">FONT 16. Children's Book</option>
+                            <option value="FONT 17. Scandinavian Minimal">FONT 17. Scandinavian Minimal</option>
+                            <option value="FONT 18. Japanese Lifestyle">FONT 18. Japanese Lifestyle</option>
+                            <option value="FONT 19. Luxury Magazine">FONT 19. Luxury Magazine</option>
+                            <option value="FONT 20. Cozy Journal ⭐⭐⭐⭐⭐">FONT 20. Cozy Journal ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐">FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐">FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐">FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 24. Art Deco Display ⭐⭐⭐⭐⭐">FONT 24. Art Deco Display ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 25. Retro Groovy ⭐⭐⭐⭐⭐">FONT 25. Retro Groovy ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐">FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐">FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐">FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐">FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐">FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐</option>
+                            <option value="FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐">FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-font-kustom" placeholder="Ketik nama font custom..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- F. Efek Teks -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">F. Efek Teks</label>
+                        <select id="set-texteffect" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                            <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+                            <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
+                            <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+                            <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
+                            <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
+                            <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
+                            <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-texteffect-kustom" placeholder="Ketik efek teks..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- G. Alignment -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">G. Rata Teks (Alignment)</label>
+                        <select id="set-alignment" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI (DINAMIS/ SEEMLESS)" selected>Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
+                            <option value="RATA KIRI">RATA KIRI</option>
+                            <option value="RATA TENGAH">RATA TENGAH</option>
+                            <option value="RATA KANAN">RATA KANAN</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-alignment-kustom" placeholder="Ketik alignment..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- I. Komposisi -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">I. Komposisi Teks & Visual</label>
+                        <select id="set-composition" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                            <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
+                            <option value="TEKS DOMINAN (60% TEKS : 40% VISUAL)">TEKS DOMINAN (60% TEKS : 40% VISUAL)</option>
+                            <option value="VISUAL DOMINAN (40% TEKS : 60% VISUAL)">VISUAL DOMINAN (40% TEKS : 60% VISUAL)</option>
+                            <option value="MINIMALIS TEKS (30% TEKS : 70% VISUAL)">MINIMALIS TEKS (30% TEKS : 70% VISUAL)</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-composition-kustom" placeholder="Ketik komposisi..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- J. Format Body -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">J. Format Body Text</label>
+                        <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                            <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
+                            <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-bodyformat-kustom" placeholder="Ketik format body..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+
+                    <!-- L. Palet Warna -->
+                    <div class="setting-group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">L. Palet Warna</label>
+                        <select id="set-palette" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                            <option value="EARTH TONE">EARTH TONE</option>
+                            <option value="SOFT PASTEL">SOFT PASTEL</option>
+                            <option value="MONOCHROME">MONOCHROME</option>
+                            <option value="WARM">WARM</option>
+                            <option value="COOL">COOL</option>
+                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                        </select>
+                        <input type="text" id="set-palette-kustom" placeholder="Ketik palet warna..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                    </div>
+                </div>
+
+                <!-- K. Ukuran PT (Header, Body, Footer) -->
+                <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
+                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">K. Ukuran Font (PT)</label>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Header</label>
+                            <input type="number" id="set-pt-header" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Body</label>
+                            <input type="number" id="set-pt-body" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Footer</label>
+                            <input type="number" id="set-pt-footer" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- N. Watermark Footer -->
+                <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
+                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">N. Watermark Footer</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Logo Sosmed (Koma separator)</label>
+                            <input type="text" id="set-watermark-logo" value="Instagram, Threads" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Username</label>
+                            <input type="text" id="set-watermark-user" value="@ikmalogic" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-emerald-700 font-bold mt-2 font-mono">Format Final: [minimalist monochrome vector instagram logo icon] [minimalist monochrome vector threads logo icon] @ikmalogic | 1/7</p>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="my-8 flex justify-center sticky top-[150px] z-30">
+            <button onclick="processGenerate()" id="btn-global-generate" class="group relative px-10 py-5 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-lg rounded-2xl shadow-xl transition-all uppercase tracking-wide flex items-center justify-center gap-3 w-full max-w-md overflow-hidden">
+                <div class="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
+                <i class="fa-solid fa-bolt text-amber-300 text-xl"></i> 
+                <span>Generate Output AI</span>
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- 3. KARTU OUTPUT -->
+        <!-- ========================================== -->
+        <section id="card-output" class="card-section flex-col gap-6 fade-in">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-4">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-file-export text-emerald-600"></i> Kartu Output
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Hasil generate siap disalin. Block terpisah untuk memudahkan manajemen.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="copyAllOutputBlocks()" class="px-4 py-2 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-copy"></i> Copy All
+                        </button>
+                        <button onclick="saveAllOutputBlocks()" class="px-4 py-2 bg-amber-100 text-amber-800 hover:bg-amber-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-bookmark"></i> Save All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Container Block Dinamis -->
+                <div id="output-blocks-container" class="flex flex-col gap-6">
+                    <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400">
+                        <i class="fa-solid fa-inbox text-3xl mb-2"></i>
+                        <p class="text-sm font-semibold">Output akan muncul di sini setelah Anda menekan tombol Generate.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. KARTU SAVED -->
+        <!-- ========================================== -->
+        <section id="card-saved" class="card-section flex-col gap-6 fade-in">
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col gap-6">
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-hard-drive text-emerald-600"></i> Kartu Saved
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Riwayat prompt yang disimpan di Local Storage browser Anda.</p>
+                    </div>
+                </div>
+
+                <!-- Sub Tab Saved -->
+                <div class="flex gap-2 border-b border-slate-200">
+                    <button onclick="renderSaved('A')" id="tab-saved-a" class="px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase">Saved Mode A</button>
+                    <button onclick="renderSaved('B')" id="tab-saved-b" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase">Saved Mode B</button>
+                </div>
+
+                <!-- Container Saved Blocks -->
+                <div id="saved-blocks-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Export Import Actions -->
+                <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <p class="text-[11px] text-slate-500 italic max-w-md">Eksport data untuk membackup seluruh prompt tersimpan ke file JSON. Import data tidak akan menimpa data lama, melainkan menambahkannya.</p>
+                    <div class="flex gap-2">
+                        <input type="file" id="file-import-json" accept=".json" class="hidden" onchange="handleImportJSON(event)">
+                        <button onclick="document.getElementById('file-import-json').click()" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-import"></i> Import JSON
+                        </button>
+                        <button onclick="handleExportJSON()" class="px-4 py-2 bg-emerald-800 text-white hover:bg-emerald-700 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-export"></i> Export JSON
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UI Overlay for Modals/Toast -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
     <script>
-        function appData() {
-            return {
-                accordions: { input: true, settings: false },
-                topic: '',
-                numSlides: 7,
-                artStyle: 'auto', customArtStyle: '',
-                typographyChoice: 'auto', customTypography: '',
-                textEffect: 'flat', customTextEffect: '',
-                textAlign: 'auto', customTextAlign: '', // NEW FEATURE
-                bodyTextFormat: 'bullet',
-                aspectRatio: '3:4', customRatio: '',
-                composition: 'auto', customComposition: '',
-                colorPalette: 'auto', customPalette: '',
-                characterType: 'random', customCharacter: '',
-                credit: '', socialMediaLogos: 'instagram',
-                feedbackMessage: '', feedbackType: 'success',
-                generatedCards: [],
+        let currentMode = 'B'; 
+        let activeCard = 'input'; 
+        let currentSavedTab = 'A';
 
-                typographyDNA: [
-                    { name: "Friendly Rounded Handwritten", desc: "Friendly rounded handwritten lettering, soft rounded terminals, highly legible." },
-                    { name: "Soft Brush Handwriting", desc: "Soft dry-brush handwritten lettering, natural paintbrush texture." },
-                    { name: "Modern Editorial Serif", desc: "Elegant editorial serif typography, high contrast letterforms." },
-                    { name: "Humanist Sans", desc: "Modern humanist sans-serif, clean geometric structure." },
-                    { name: "Geometric Sans", desc: "Bold geometric sans-serif, strong visual impact." },
-                    { name: "Rounded Sans", desc: "Rounded sans-serif lettering, friendly modern appearance." },
-                    { name: "Storybook Typography", desc: "Whimsical storybook lettering, warm illustrated aesthetic." },
-                    { name: "Notebook Handwriting", desc: "Natural notebook handwriting, casual pen-written lettering." },
-                    { name: "Premium Calligraphy", desc: "Elegant flowing calligraphy, delicate flourishes." },
-                    { name: "Modern Script", desc: "Modern handwritten script, smooth flowing connections." },
-                    { name: "Vintage Sign Painting", desc: "Retro hand-painted signage lettering." },
-                    { name: "Chalkboard", desc: "Hand-drawn chalk lettering, powdery texture." },
-                    { name: "Pencil Sketch", desc: "Handwritten pencil lettering, light graphite texture." },
-                    { name: "Ink Pen", desc: "Fine ink handwritten lettering, classic journal aesthetic." },
-                    { name: "Comic Friendly", desc: "Playful comic-style lettering, rounded bold forms." },
-                    { name: "Childrens Book", desc: "Cute children's book typography, friendly style." },
-                    { name: "Scandinavian Minimal", desc: "Minimal Scandinavian typography, clean elegance." },
-                    { name: "Japanese Lifestyle", desc: "Minimal Japanese-inspired typography, calm visual rhythm." },
-                    { name: "Luxury Magazine", desc: "Luxury editorial typography, fashion aesthetic." },
-                    { name: "Cozy Journal", desc: "Cozy journal handwriting, warm notes." }
-                ],
+        // Fake DB arrays based on the exhaustive instructions
+        const styleArtsList = [
+            "1. GAYA 1 / 3D Papercraft", "2. GAYA 2 / Layered Papercut", "3. GAYA 3 / Origami Paper Art",
+            "4. GAYA 4 / Paper Diorama", "5. GAYA 5 / Islamic Layered Papercut", "6. GAYA 6 / Paper Quilling",
+            "7. GAYA 7 / Kirigami Illustration", "8. GAYA 8 / Cut Paper Collage", "9. GAYA 9 / Cardboard Craft", "10. GAYA 10 / Paper Sculpture"
+        ];
 
-                styleDefinitions: {
-                    'layered_papercut': "Premium layered papercut illustration, handcrafted multi-layer paper sculpture, precision laser-cut paper.",
-                    'paper_cut_diorama': "Premium 3D paper cut diorama illustration, handcrafted layered paper sculpture, high-end C4D render.",
-                    'papercraft_3d': "Premium 3D papercraft illustration, handcrafted paper diorama, realistic folded paper construction.",
-                    'islamic_papercraft': "Premium 3D isometric Islamic papercraft illustration, layered paper diorama, modest themes.",
-                    'low_poly_3d': "Premium low poly 3D illustration, geometric polygonal artwork, stylized low poly environment.",
-                    'isometric_papercraft_lowpoly': "Premium 3D isometric papercraft low poly, miniature paper diorama, C4D render.",
-                    'origami_art': "Premium origami paper art illustration, handcrafted folded paper sculpture, crisp geometric folds.",
-                    'vintage_storybook': "Premium vintage storybook illustration, nostalgic hand-painted artwork, ink and watercolor.",
-                    'cutaway_illustration': "Premium cutaway illustration, detailed cross-section visualization, isometric perspective.",
-                    'voxel_art': "Premium voxel art illustration, cubic block-based 3D world, pixel-inspired construction.",
-                    'knit_crochet': "Premium 3D realistic isometric knit & crochet illustration, handcrafted knitted wool diorama.",
-                    'needle_felting': "Premium 3D realistic isometric needle felting illustration, handcrafted wool sculpting diorama.",
-                    'quilted_patchwork': "Premium 3D realistic isometric quilted patchwork illustration, handcrafted stitched fabric diorama.",
-                    'whimsical_doodle': "Whimsical hand-drawn watercolor and ink doodle illustration, traditional analog painting.",
-                    'studygram_journal': "Premium digital journaling and scrapbook illustration, modern studygram aesthetic, stationery design.",
-                    'watercolor_ink': "Premium watercolor and ink illustration, traditional handcrafted painting, expressive ink contour lines.",
-                    'wimmelbilderbuch': "Premium Wimmelbilderbuch illustration, highly detailed children's search-and-find artwork.",
-                    'comic_studio': "Premium high-fidelity Islamic comic illustration, professional webtoon aesthetic, cel-shaded.",
-                    'grunge_streetwear': "Premium grunge streetwear collage illustration, mixed media digital collage, halftone.",
-                    'pixar_3d': "Premium Pixar-inspired 3D animation, cinematic movie aesthetic, physically based rendering."
-                },
+        const fontDNAList = [
+            "FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐", "FONT 2. Soft Brush Handwriting", "FONT 3. Modern Editorial Serif",
+            "FONT 4. Humanist Sans", "FONT 5. Geometric Sans", "FONT 6. Rounded Sans", "FONT 7. Storybook Typography ⭐⭐⭐⭐⭐",
+            "FONT 8. Notebook Handwriting", "FONT 9. Premium Calligraphy", "FONT 10. Modern Script", "FONT 11. Vintage Sign Painting",
+            "FONT 12. Chalkboard", "FONT 13. Pencil Sketch", "FONT 14. Ink Pen", "FONT 15. Comic Friendly", "FONT 16. Children's Book",
+            "FONT 17. Scandinavian Minimal", "FONT 18. Japanese Lifestyle", "FONT 19. Luxury Magazine", "FONT 20. Cozy Journal ⭐⭐⭐⭐⭐",
+            "FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐", "FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐", "FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐",
+            "FONT 24. Art Deco Display ⭐⭐⭐⭐⭐", "FONT 25. Retro Groovy ⭐⭐⭐⭐⭐", "FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐",
+            "FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐", "FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐", "FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐",
+            "FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐", "FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐"
+        ];
 
-                showFeedback(msg, type = 'success') {
-                    this.feedbackMessage = msg;
-                    this.feedbackType = type;
-                    setTimeout(() => { this.feedbackMessage = ''; }, 3000);
-                },
+        function setMode(mode) {
+            currentMode = mode;
+            const btnA = document.getElementById('btn-mode-a');
+            const btnB = document.getElementById('btn-mode-b');
+            const warnA = document.getElementById('setting-mode-a-warning');
+            const contentB = document.getElementById('setting-mode-b-content');
 
-                generateCarouselPrompts() {
-                    if (!this.topic) {
-                        this.showFeedback("Isi Topik atau Draft Naskah terlebih dahulu!", "neutral");
-                        this.accordions.input = true;
-                        return;
+            if (mode === 'A') {
+                btnA.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-amber-950 shadow-sm";
+                btnB.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white";
+                warnA.classList.remove('hidden');
+                contentB.classList.add('hidden');
+            } else {
+                btnB.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-emerald-950 shadow-sm";
+                btnA.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white";
+                warnA.classList.add('hidden');
+                contentB.classList.remove('hidden');
+            }
+        }
+
+        function switchCard(cardId) {
+            activeCard = cardId;
+            document.querySelectorAll('.card-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`card-${cardId}`).classList.add('active');
+
+            // Nav bar styling update
+            const navs = ['input', 'setting', 'output', 'saved'];
+            navs.forEach(nav => {
+                const el = document.getElementById(`nav-${nav}`);
+                if (nav === cardId) {
+                    el.className = `flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-emerald-600 text-emerald-700 transition-all uppercase tracking-wide`;
+                } else {
+                    el.className = `flex-1 min-w-[120px] py-3.5 font-extrabold text-sm text-center border-b-[3px] border-transparent text-slate-500 hover:text-slate-800 transition-all uppercase tracking-wide`;
+                }
+            });
+
+            if (cardId === 'saved') {
+                renderSaved(currentSavedTab);
+            }
+        }
+
+        function goToNextStep(cardId) {
+            if (currentMode === 'A' && cardId === 'setting') {
+                switchCard('output'); // Skip setting if Mode A
+            } else {
+                switchCard(cardId);
+            }
+        }
+
+        function clearInput(id) {
+            document.getElementById(id).value = "";
+        }
+
+        function handleKustom(selectEl) {
+            const kustomInputId = selectEl.id + '-kustom';
+            const kustomInput = document.getElementById(kustomInputId);
+            if (selectEl.value === 'kustom') {
+                kustomInput.classList.remove('hidden');
+                kustomInput.focus();
+            } else {
+                kustomInput.classList.add('hidden');
+            }
+        }
+
+        function autoSetSettings() {
+            // Intelligent randomizer for Auto-Set behavior
+            const getRand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            
+            document.getElementById('set-slide-count').value = 7;
+            document.getElementById('set-ratio').value = "3:4";
+            document.getElementById('set-character').value = "Wanita";
+            
+            document.getElementById('set-style').value = getRand(styleArtsList);
+            document.getElementById('set-font').value = getRand(fontDNAList);
+            
+            document.getElementById('set-texteffect').value = "FLAT (BAWAAN FONT)";
+            document.getElementById('set-alignment').value = "Auto-Set by AI (DINAMIS/ SEEMLESS)";
+            document.getElementById('set-composition').value = "TEKS DOMINAN (60% TEKS : 40% VISUAL)";
+            document.getElementById('set-bodyformat').value = "DENGAN POINT-POINT";
+            
+            const palettes = ["EARTH TONE", "SOFT PASTEL", "WARM"];
+            document.getElementById('set-palette').value = getRand(palettes);
+            
+            document.getElementById('set-pt-header').value = "64";
+            document.getElementById('set-pt-body').value = "32";
+            document.getElementById('set-pt-footer').value = "24";
+
+            // Hide all kustom fields just in case
+            document.querySelectorAll('input[id$="-kustom"]').forEach(el => el.classList.add('hidden'));
+            
+            showToast("Auto-Set Berhasil Diterapkan");
+        }
+
+        function resetSettings() {
+            const selects = document.querySelectorAll('#setting-mode-b-content select');
+            selects.forEach(select => {
+                select.selectedIndex = 0; // Set to Auto-Set by AI
+                handleKustom(select);
+            });
+            document.getElementById('set-slide-count').value = 7;
+            document.getElementById('set-pt-header').value = "";
+            document.getElementById('set-pt-body').value = "";
+            document.getElementById('set-pt-footer').value = "";
+            showToast("Setting telah direset");
+        }
+
+        function getSettingValue(baseId) {
+            const selectEl = document.getElementById(baseId);
+            if (selectEl.value === 'kustom') {
+                return document.getElementById(baseId + '-kustom').value || "Auto-Set by AI";
+            }
+            return selectEl.value;
+        }
+
+        function processGenerate() {
+            const topic = document.getElementById('input-topic').value.trim();
+            const instructions = document.getElementById('input-instructions').value.trim();
+            
+            if (!topic) {
+                alert("Mohon masukkan Ide / Topik terlebih dahulu di Kartu Input.");
+                switchCard('input');
+                return;
+            }
+
+            const container = document.getElementById('output-blocks-container');
+            container.innerHTML = ""; // Clear existing
+
+            if (currentMode === 'A') {
+                generateModeA(topic, instructions, container);
+            } else {
+                generateModeB(topic, instructions, container);
+            }
+
+            switchCard('output');
+            showToast(`Generate Mode ${currentMode} Selesai!`);
+        }
+
+        function generateModeA(topic, instructions, container) {
+            // Mode A strictly outputs 5 independent ideas based on researcher rules
+            for (let i = 1; i <= 5; i++) {
+                const blockId = `output-a-${Date.now()}-${i}`;
+                const rawText = `### IDE TOPIK ${i}\n` +
+                    `* Topic: Eksplorasi mendalam tentang [${topic}]\n` +
+                    `* Cover Title Options:\n` +
+                    `  - Option A: Judul Menarik ${i} Terkait Topik\n` +
+                    `  - Option B: Judul Penasaran ${i} Terkait Topik\n` +
+                    `* Unique Angle: Sudut pandang analitis dan psikologis Islami berdasarkan Qur'an dan Hadits Sahih. ${instructions ? 'Catatan: ' + instructions : ''}\n` +
+                    `* Data Sources: QS. Relevan & HR. Bukhari/Muslim.\n` +
+                    `* Core Idea: Menjelaskan akar masalah dan memberikan solusi praktis (Feynman Style).\n` +
+                    `* Recommended Style Art: GAYA 5 / Islamic Layered Papercut\n` +
+                    `* Recommended Color Palette: Earth Tone & Muted Green\n` +
+                    `* Recommended Typography: FONT 7. Storybook Typography / FONT 4. Humanist Sans\n\n` +
+                    `Make the aspect ratio 3:4`;
+
+                container.appendChild(createOutputCardHTML(blockId, `Ide Topik ${i}`, rawText, 'A'));
+            }
+        }
+
+        function generateModeB(topic, instructions, container) {
+            // Fetch settings manually to enforce rules
+            const slideCount = parseInt(document.getElementById('set-slide-count').value) || 7;
+            const ratio = getSettingValue('set-ratio');
+            const character = getSettingValue('set-character');
+            const style = getSettingValue('set-style');
+            const font = getSettingValue('set-font');
+            const effect = getSettingValue('set-texteffect');
+            const alignment = getSettingValue('set-alignment');
+            const composition = getSettingValue('set-composition');
+            const bodyFormat = getSettingValue('set-bodyformat');
+            const palette = getSettingValue('set-palette');
+            
+            const ptHead = document.getElementById('set-pt-header').value || 'Auto';
+            const ptBody = document.getElementById('set-pt-body').value || 'Auto';
+            const ptFoot = document.getElementById('set-pt-footer').value || 'Auto';
+            
+            const rawLogos = document.getElementById('set-watermark-logo').value.split(',').map(s=>s.trim()).filter(s=>s);
+            const watermarkLogos = rawLogos.map(logo => `[minimalist monochrome vector ${logo.toLowerCase()} logo icon]`).join(' ');
+            const username = document.getElementById('set-watermark-user').value || "@username";
+            
+            // Build Block 1 (Global Config + Slide 1)
+            const block1Id = `output-b-${Date.now()}-1`;
+            const block1Text = `@createimage\n` +
+                `==========================================================\n` +
+                `GLOBAL CONFIGURATION & SLIDE 1\n` +
+                `==========================================================\n` +
+                `* OPERATION MODE: MODE B\n` +
+                `* TOPIK/ MATERI KONTEN: ${topic}\n` +
+                `${instructions ? '* INSTRUKSI KHUSUS: ' + instructions + '\n' : ''}` +
+                `* STYLE ART: ${style}\n` +
+                `* RATIO: ${ratio}\n` +
+                `* KOMPOSISI TEKS/ ILUSTRASI (DALAM PERSEN): ${composition}\n` +
+                `* TYPOGRAPHY\n` +
+                `  * NAMA/ DNA FONT: ${font}\n` +
+                `  * EFEK FONT: ${effect}\n` +
+                `  * UKURAN FONT (HEADER, BODY, FOOTER): ${ptHead}, ${ptBody}, ${ptFoot}\n` +
+                `  * TEXT ALIGNMENT: ${alignment}\n` +
+                `* PALET WARNA: ${palette}\n` +
+                `* LATAR: Living environment reinforcing educational message\n` +
+                `* KARAKTER UTAMA\n` +
+                `  * GENDER: ${character}\n` +
+                `  * WAJAH: FACELESS, NO EYES (MANDATORY RULES)\n` +
+                `  * HAIRCUT (LAKI-LAKI): Tertutup/ Rapi\n` +
+                `  * OUTFIT: DINAMIS SESUAI KONTEKS TIAP SLIDE (Menutup aurat syar'i)\n` +
+                `  * AKSESORIS: Minimalis tanpa emas untuk pria\n` +
+                `* BODY TEXT: ${bodyFormat}\n` +
+                `* FOOTER\n` +
+                `  * BENTUK PATCH FOOTER: Minimalist\n` +
+                `  * MEDIA SOSIAL: ${rawLogos.join(', ')}\n` +
+                `  * USERNAME: ${username}\n` +
+                `* WRITING BLOCK KHUSUS MODE B\n` +
+                `  * SETIAP WRITING BLOCK WAJIB DIBUKA/ DIAWALI DENGAN KALIMAT: @createimage\n` +
+                `  * SETIAP WRITING BLOCK WAJIB DITUTUP/ DIAKHIRI DENGAN KALIMAT: Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}\n\n` +
+                `----------------------------------------------------------\n` +
+                `SLIDE 1 (HOOK)\n` +
+                `----------------------------------------------------------\n` +
+                `* SPECS: Cover Hook slide, curiosity driven.\n` +
+                `* VISUAL GUIDE: Karakter utama (${character}) digambarkan FACELESS TANPA MATA, berinteraksi dengan lingkungan sejalan dengan topik ${topic}.\n` +
+                `* GEN AI PROMPT: Premium ${style}, faceless character, modest clothing, ${palette} colors, soft shadows, cozy studio lighting. --ar ${ratio === 'Auto-Set by AI' ? '3:4' : ratio.replace(':',' ')}\n` +
+                `* NASKAH:\n` +
+                `  - HEADER: (Judul Menarik Berdasarkan Topik)\n` +
+                `  - BODY: (Kosong, tanpa bullet points)\n` +
+                `  - FOOTER: ${watermarkLogos} ${username} | 1/${slideCount}\n\n` +
+                `Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}`;
+
+            container.appendChild(createOutputCardHTML(block1Id, `Global Config & Slide 1`, block1Text, 'B'));
+
+            // Build Slide 2 to Slide N
+            for (let i = 2; i <= slideCount; i++) {
+                const blockId = `output-b-${Date.now()}-${i}`;
+                let slideType = i === slideCount ? 'CALL TO ACTION' : (i === 5 ? 'DALIL (QURAN/HADITS)' : 'CONTENT EXPLANATION');
+                const blockText = `@createimage\n` +
+                    `----------------------------------------------------------\n` +
+                    `SLIDE ${i} (${slideType})\n` +
+                    `----------------------------------------------------------\n` +
+                    `* SPECS: Modular content page, clean typography alignment.\n` +
+                    `* VISUAL GUIDE: Visualisasi metaforis atau aksi nyata terkait edukasi slide. Karakter utama FACELESS TANPA MATA.\n` +
+                    `* GEN AI PROMPT: Premium ${style}, faceless character, modest clothing, ${palette} colors, soft shadows. --ar ${ratio === 'Auto-Set by AI' ? '3:4' : ratio.replace(':',' ')}\n` +
+                    `* NASKAH:\n` +
+                    `  - HEADER: (Sub-judul poin ke-${i})\n` +
+                    `  - BODY:\n` +
+                    `    • (Penjelasan Feynman yang mudah dimengerti)\n` +
+                    `  - FOOTER: ${watermarkLogos} ${username} | ${i}/${slideCount}\n\n` +
+                    `Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}`;
+                
+                container.appendChild(createOutputCardHTML(blockId, `Slide ${i} (${slideType})`, blockText, 'B'));
+            }
+
+            // Build Caption
+            const captionId = `output-b-${Date.now()}-cap`;
+            const captionText = `==========================================================\n` +
+                `CAPTION COPYWRITING & HASHTAGS\n` +
+                `==========================================================\n` +
+                `Ringkasan mendalam tentang ${topic}. (Teks caption memikat, edukatif, dan ramah. Total di bawah 500 huruf.)\n\n` +
+                `#islamiceducation #reminder #visualdakwah`;
+            container.appendChild(createOutputCardHTML(captionId, `Social Media Caption`, captionText, 'B'));
+        }
+
+        function createOutputCardHTML(id, title, content, mode) {
+            const div = document.createElement('div');
+            div.className = "bg-stone-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-3 shadow-sm";
+            div.innerHTML = `
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="font-extrabold text-sm text-emerald-800 uppercase"><i class="fa-solid fa-cube mr-1"></i> ${title}</span>
+                    <div class="flex gap-2">
+                        <button onclick="copySingleBlock('${id}')" class="px-3 py-1 text-[10px] font-bold bg-amber-500 text-emerald-950 rounded uppercase hover:bg-amber-400 transition-all">Copy</button>
+                        <button onclick="saveSingleBlock('${id}', '${mode}', '${title}')" class="px-3 py-1 text-[10px] font-bold bg-emerald-700 text-white rounded uppercase hover:bg-emerald-600 transition-all">Save</button>
+                    </div>
+                </div>
+                <textarea id="${id}" class="w-full h-48 p-3 text-xs font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${content}</textarea>
+            `;
+            return div;
+        }
+
+        function copySingleBlock(id) {
+            const el = document.getElementById(id);
+            el.select();
+            document.execCommand('copy');
+            showToast("Block berhasil disalin!");
+        }
+
+        function copyAllOutputBlocks() {
+            const textareas = document.querySelectorAll('#output-blocks-container textarea');
+            let combined = "";
+            textareas.forEach(ta => {
+                combined += ta.value + "\n\n";
+            });
+            const temp = document.createElement('textarea');
+            temp.value = combined;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand('copy');
+            document.body.removeChild(temp);
+            showToast("Semua block berhasil disalin!");
+        }
+
+        function saveSingleBlock(id, mode, title) {
+            const el = document.getElementById(id);
+            const content = el.value;
+            const savedItem = {
+                id: 'saved-' + Date.now(),
+                mode: mode,
+                title: title,
+                content: content,
+                image: null,
+                timestamp: new Date().toLocaleString('id-ID')
+            };
+            
+            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+            let existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            existing.unshift(savedItem); // prepend
+            localStorage.setItem(storageKey, JSON.stringify(existing));
+            
+            showToast("Block berhasil disimpan ke Local Storage!");
+            if (activeCard === 'saved') renderSaved(currentSavedTab); // live update if open
+        }
+
+        function saveAllOutputBlocks() {
+            const container = document.getElementById('output-blocks-container');
+            const wrappers = container.children;
+            let savedCount = 0;
+            
+            Array.from(wrappers).forEach(wrap => {
+                if (wrap.querySelector('textarea')) {
+                    const id = wrap.querySelector('textarea').id;
+                    const modeMatch = id.match(/output-(a|b)/);
+                    if (modeMatch) {
+                        const mode = modeMatch[1].toUpperCase();
+                        const title = wrap.querySelector('span').innerText.trim();
+                        saveSingleBlock(id, mode, title);
+                        savedCount++;
                     }
-                    
-                    this.generatedCards = []; 
-                    let isPosterMode = parseInt(this.numSlides) === 1;
+                }
+            });
+            if (savedCount > 0) showToast(`${savedCount} Block berhasil disimpan!`);
+        }
 
-                    // 1. Style Logic
-                    let styleInstruction = this.artStyle === 'custom' ? (this.customArtStyle || "Custom Style") : 
-                        (this.styleDefinitions[this.artStyle] || this.styleDefinitions['layered_papercut']);
+        function renderSaved(mode) {
+            currentSavedTab = mode;
+            const btnA = document.getElementById('tab-saved-a');
+            const btnB = document.getElementById('tab-saved-b');
+            if (mode === 'A') {
+                btnA.className = "px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase";
+                btnB.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase";
+            } else {
+                btnB.className = "px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase";
+                btnA.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase";
+            }
 
-                    // 2. Typography Logic
-                    let typoName = "", typoDesc = "";
-                    if (this.typographyChoice === 'custom') {
-                        typoName = "Custom Font"; typoDesc = this.customTypography || "Custom typography description.";
-                    } else if (this.typographyChoice === 'auto') {
-                        let r = this.typographyDNA[Math.floor(Math.random() * this.typographyDNA.length)];
-                        typoName = r.name; typoDesc = r.desc;
-                    } else {
-                        let s = this.typographyDNA.find(f => f.name === this.typographyChoice);
-                        typoName = s ? s.name : "Friendly Rounded Handwritten"; typoDesc = s ? s.desc : "";
-                    }
+            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+            const data = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const container = document.getElementById('saved-blocks-container');
+            container.innerHTML = "";
 
-                    // Font Size Logic
-                    let hSize = this.headerFontSize ? (this.headerFontSize.toLowerCase().includes('pt') ? this.headerFontSize : this.headerFontSize + 'pt') : 'Auto (Large)';
-                    let bSize = this.bodyFontSize ? (this.bodyFontSize.toLowerCase().includes('pt') ? this.bodyFontSize : this.bodyFontSize + 'pt') : 'Auto (Medium)';
-                    let fSize = this.footerFontSize ? (this.footerFontSize.toLowerCase().includes('pt') ? this.footerFontSize : this.footerFontSize + 'pt') : 'Auto (Small)';
-                    let fontSizeInstr = `Header: ${hSize}, Body: ${bSize}, Footer: ${fSize}`;
+            if (data.length === 0) {
+                container.innerHTML = `<div class="col-span-1 md:col-span-2 p-8 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400">Belum ada prompt tersimpan di Mode ${mode}.</div>`;
+                return;
+            }
 
-                    // 3. Text Effect Logic
-                    let effectInstr = "";
-                    if (this.textEffect === 'custom') {
-                        effectInstr = this.customTextEffect || "Text with custom effect applied.";
-                    } else if (this.textEffect === 'embossed') {
-                        effectInstr = "3D embossed text effect, text appears physically raised from the surface, realistic lighting and shadows on the typography.";
-                    } else if (this.textEffect === 'neon') {
-                        effectInstr = "Neon glow text effect, luminous bright typography, subtle glowing light wrapping around the letters.";
-                    } else if (this.textEffect === 'foil') {
-                        effectInstr = "Metallic foil text effect, shiny reflective typography, catching ambient light.";
-                    } else if (this.textEffect === 'chalk') {
-                        effectInstr = "Textural chalk effect, rough matte lettering seamlessly blended onto the surface.";
-                    } else if (this.textEffect === 'watercolor') {
-                        effectInstr = "Watercolor blend text effect, typography slightly bleeding into the background like paint.";
-                    } else {
-                        effectInstr = "Clean 2D flat typography, perfectly flush with the surface.";
-                    }
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-stone-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-3 shadow-xs";
+                
+                let imgHtml = '';
+                if (item.image) {
+                    imgHtml = `<div class="w-full h-32 rounded-lg overflow-hidden border border-slate-200 mb-2"><img src="${item.image}" class="w-full h-full object-cover"></div>`;
+                }
 
-                    // 4. Alignment Logic
-                    let alignInstr = "";
-                    if (this.textAlign === 'custom') {
-                        alignInstr = this.customTextAlign || "Custom alignment";
-                    } else if (this.textAlign === 'left') {
-                        alignInstr = "Strictly left-aligned text";
-                    } else if (this.textAlign === 'center') {
-                        alignInstr = "Strictly center-aligned text";
-                    } else if (this.textAlign === 'right') {
-                        alignInstr = "Strictly right-aligned text";
-                    } else {
-                        alignInstr = "Dynamically flowing text alignment adapting to the visual shape";
-                    }
+                card.innerHTML = `
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div>
+                            <span class="font-extrabold text-[11px] text-emerald-800 uppercase block">${item.title}</span>
+                            <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                        </div>
+                    </div>
+                    ${imgHtml}
+                    <textarea id="${item.id}-text" class="w-full h-32 p-3 text-[10px] font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${item.content}</textarea>
+                    <div class="flex flex-wrap gap-2 mt-1">
+                        <button onclick="copySaved('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy</button>
+                        <button onclick="editSaved('${item.id}', '${mode}')" id="btn-edit-${item.id}" class="flex-1 py-1.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded uppercase hover:bg-amber-200 transition-all"><i class="fa-solid fa-pen"></i> Edit</button>
+                        <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
+                        <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah</button>
+                        <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
 
-                    // 5. Other Params & Exact Ratio Calculation
-                    let ratioText = this.aspectRatio === 'custom' ? (this.customRatio || "custom ratio") : 
-                        (this.aspectRatio === '1:1' ? "1:1 (Square)" : 
-                         this.aspectRatio === '9:16' ? "9:16 (Vertical)" : 
-                         this.aspectRatio === '16:9' ? "16:9 (Landscape)" : 
-                         this.aspectRatio === '3:4' ? "3:4 (Portrait)" : 
-                         "4:5 (IG Portrait)");
-                    
-                    let exactRatio = this.aspectRatio === 'custom' ? (this.customRatio || "3:4") : this.aspectRatio;
+        function copySaved(id) {
+            const el = document.getElementById(`${id}-text`);
+            el.select();
+            document.execCommand('copy');
+            showToast("Teks tersimpan berhasil disalin!");
+        }
 
-                    let compRuleText = this.composition === 'custom' ? this.customComposition : 
-                        (this.composition === 'text_heavy' ? "Text placement area occupies 60% of the canvas, visual illustrations occupy 40%." :
-                         this.composition === 'visual_heavy' ? "Text placement area occupies 40% of the canvas, visual illustrations occupy 60%." :
-                         this.composition === 'minimal_text' ? "Text placement area occupies 30% of the canvas, visual illustrations occupy 70%." : 
-                         "Balanced 50/50 space distribution between text area and visual elements.");
-
-                    let colorInstr = this.colorPalette === 'custom' ? this.customPalette : 
-                        (this.colorPalette === 'earth' ? "Natural Earth tones" : this.colorPalette === 'pastel' ? "Soft Pastels" : this.colorPalette === 'monochrome' ? "Monochrome" : this.colorPalette === 'warm' ? "Warm/Amber" : this.colorPalette === 'cool' ? "Cool/Blue" : "Auto contextual colors");
-
-                    let rawLogos = this.socialMediaLogos ? this.socialMediaLogos.split(',').map(l => l.trim()) : [];
-                    let logoString = rawLogos.length > 0 ? rawLogos.map(l => `[minimalist monochrome vector ${l} logo icon]`).join(' ') : "";
-                    let finalUsername = this.credit ? (this.credit.startsWith('@') ? this.credit : '@' + this.credit) : "@username";
-                    
-                    let bodyTextRule = this.bodyTextFormat === 'bullet' ? "Gunakan format point-point (bullet points)." : "Gunakan format paragraf naratif mengalir (TANPA point-point/bullet).";
-
-                    // Character Override Rules
-                    let characterRuleText = "";
-                    if (this.characterType === 'custom' && this.customCharacter.trim() !== '') {
-                        characterRuleText = `* KUSTOM KARAKTER USER: ${this.customCharacter}\n* (TUGAS AI: HAPUS ATURAN KARAKTER STANDAR. JIKA KARAKTER MUNCUL, WAJIB GUNAKAN DESKRIPSI KUSTOM INI SEPENUHNYA! NAMUN TETAP WAJIB FACELESS NO EYES).`;
-                    } else {
-                        characterRuleText = `* MC WANITA: Gamis lebar, khimar menutup dada.\n* MC PRIA: Pakaian casual/modest rapi.`;
-                    }
-                    
-                    let contentType = isPosterMode ? "Poster Tunggal" : "Carousel";
-
-                    let card1Content = `@createimage\n\nBertindaklah sebagai AI Content Strategist & Visual Architect. Buat Naskah ${contentType} dan Visual Guide (sebanyak ${this.numSlides} Slide) berdasarkan instruksi ketat berikut!\n\n`;
-                    card1Content += `[Card 1]\n=== GLOBAL CONFIGURATION & SLIDE 1 ===\n\n`;
-                    card1Content += `[GLOBAL CONFIGURATION]\n`;
-                    card1Content += `- Aspect Ratio: ${ratioText}\n`;
-                    card1Content += `- Canvas Composition: ${compRuleText}\n`;
-                    card1Content += `- Text Alignment: ${alignInstr}\n`;
-                    card1Content += `- Style Art: ${styleInstruction}\n`;
-                    card1Content += `- Color Palette: ${colorInstr}\n`;
-                    card1Content += `- Typography: ${typoName} (${typoDesc})\n`;
-                    card1Content += `- Font Sizes: ${fontSizeInstr}\n`;
-                    card1Content += `- Typography Effect: ${effectInstr}\n`;
-                    card1Content += `- Characters Rules:\n${characterRuleText}\n`;
-                    card1Content += `- General Visual Constraints: STRICT ANICONISM. All humans/figures MUST BE FACELESS WITH NO EYES. STRICTLY NO SPLIT-SCREEN OR COLLAGE. NO ARABIC TEXT at all in images.\n\n`;
-                    
-                    card1Content += `---------------------------------------------------\n# VERY IMPORTANT RULES FOR AI\n`;
-                    card1Content += `1. DILARANG KERAS MENGGUNAKAN KATA "FEYNMAN" di dalam slide/caption.\n`;
-                    card1Content += `2. DILARANG KERAS MEMBUAT GRID/KOLASE. Setiap instruksi gambar WAJIB menghasilkan 1 Single Standalone Canvas.\n`;
-                    card1Content += `3. ADAPTASI INPUT USER: Jika user memasukkan draft naskah utuh, JANGAN MERANGKUM/MENGARANG! Gunakan teks dari user tersebut persis.\n`;
-                    card1Content += `4. FLEKSIBILITAS KARAKTER (PENTING): Karakter manusia BOLEH dimunculkan JIKA KONTEKS naskah sedang membicarakan subjek/emosi/interaksi. Namun, jika naskah murni konsep abstrak, JANGAN paksakan ada karakter, gunakan BENDA METAFORA visual sebagai fokus utama.\n`;
-                    card1Content += `---------------------------------------------------\n\n`;
-
-                    card1Content += `[SPECS]\n`;
-                    card1Content += `- Aspect Ratio: ${ratioText}\n`;
-                    card1Content += `- Font Sizes: ${fontSizeInstr}\n`;
-                    card1Content += `- Typography Effect: ${effectInstr}\n`;
-                    card1Content += `- Placement & Alignment: ${alignInstr} seamlessly into negative space.\n`;
-                    card1Content += `- Footer: ${logoString} ${finalUsername} ${isPosterMode ? '' : '| 1/' + this.numSlides}\n\n`;
-                    
-                    card1Content += `[VISUAL GUIDE]\n`;
-                    card1Content += `- Composition: High-impact central focus serving as a powerful visual hook respecting ${compRuleText}.\n`;
-                    card1Content += `- Storytelling: [TUGAS AI: Buat deskripsi visual/objek menarik berdasarkan topik: "${this.topic}"]\n\n`;
-
-                    card1Content += `[GEN_AI PROMPT]\n`;
-                    card1Content += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB AWALI DENGAN: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN sertakan: "Seamless environmental negative space for text matching the design flow. The typography must be dynamically placed and seamlessly integrated into the environment (NO solid white boxes or rigid borders), respecting the ${compRuleText} proportion and ${alignInstr} format." Pastikan efek teks "${effectInstr}" diterapkan.]\n\n`;
-
-                    card1Content += `[NASKAH]\n`;
-                    card1Content += `- HEADER: ...\n- SUB HEADER: ...\n- FOOTER: ${logoString} ${finalUsername} ${isPosterMode ? '' : '| 1/' + this.numSlides}\n\n`;
-                    
-                    // Added Dynamic Ratio Suffix for Card 1
-                    card1Content += `Make the aspect ratio ${exactRatio}`;
-
-                    this.generatedCards.push({ title: "Card 1 (Master Config & Cover)", content: card1Content });
-
-                    if (!isPosterMode) {
-                        for (let i = 2; i <= this.numSlides; i++) {
-                            let cardContent = `@createimage\n\n[Card ${i}]\n=== SLIDE ${i} ===\n`;
-                            cardContent += `[SPECS]\n`;
-                            cardContent += `- Aspect Ratio: ${ratioText}\n`;
-                            cardContent += `- Typography Effect: ${effectInstr}\n`;
-                            cardContent += `- Placement & Alignment: ${alignInstr} seamlessly into negative space.\n`;
-                            cardContent += `- Visual Constraint: STANDALONE CANVAS. FACELESS. NO ARABIC TEXT.\n`;
-                            cardContent += `- Footer: ${logoString} ${finalUsername} | ${i}/${this.numSlides}\n\n`;
-                            
-                            cardContent += `[VISUAL GUIDE]\n`;
-                            cardContent += `- Composition: Text and visual aligned respectfully based on ${compRuleText}.\n`;
-                            cardContent += `- Characters/Metaphor: [TUGAS AI: Tentukan secara cerdas! Jika slide menceritakan emosi/interaksi, munculkan karakter sesuai aturan kustom/standar. Jika slide abstrak konseptual, HILANGKAN karakter dan ganti dengan benda metafora visual.]\n`;
-                            cardContent += `- Storytelling: [TUGAS AI: Buat deskripsi selaras dengan naskah.]\n\n`;
-
-                            cardContent += `[GEN_AI PROMPT]\n`;
-                            cardContent += `[TUGAS AI: Tulis prompt DALL-E 8K. WAJIB AWALI DENGAN: "Single standalone image, strictly NO grid, NO collage layout." KEMUDIAN SERTAKAN: 1) Angle Kamera Spesifik yang BERBEDA dari slide sebelumnya (contoh: close up, high angle). 2) "Seamless environmental negative space for text. Typography seamlessly and dynamically integrated into the background (NO white boxes), respecting ${alignInstr} format." Pastikan efek teks bekerja.]\n\n`;
-
-                            let bodyTemplate = this.bodyTextFormat === 'bullet' ? "  * ...\n  * ..." : "  [Tuliskan paragraf pendek naratif di sini tanpa bullet point...]";
-
-                            cardContent += `[NASKAH]\n`;
-                            cardContent += `- HEADER: ...\n- BODY:\n${bodyTemplate}\n- FOOTER: ${logoString} ${finalUsername} | ${i}/${this.numSlides}\n\n`;
-
-                            // Added Dynamic Ratio Suffix for subsequent cards
-                            cardContent += `Make the aspect ratio ${exactRatio}`;
-
-                            this.generatedCards.push({ title: `Card ${i} (Slide ${i})`, content: cardContent });
-                        }
-                    }
-
-                    let captionContent = `[Card ${isPosterMode ? 2 : parseInt(this.numSlides) + 1}]\n=== CAPTION ===\n[TUGAS AI: Buat copywriting caption yang engaging, merangkum isi ${isPosterMode ? 'poster' : 'slide'}, diakhiri CTA dan Hashtag.]`;
-                    this.generatedCards.push({ title: "Card (Caption)", content: captionContent });
-
-                    this.accordions.input = false;
-                    this.accordions.settings = false;
-                    this.showFeedback("Blueprint Prompt Berhasil Dirakit!", "success");
-                },
-
-                copySingle(text) {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    this.showFeedback("Kartu disalin ke clipboard!", "success");
-                },
-
-                copyAll() {
-                    if (this.generatedCards.length === 0) return;
-                    let fullText = this.generatedCards.map(c => c.content).join('\n\n\n');
-                    const textarea = document.createElement('textarea');
-                    textarea.value = fullText;
-                    document.body.appendChild(textarea);
-                    textarea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textarea);
-                    this.showFeedback("Semua kartu disalin! Siap di-paste ke ChatGPT.", "success");
+        function editSaved(id, mode) {
+            const el = document.getElementById(`${id}-text`);
+            const btn = document.getElementById(`btn-edit-${id}`);
+            
+            if (el.hasAttribute('readonly')) {
+                el.removeAttribute('readonly');
+                el.classList.replace('bg-white', 'bg-amber-50');
+                el.classList.add('border-amber-400');
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Save Edit`;
+                btn.classList.replace('bg-amber-100', 'bg-amber-500');
+                btn.classList.replace('text-amber-800', 'text-amber-950');
+                el.focus();
+            } else {
+                // Save changes
+                el.setAttribute('readonly', 'true');
+                el.classList.replace('bg-amber-50', 'bg-white');
+                el.classList.remove('border-amber-400');
+                btn.innerHTML = `<i class="fa-solid fa-pen"></i> Edit`;
+                btn.classList.replace('bg-amber-500', 'bg-amber-100');
+                btn.classList.replace('text-amber-950', 'text-amber-800');
+                
+                // Update Local Storage
+                const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+                let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const itemIndex = data.findIndex(item => item.id === id);
+                if (itemIndex > -1) {
+                    data[itemIndex].content = el.value;
+                    localStorage.setItem(storageKey, JSON.stringify(data));
+                    showToast("Perubahan berhasil disimpan.");
                 }
             }
         }
+
+        function deleteSaved(id, mode) {
+            if(!confirm("Yakin ingin menghapus data ini?")) return;
+            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+            let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            data = data.filter(item => item.id !== id);
+            localStorage.setItem(storageKey, JSON.stringify(data));
+            renderSaved(mode);
+            showToast("Data berhasil dihapus.");
+        }
+
+        function uploadSavedImage(event, id, mode) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Compress image minimally via Canvas to prevent localstorage limit crash
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+
+                    // Save to local storage
+                    const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
+                    let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                    const itemIndex = data.findIndex(item => item.id === id);
+                    if (itemIndex > -1) {
+                        data[itemIndex].image = dataUrl;
+                        localStorage.setItem(storageKey, JSON.stringify(data));
+                        renderSaved(mode);
+                        showToast("Gambar berhasil diunggah dan disimpan.");
+                    }
+                }
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleExportJSON() {
+            const dataA = JSON.parse(localStorage.getItem('islamic_studio_saved_a') || '[]');
+            const dataB = JSON.parse(localStorage.getItem('islamic_studio_saved_b') || '[]');
+            const exportData = {
+                export_date: new Date().toISOString(),
+                version: "3.0",
+                saved_a: dataA,
+                saved_b: dataB
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `islamic_studio_backup_${Date.now()}.json`);
+            dlAnchorElem.click();
+            showToast("Data berhasil dieksport!");
+        }
+
+        function handleImportJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.saved_a && Array.isArray(imported.saved_a)) {
+                        let existingA = JSON.parse(localStorage.getItem('islamic_studio_saved_a') || '[]');
+                        // Append without checking duplicates for simplicity, or we could filter by ID
+                        localStorage.setItem('islamic_studio_saved_a', JSON.stringify([...imported.saved_a, ...existingA]));
+                    }
+                    if (imported.saved_b && Array.isArray(imported.saved_b)) {
+                        let existingB = JSON.parse(localStorage.getItem('islamic_studio_saved_b') || '[]');
+                        localStorage.setItem('islamic_studio_saved_b', JSON.stringify([...imported.saved_b, ...existingB]));
+                    }
+                    renderSaved(currentSavedTab);
+                    showToast("Import JSON berhasil! Data ditambahkan.");
+                } catch (error) {
+                    alert("File JSON tidak valid atau rusak.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function showToast(msg) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg text-xs font-bold fade-in';
+            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i> ${msg}`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
     </script>
 </body>
 </html>
