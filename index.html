@@ -3,615 +3,803 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOMUKA</title>
+    <title>NOMUKA - Islamic Content Strategist Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Accordion transition */
+        .accordion-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .accordion-content.active {
+            max-height: 5000px; /* Large enough to contain content */
+            opacity: 1;
+        }
         
-        /* Smooth transitions */
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
     </style>
 </head>
-<body class="bg-stone-50 text-slate-800 min-h-screen flex flex-col">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
 
-    <header class="bg-emerald-950 text-stone-100 py-4 px-6 shadow-md border-b-4 border-amber-500 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <!-- Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="bg-amber-500 text-emerald-950 p-2.5 rounded-xl shadow-inner font-bold text-2xl flex items-center justify-center">
-                    <i class="fa-solid fa-kaaba"></i>
+                <div class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center font-bold text-xl shadow-lg shadow-emerald-200">
+                    N
                 </div>
                 <div>
-                    <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-amber-400">NOMUKA</h1>
-                    <p class="text-xs text-emerald-200 uppercase font-semibold tracking-wider">Dual-Mode Visual Architect Engine • v4.0</p>
+                    <h1 class="text-lg font-extrabold text-slate-800 leading-tight">NOMUKA</h1>
+                    <p class="text-[10px] text-slate-500 font-medium uppercase tracking-wider">Islamic Content Studio</p>
                 </div>
             </div>
-            
             <!-- Mode Switcher -->
-            <div class="flex bg-emerald-900 rounded-xl p-1 border border-emerald-800">
-                <button onclick="setMode('A')" id="btn-mode-a" class="px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white">
-                    <i class="fa-solid fa-flask mr-1"></i> Mode A (Researcher)
+            <div class="flex bg-slate-100 p-1 rounded-lg border border-slate-200">
+                <button onclick="switchMode('A')" id="btn-mode-a" class="px-4 py-1.5 text-xs font-bold rounded-md transition-all text-slate-500 hover:text-slate-700">
+                    MODE A (Ide)
                 </button>
-                <button onclick="setMode('B')" id="btn-mode-b" class="px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-emerald-950 shadow-sm">
-                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Mode B (Feynman)
+                <button onclick="switchMode('B')" id="btn-mode-b" class="px-4 py-1.5 text-xs font-bold rounded-md transition-all bg-white text-emerald-700 shadow-sm border border-slate-200">
+                    MODE B (Carousel)
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto p-4 lg:p-6 pb-20 flex flex-col gap-6">
+    <!-- Main Content -->
+    <main class="flex-1 max-w-4xl mx-auto w-full px-4 py-6 space-y-4">
         
         <!-- ========================================== -->
-        <!-- 1. KARTU INPUT -->
+        <!-- KARTU 1: INPUT -->
         <!-- ========================================== -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <button onclick="toggleMainAccordion('card-input')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
-                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-keyboard text-emerald-600"></i> 1. Kartu Input
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <button onclick="toggleAccordion('acc-input', 'icon-input')" class="w-full px-5 py-4 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-nib text-emerald-600"></i> 1. KARTU INPUT
                 </h2>
-                <i id="icon-card-input" class="fa-solid fa-chevron-up text-slate-500 transition-transform"></i>
+                <i id="icon-input" class="fa-solid fa-chevron-up text-slate-400 transition-transform duration-300"></i>
             </button>
-            <section id="card-input" class="flex flex-col gap-6 p-6 fade-in">
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Kolom A -->
-                    <div class="flex flex-col gap-2 relative">
-                        <div class="flex justify-between items-center">
-                            <label class="text-xs font-bold text-slate-600 uppercase">A. Ide / Topik / Paste Artikel</label>
-                            <button onclick="clearInput('input-topic')" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded transition-all">
-                                <i class="fa-solid fa-xmark mr-1"></i> Hapus
-                            </button>
-                        </div>
-                        <textarea id="input-topic" rows="10" class="w-full p-4 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan topik utama (misal: Sabar Menghadapi Ujian, atau paste artikel panjang di sini...)"></textarea>
+            
+            <div id="acc-input" class="accordion-content active">
+                <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Kolom Topik -->
+                    <div class="relative group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-2">A. Topik/ Gagasan Utama</label>
+                        <textarea id="input-topic" rows="5" class="w-full p-3 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none resize-y bg-slate-50 focus:bg-white transition-colors" placeholder="Ketik atau paste ide, topik, artikel, atau materi dakwah di sini..."></textarea>
+                        <button onclick="document.getElementById('input-topic').value=''" class="absolute top-8 right-2 w-6 h-6 bg-slate-200 hover:bg-red-100 text-slate-500 hover:text-red-500 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity" title="Clear Text">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
-                    
-                    <!-- Kolom B -->
-                    <div class="flex flex-col gap-2 relative">
-                        <div class="flex justify-between items-center">
-                            <label class="text-xs font-bold text-slate-600 uppercase">B. Instruksi Tambahan (Opsional)</label>
-                            <button onclick="clearInput('input-instructions')" class="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded transition-all">
-                                <i class="fa-solid fa-xmark mr-1"></i> Hapus
-                            </button>
-                        </div>
-                        <textarea id="input-instructions" rows="10" class="w-full p-4 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Masukkan instruksi spesifik jika ada (misal: Fokus pada peran ayah, hindari dalil yang terlalu berat, buat gaya bahasa anak muda...)"></textarea>
+
+                    <!-- Kolom Instruksi Khusus -->
+                    <div class="relative group">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-2">B. Instruksi Khusus (Opsional)</label>
+                        <textarea id="input-instructions" rows="5" class="w-full p-3 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none resize-y bg-slate-50 focus:bg-white transition-colors" placeholder="Tambahkan instruksi khusus (opsional). Contoh: Gunakan bahasa anak muda, atau wajib sertakan dalil tentang sabar..."></textarea>
+                        <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-8 right-2 w-6 h-6 bg-slate-200 hover:bg-red-100 text-slate-500 hover:text-red-500 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity" title="Clear Text">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
                 </div>
-            </section>
-        </div>
-
-        <!-- ========================================== -->
-        <!-- 2. KARTU SETTING -->
-        <!-- ========================================== -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <button onclick="toggleMainAccordion('card-setting')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
-                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-emerald-600"></i> 2. Kartu Setting
-                </h2>
-                <i id="icon-card-setting" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
-            </button>
-            <section id="card-setting" class="hidden flex-col gap-6 p-6 fade-in">
-                <!-- Peringatan Mode A -->
-                <div id="setting-mode-a-warning" class="hidden bg-amber-50 border border-amber-200 text-amber-800 p-6 rounded-2xl shadow-sm text-center">
-                    <i class="fa-solid fa-flask text-4xl mb-3 opacity-50"></i>
-                    <h3 class="font-extrabold text-lg uppercase">Kartu Setting Tidak Tersedia di Mode A</h3>
-                    <p class="text-sm mt-2">Mode A (Researcher) hanya menghasilkan ide/topik murni dan tidak memerlukan konfigurasi visual.<br>Silakan langsung menuju <strong>Kartu Output</strong> atau klik tombol Generate di bawah.</p>
-                </div>
-
-                <!-- Konten Setting Mode B -->
-                <div id="setting-mode-b-content" class="flex flex-col gap-6">
-                    
-                    <div class="flex flex-col md:flex-row justify-end items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                        <div class="flex gap-2">
-                            <button onclick="autoSetSettings()" class="px-4 py-2 bg-indigo-100 text-indigo-800 hover:bg-indigo-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Set
-                            </button>
-                            <button onclick="resetSettings()" class="px-4 py-2 bg-slate-100 text-slate-800 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                                <i class="fa-solid fa-rotate-left"></i> Reset
-                            </button>
-                        </div>
-                    </div>
-
-                <!-- Grid Form Settings -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    
-                    <!-- A. Jumlah Slide -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">A. Jumlah Slide (1 - 30)</label>
-                        <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500">
-                        <p class="text-[10px] text-slate-400 mt-1">*Default: 7 Slide + 1 Caption</p>
-                    </div>
-
-                    <!-- B. Aspect Ratio -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">B. Aspect Ratio</label>
-                        <select id="set-ratio" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI">Auto-Set by AI</option>
-                            <option value="1:1">1:1 (Square)</option>
-                            <option value="3:4" selected>3:4 (Portrait/Feed)</option>
-                            <option value="4:5">4:5</option>
-                            <option value="9:16">9:16 (Stories/Reels)</option>
-                            <option value="16:9">16:9</option>
-                            <option value="5:4">5:4</option>
-                            <option value="4:3">4:3</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-ratio-kustom" placeholder="Ketik rasio..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- C. Karakter Utama -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">C. Karakter Utama</label>
-                        <select id="set-character" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI">Auto-Set by AI</option>
-                            <option value="Pria Dewasa">Pria Dewasa</option>
-                            <option value="Wanita" selected>Wanita</option>
-                            <option value="Pasutri">Pasutri</option>
-                            <option value="Anak Laki-laki">Anak Laki-laki</option>
-                            <option value="Anak Perempuan">Anak Perempuan</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-character-kustom" placeholder="Ketik karakter..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                        <p class="text-[10px] text-amber-600 font-bold mt-1">*Aturan Faceless & No Eyes mutlak berlaku.</p>
-                    </div>
-
-                    <!-- D. Style Art -->
-                    <div class="setting-group lg:col-span-3">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">D. Gaya Seni (Art Style)</label>
-                        <select id="set-style" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI">Auto-Set by AI</option>
-                            <option value="1. GAYA 1 / 3D Papercraft">1. GAYA 1 / 3D Papercraft</option>
-                            <option value="2. GAYA 2 / Layered Papercut">2. GAYA 2 / Layered Papercut</option>
-                            <option value="3. GAYA 3 / Origami Paper Art">3. GAYA 3 / Origami Paper Art</option>
-                            <option value="4. GAYA 4 / Paper Diorama">4. GAYA 4 / Paper Diorama</option>
-                            <option value="5. GAYA 5 / Islamic Layered Papercut" selected>5. GAYA 5 / Islamic Layered Papercut</option>
-                            <option value="6. GAYA 6 / Paper Quilling">6. GAYA 6 / Paper Quilling</option>
-                            <option value="7. GAYA 7 / Kirigami Illustration">7. GAYA 7 / Kirigami Illustration</option>
-                            <option value="8. GAYA 8 / Cut Paper Collage">8. GAYA 8 / Cut Paper Collage</option>
-                            <option value="9. GAYA 9 / Cardboard Craft">9. GAYA 9 / Cardboard Craft</option>
-                            <option value="10. GAYA 10 / Paper Sculpture">10. GAYA 10 / Paper Sculpture</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-style-kustom" placeholder="Ketik gaya seni custom..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- E. Font DNA -->
-                    <div class="setting-group lg:col-span-3">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">E. Tipografi (Font DNA)</label>
-                        <select id="set-font" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI">Auto-Set by AI</option>
-                            <option value="FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐">FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 2. Soft Brush Handwriting">FONT 2. Soft Brush Handwriting</option>
-                            <option value="FONT 3. Modern Editorial Serif">FONT 3. Modern Editorial Serif</option>
-                            <option value="FONT 4. Humanist Sans">FONT 4. Humanist Sans</option>
-                            <option value="FONT 5. Geometric Sans">FONT 5. Geometric Sans</option>
-                            <option value="FONT 6. Rounded Sans">FONT 6. Rounded Sans</option>
-                            <option value="FONT 7. Storybook Typography ⭐⭐⭐⭐⭐" selected>FONT 7. Storybook Typography ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 8. Notebook Handwriting">FONT 8. Notebook Handwriting</option>
-                            <option value="FONT 9. Premium Calligraphy">FONT 9. Premium Calligraphy</option>
-                            <option value="FONT 10. Modern Script">FONT 10. Modern Script</option>
-                            <option value="FONT 11. Vintage Sign Painting">FONT 11. Vintage Sign Painting</option>
-                            <option value="FONT 12. Chalkboard">FONT 12. Chalkboard</option>
-                            <option value="FONT 13. Pencil Sketch">FONT 13. Pencil Sketch</option>
-                            <option value="FONT 14. Ink Pen">FONT 14. Ink Pen</option>
-                            <option value="FONT 15. Comic Friendly">FONT 15. Comic Friendly</option>
-                            <option value="FONT 16. Children's Book">FONT 16. Children's Book</option>
-                            <option value="FONT 17. Scandinavian Minimal">FONT 17. Scandinavian Minimal</option>
-                            <option value="FONT 18. Japanese Lifestyle">FONT 18. Japanese Lifestyle</option>
-                            <option value="FONT 19. Luxury Magazine">FONT 19. Luxury Magazine</option>
-                            <option value="FONT 20. Cozy Journal ⭐⭐⭐⭐⭐">FONT 20. Cozy Journal ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐">FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐">FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐">FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 24. Art Deco Display ⭐⭐⭐⭐⭐">FONT 24. Art Deco Display ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 25. Retro Groovy ⭐⭐⭐⭐⭐">FONT 25. Retro Groovy ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐">FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐">FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐">FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐">FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐">FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐</option>
-                            <option value="FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐">FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-font-kustom" placeholder="Ketik nama font custom..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- F. Efek Teks -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">F. Efek Teks</label>
-                        <select id="set-texteffect" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
-                            <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
-                            <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
-                            <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
-                            <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
-                            <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
-                            <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
-                            <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-texteffect-kustom" placeholder="Ketik efek teks..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- G. Alignment -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">G. Rata Teks (Alignment)</label>
-                        <select id="set-alignment" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI (DINAMIS/ SEEMLESS)" selected>Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
-                            <option value="RATA KIRI">RATA KIRI</option>
-                            <option value="RATA TENGAH">RATA TENGAH</option>
-                            <option value="RATA KANAN">RATA KANAN</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-alignment-kustom" placeholder="Ketik alignment..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- H. Komposisi -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">H. Komposisi Teks & Visual</label>
-                        <select id="set-composition" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
-                            <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
-                            <option value="TEKS DOMINAN (60% TEKS : 40% VISUAL)">TEKS DOMINAN (60% TEKS : 40% VISUAL)</option>
-                            <option value="VISUAL DOMINAN (40% TEKS : 60% VISUAL)">VISUAL DOMINAN (40% TEKS : 60% VISUAL)</option>
-                            <option value="MINIMALIS TEKS (30% TEKS : 70% VISUAL)">MINIMALIS TEKS (30% TEKS : 70% VISUAL)</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-composition-kustom" placeholder="Ketik komposisi..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- I. Format Body -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">I. Format Body Text</label>
-                        <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
-                            <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
-                            <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-bodyformat-kustom" placeholder="Ketik format body..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-
-                    <!-- J. Palet Warna -->
-                    <div class="setting-group">
-                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">J. Palet Warna</label>
-                        <select id="set-palette" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
-                            <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
-                            <option value="EARTH TONE">EARTH TONE</option>
-                            <option value="SOFT PASTEL">SOFT PASTEL</option>
-                            <option value="MONOCHROME">MONOCHROME</option>
-                            <option value="WARM">WARM</option>
-                            <option value="COOL">COOL</option>
-                            <option value="kustom">KUSTOM (Isi Sendiri)</option>
-                        </select>
-                        <input type="text" id="set-palette-kustom" placeholder="Ketik palet warna..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
-                    </div>
-                </div>
-
-                <!-- K. Ukuran PT (Header, Body, Footer) -->
-                <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
-                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">K. Ukuran Font (PT)</label>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Header</label>
-                            <input type="number" id="set-pt-header" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Body</label>
-                            <input type="number" id="set-pt-body" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Footer</label>
-                            <input type="number" id="set-pt-footer" placeholder="Auto" class="w-full px-2 py-1.5 text-sm border border-slate-300 rounded-lg">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- L. Watermark Footer -->
-                <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
-                    <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">L. Watermark Footer</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Logo Sosmed (Koma separator)</label>
-                            <input type="text" id="set-watermark-logo" value="Instagram, Threads" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] text-slate-500 uppercase mb-1">Username</label>
-                            <input type="text" id="set-watermark-user" value="@ikmalogic" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-xl">
-                        </div>
-                    </div>
-                    <p class="text-[10px] text-emerald-700 font-bold mt-2 font-mono">Format Final: [minimalist monochrome vector instagram logo icon] [minimalist monochrome vector threads logo icon] @ikmalogic | 1/7</p>
-                </div>
-
             </div>
-        </section>
-        </div>
-
-        <div class="my-6 flex justify-center sticky top-[90px] z-30">
-            <button onclick="processGenerate()" id="btn-global-generate" class="group relative px-10 py-5 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-lg rounded-2xl shadow-xl transition-all uppercase tracking-wide flex items-center justify-center gap-3 w-full max-w-md overflow-hidden">
-                <div class="absolute inset-0 w-full h-full bg-white/20 -translate-x-full group-hover:animate-[shimmer_1s_infinite]"></div>
-                <i class="fa-solid fa-bolt text-amber-300 text-xl"></i> 
-                <span>Generate Output AI</span>
-            </button>
         </div>
 
         <!-- ========================================== -->
-        <!-- 3. KARTU OUTPUT -->
+        <!-- KARTU 2: SETTING (MODE B ONLY) -->
         <!-- ========================================== -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <button onclick="toggleMainAccordion('card-output')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
-                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-file-export text-emerald-600"></i> 3. Kartu Output
+        <div id="card-setting" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <button onclick="toggleAccordion('acc-setting', 'icon-setting')" class="w-full px-5 py-4 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-emerald-600"></i> 2. KARTU SETTING
                 </h2>
-                <i id="icon-card-output" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                <i id="icon-setting" class="fa-solid fa-chevron-up text-slate-400 transition-transform duration-300"></i>
             </button>
-            <section id="card-output" class="hidden flex-col gap-6 p-6 fade-in">
-                <div class="flex flex-col md:flex-row justify-end items-start md:items-center gap-4 border-b border-slate-100 pb-4">
-                    <div class="flex gap-2">
-                        <button onclick="copyAllOutputBlocks()" class="px-4 py-2 bg-emerald-100 text-emerald-800 hover:bg-emerald-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-copy"></i> Copy All
+            
+            <div id="acc-setting" class="accordion-content active">
+                <div class="p-5 space-y-6">
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end gap-2">
+                        <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors border border-slate-200 shadow-sm flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Reset
                         </button>
-                        <button onclick="saveAllOutputBlocks()" class="px-4 py-2 bg-amber-100 text-amber-800 hover:bg-amber-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-bookmark"></i> Save All
+                        <button onclick="autoSetSettings()" class="px-4 py-2 text-xs font-bold bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white rounded-lg transition-colors shadow-sm shadow-orange-200 flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Set AI
                         </button>
                     </div>
-                </div>
 
-                <!-- Container Block Dinamis -->
-                <div id="output-blocks-container" class="flex flex-col gap-6">
-                    <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400">
-                        <i class="fa-solid fa-inbox text-3xl mb-2"></i>
-                        <p class="text-sm font-semibold">Output akan muncul di sini setelah Anda menekan tombol Generate.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- A. Jumlah Slide -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">A. Jumlah Slide Carousel</label>
+                            <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                        </div>
+
+                        <!-- B. Rasio -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">B. Aspect Ratio</label>
+                            <select id="set-ratio" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="3:4" selected>3:4 (Portrait Feed)</option>
+                                <option value="4:5">4:5 (Instagram Feed)</option>
+                                <option value="9:16">9:16 (Reels/ Story)</option>
+                                <option value="16:9">16:9 (Landscape)</option>
+                                <option value="5:4">5:4</option>
+                                <option value="4:3">4:3</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-ratio-kustom" placeholder="Ketik rasio..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- C. Karakter Utama -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">C. Karakter Utama</label>
+                            <select id="set-character" onchange="handleCharacterChange(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="Pria Dewasa">Pria Dewasa</option>
+                                <option value="Wanita">Wanita</option>
+                                <option value="Pasutri">Pasutri</option>
+                                <option value="Anak Laki-laki">Anak Laki-laki</option>
+                                <option value="Anak Perempuan">Anak Perempuan</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-character-kustom" placeholder="Ketik karakter..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                            <p class="text-[10px] text-amber-600 font-bold mt-1">*Aturan Faceless & No Eyes mutlak berlaku.</p>
+                        </div>
+
+                        <!-- Detail Karakter Dinamis (Spans full width if active) -->
+                        <div id="character-details-container" class="hidden md:col-span-2 bg-emerald-50/50 border border-emerald-200 p-4 rounded-xl shadow-inner mt-1 mb-2">
+                            <h3 class="text-[11px] font-extrabold text-emerald-800 uppercase mb-3 border-b border-emerald-200 pb-2"><i class="fa-solid fa-user-astronaut mr-1"></i> Rincian Spesifik Karakter</h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Wajah -->
+                                <div>
+                                    <label class="block text-[10px] font-extrabold text-slate-500 uppercase mb-1">A. Wajah</label>
+                                    <select id="set-char-wajah" onchange="handleKustom(this)" class="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-emerald-500">
+                                        <option value="Normal (Proporsional)">Normal (Proporsional)</option>
+                                        <option value="Chibi (Imut/ Kepala Besar)">Chibi (Imut/ Kepala Besar)</option>
+                                        <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                                    </select>
+                                    <input type="text" id="set-char-wajah-kustom" placeholder="Ketik wajah..." class="hidden mt-1 w-full px-2 py-1 text-xs border border-amber-300 rounded bg-amber-50">
+                                </div>
+                                <!-- Headwear -->
+                                <div>
+                                    <label id="label-char-headwear" class="block text-[10px] font-extrabold text-slate-500 uppercase mb-1">B. Penutup Kepala</label>
+                                    <select id="set-char-headwear" onchange="handleKustom(this)" class="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-emerald-500">
+                                    </select>
+                                    <input type="text" id="set-char-headwear-kustom" placeholder="Ketik detail..." class="hidden mt-1 w-full px-2 py-1 text-xs border border-amber-300 rounded bg-amber-50">
+                                </div>
+                                <!-- Outfit -->
+                                <div>
+                                    <label class="block text-[10px] font-extrabold text-slate-500 uppercase mb-1">C. Outfit/ Pakaian</label>
+                                    <select id="set-char-outfit" onchange="handleKustom(this)" class="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-emerald-500">
+                                    </select>
+                                    <input type="text" id="set-char-outfit-kustom" placeholder="Ketik outfit..." class="hidden mt-1 w-full px-2 py-1 text-xs border border-amber-300 rounded bg-amber-50">
+                                </div>
+                                <!-- Aksesoris -->
+                                <div>
+                                    <label class="block text-[10px] font-extrabold text-slate-500 uppercase mb-1">D. Aksesoris</label>
+                                    <select id="set-char-aksesoris" onchange="handleKustom(this)" class="w-full px-2 py-1.5 text-xs border border-slate-300 rounded-lg bg-white focus:ring-2 focus:ring-emerald-500">
+                                    </select>
+                                    <input type="text" id="set-char-aksesoris-kustom" placeholder="Ketik aksesoris..." class="hidden mt-1 w-full px-2 py-1 text-xs border border-amber-300 rounded bg-amber-50">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- D. Gaya Seni -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">D. Gaya Seni (Art Style)</label>
+                            <select id="set-style" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="1. GAYA 1 / 3D Papercraft">1. GAYA 1 / 3D Papercraft</option>
+                                <option value="2. GAYA 2 / Layered Papercut">2. GAYA 2 / Layered Papercut</option>
+                                <option value="3. GAYA 3 / Origami Paper Art">3. GAYA 3 / Origami Paper Art</option>
+                                <option value="4. GAYA 4 / Paper Diorama">4. GAYA 4 / Paper Diorama</option>
+                                <option value="5. GAYA 5 / Islamic Layered Papercut">5. GAYA 5 / Islamic Layered Papercut</option>
+                                <option value="6. GAYA 6 / Paper Quilling">6. GAYA 6 / Paper Quilling</option>
+                                <option value="7. GAYA 7 / Kirigami Illustration">7. GAYA 7 / Kirigami Illustration</option>
+                                <option value="8. GAYA 8 / Cut Paper Collage">8. GAYA 8 / Cut Paper Collage</option>
+                                <option value="9. GAYA 9 / Cardboard Craft">9. GAYA 9 / Cardboard Craft</option>
+                                <option value="10. GAYA 10 / Paper Sculpture">10. GAYA 10 / Paper Sculpture</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-style-kustom" placeholder="Ketik gaya seni..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- E. Typography -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">E. Tipografi (DNA Font)</label>
+                            <select id="set-font" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="FONT 1. Friendly Rounded Handwritten">FONT 1. Friendly Rounded Handwritten ⭐⭐⭐</option>
+                                <option value="FONT 2. Soft Brush Handwriting">FONT 2. Soft Brush Handwriting</option>
+                                <option value="FONT 3. Modern Editorial Serif">FONT 3. Modern Editorial Serif</option>
+                                <option value="FONT 4. Humanist Sans">FONT 4. Humanist Sans</option>
+                                <option value="FONT 5. Geometric Sans">FONT 5. Geometric Sans</option>
+                                <option value="FONT 6. Rounded Sans">FONT 6. Rounded Sans</option>
+                                <option value="FONT 7. Storybook Typography">FONT 7. Storybook Typography ⭐⭐⭐</option>
+                                <option value="FONT 8. Notebook Handwriting">FONT 8. Notebook Handwriting</option>
+                                <option value="FONT 9. Premium Calligraphy">FONT 9. Premium Calligraphy</option>
+                                <option value="FONT 10. Modern Script">FONT 10. Modern Script</option>
+                                <option value="FONT 11. Vintage Sign Painting">FONT 11. Vintage Sign Painting</option>
+                                <option value="FONT 12. Chalkboard">FONT 12. Chalkboard</option>
+                                <option value="FONT 13. Pencil Sketch">FONT 13. Pencil Sketch</option>
+                                <option value="FONT 14. Ink Pen">FONT 14. Ink Pen</option>
+                                <option value="FONT 15. Comic Friendly">FONT 15. Comic Friendly</option>
+                                <option value="FONT 16. Children's Book">FONT 16. Children's Book</option>
+                                <option value="FONT 17. Scandinavian Minimal">FONT 17. Scandinavian Minimal</option>
+                                <option value="FONT 18. Japanese Lifestyle">FONT 18. Japanese Lifestyle</option>
+                                <option value="FONT 19. Luxury Magazine">FONT 19. Luxury Magazine</option>
+                                <option value="FONT 20. Cozy Journal">FONT 20. Cozy Journal ⭐⭐⭐</option>
+                                <option value="FONT 21. Bold Condensed Display">FONT 21. Bold Condensed Display ⭐⭐⭐</option>
+                                <option value="FONT 22. Elegant Slab Serif">FONT 22. Elegant Slab Serif ⭐⭐⭐</option>
+                                <option value="FONT 23. Minimal Monospace">FONT 23. Minimal Monospace ⭐⭐⭐</option>
+                                <option value="FONT 24. Art Deco Display">FONT 24. Art Deco Display ⭐⭐⭐</option>
+                                <option value="FONT 25. Retro Groovy">FONT 25. Retro Groovy ⭐⭐⭐</option>
+                                <option value="FONT 26. Pixel Retro Gaming">FONT 26. Pixel Retro Gaming ⭐⭐⭐</option>
+                                <option value="FONT 27. Futuristic Tech Display">FONT 27. Futuristic Tech Display ⭐⭐⭐</option>
+                                <option value="FONT 28. Blackletter Gothic">FONT 28. Blackletter Gothic ⭐⭐⭐</option>
+                                <option value="FONT 29. Elegant Art Nouveau">FONT 29. Elegant Art Nouveau ⭐⭐⭐</option>
+                                <option value="FONT 30. Luxury Signature Script">FONT 30. Luxury Signature Script ⭐⭐⭐</option>
+                                <option value="FONT 31. Brush Street Typography">FONT 31. Brush Street Typography ⭐⭐⭐</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-font-kustom" placeholder="Ketik nama font..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- F. Text Effect -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">F. Efek Teks (Header & Body)</label>
+                            <select id="set-texteffect" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+                                <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
+                                <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+                                <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
+                                <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
+                                <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
+                                <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-texteffect-kustom" placeholder="Ketik efek teks..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- G. Text Alignment -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">G. Perataan Teks (Alignment)</label>
+                            <select id="set-alignment" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI (DINAMIS/ SEEMLESS)">Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
+                                <option value="RATA KIRI">RATA KIRI</option>
+                                <option value="RATA TENGAH">RATA TENGAH</option>
+                                <option value="RATA KANAN">RATA KANAN</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-alignment-kustom" placeholder="Ketik alignment..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- H. Komposisi Teks & Visual -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">H. Komposisi Teks & Visual</label>
+                            <select id="set-composition" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
+                                <option value="TEKS DOMINAN (60% TEKS : 40% VISUAL)">TEKS DOMINAN (60:40)</option>
+                                <option value="VISUAL DOMINAN (4O% TEKS : 60% VISUAL)">VISUAL DOMINAN (40:60)</option>
+                                <option value="MINIMALIS TEKS (30% TEKS : 70% VISUAL)">MINIMALIS TEKS (30:70)</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-composition-kustom" placeholder="Ketik komposisi..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- I. Format Body Text -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">I. Format Body Text</label>
+                            <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
+                                <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-bodyformat-kustom" placeholder="Ketik format..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- J. Palet Warna -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">J. Palet Warna</label>
+                            <select id="set-palette" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                                <option value="EARTH TONE">EARTH TONE</option>
+                                <option value="SOFT PASTEL">SOFT PASTEL</option>
+                                <option value="MONOCHROME">MONOCHROME</option>
+                                <option value="WARM">WARM</option>
+                                <option value="COOL">COOL</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-palette-kustom" placeholder="Ketik palet warna..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+
+                        <!-- K. Patch Footer -->
+                        <div class="flex flex-col">
+                            <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">K. Bentuk Patch Footer</label>
+                            <select id="set-patch-footer" onchange="handleKustom(this)" class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Auto-Set by AI" selected>Auto-Set by AI</option>
+                                <option value="MINIMALIST TEXT ONLY">MINIMALIST TEXT ONLY</option>
+                                <option value="SOLID PILL/ CAPSULE">SOLID PILL/ CAPSULE</option>
+                                <option value="HOLLOW CAPSULE (OUTLINE)">HOLLOW CAPSULE (OUTLINE)</option>
+                                <option value="FLOATING GLASSMORPHISM">FLOATING GLASSMORPHISM</option>
+                                <option value="WOODEN SIGNBOARD">WOODEN SIGNBOARD</option>
+                                <option value="RIBBON/ BANNER">RIBBON/ BANNER</option>
+                                <option value="kustom">KUSTOM (Isi Sendiri)</option>
+                            </select>
+                            <input type="text" id="set-patch-footer-kustom" placeholder="Ketik patch footer custom..." class="hidden mt-2 w-full px-3 py-2 text-sm border border-amber-300 rounded-lg bg-amber-50">
+                        </div>
+                    </div> <!-- End Main Grid -->
+
+                    <!-- L. Ukuran PT (Header, Body, Footer) -->
+                    <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">L. Ukuran Font (PT)</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">Header (PT)</label>
+                                <input type="number" id="set-pt-header" placeholder="Auto" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">Body (PT)</label>
+                                <input type="number" id="set-pt-body" placeholder="Auto" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">Footer (PT)</label>
+                                <input type="number" id="set-pt-footer" placeholder="Auto" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- M. Watermark Footer -->
+                    <div class="bg-stone-50 border border-slate-200 p-4 rounded-xl">
+                        <label class="block text-[11px] font-extrabold text-slate-500 uppercase mb-3 border-b border-slate-200 pb-2">M. Watermark Footer</label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">Logo Sosmed (Pisahkan dg koma)</label>
+                                <input type="text" id="set-watermark-logo" placeholder="Misal: Instagram, Threads" value="Instagram, Threads" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500 mb-1">Username</label>
+                                <input type="text" id="set-watermark-user" placeholder="Misal: @username" value="@username" class="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-emerald-500">
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
+
+        <!-- GENERATE BUTTON -->
+        <div class="py-2">
+            <button onclick="generateContent()" id="btn-generate" class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-200 transition-all transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> GENERATE PROMPT
+            </button>
         </div>
 
         <!-- ========================================== -->
-        <!-- 4. KARTU SAVED -->
+        <!-- KARTU 3: OUTPUT -->
         <!-- ========================================== -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <button onclick="toggleMainAccordion('card-saved')" class="w-full flex justify-between items-center p-4 md:p-6 bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
-                <h2 class="text-lg font-extrabold text-slate-800 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-hard-drive text-emerald-600"></i> 4. Kartu Saved
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <button onclick="toggleAccordion('acc-output', 'icon-output')" class="w-full px-5 py-4 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-code text-emerald-600"></i> 3. KARTU OUTPUT
                 </h2>
-                <i id="icon-card-saved" class="fa-solid fa-chevron-down text-slate-500 transition-transform"></i>
+                <i id="icon-output" class="fa-solid fa-chevron-up text-slate-400 transition-transform duration-300"></i>
             </button>
-            <section id="card-saved" class="hidden flex-col gap-6 p-6 fade-in">
-
-                <!-- Sub Tab Saved -->
-                <div class="flex gap-2 border-b border-slate-200">
-                    <button onclick="renderSaved('A')" id="tab-saved-a" class="px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase">Saved Mode A</button>
-                    <button onclick="renderSaved('B')" id="tab-saved-b" class="px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase">Saved Mode B</button>
-                </div>
-
-                <!-- Container Saved Blocks -->
-                <div id="saved-blocks-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Populated dynamically -->
-                </div>
-
-                <!-- Export Import Actions -->
-                <div class="mt-8 pt-6 border-t border-slate-200 flex flex-col sm:flex-row justify-end items-center gap-4">
-                    <div class="flex gap-2">
-                        <input type="file" id="file-import-json" accept=".json" class="hidden" onchange="handleImportJSON(event)">
-                        <button onclick="document.getElementById('file-import-json').click()" class="px-4 py-2 bg-slate-100 text-slate-700 hover:bg-slate-200 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-import"></i> Import JSON
+            
+            <div id="acc-output" class="accordion-content active">
+                <div class="p-5">
+                    <div id="output-actions" class="flex justify-end gap-2 mb-4 hidden">
+                        <button onclick="copyAllBlocks()" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors border border-slate-200 shadow-sm">
+                            <i class="fa-regular fa-copy mr-1"></i> Copy All
                         </button>
-                        <button onclick="handleExportJSON()" class="px-4 py-2 bg-emerald-800 text-white hover:bg-emerald-700 font-extrabold text-xs uppercase rounded-lg transition-all shadow-sm flex items-center gap-1.5">
-                            <i class="fa-solid fa-file-export"></i> Export JSON
+                        <button onclick="saveAllBlocks()" class="px-4 py-2 text-xs font-bold bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg transition-colors border border-emerald-200 shadow-sm">
+                            <i class="fa-regular fa-bookmark mr-1"></i> Save All
                         </button>
                     </div>
+
+                    <div id="output-container" class="space-y-4">
+                        <div class="text-center py-10 text-slate-400 text-sm border-2 border-dashed border-slate-200 rounded-xl">
+                            <i class="fa-solid fa-box-open text-3xl mb-2 text-slate-300"></i><br>
+                            Hasil generate akan muncul di sini.
+                        </div>
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
 
+        <!-- ========================================== -->
+        <!-- KARTU 4: SAVED -->
+        <!-- ========================================== -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <button onclick="toggleAccordion('acc-saved', 'icon-saved')" class="w-full px-5 py-4 flex justify-between items-center bg-slate-50 hover:bg-slate-100 transition-colors border-b border-slate-200">
+                <h2 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                    <i class="fa-solid fa-bookmark text-emerald-600"></i> 4. KARTU SAVED
+                </h2>
+                <i id="icon-saved" class="fa-solid fa-chevron-up text-slate-400 transition-transform duration-300"></i>
+            </button>
+            
+            <div id="acc-saved" class="accordion-content">
+                <div class="p-5 space-y-6">
+                    
+                    <div class="flex border-b border-slate-200">
+                        <button onclick="switchSavedTab('A')" id="tab-saved-a" class="flex-1 py-3 text-sm font-bold border-b-2 border-emerald-600 text-emerald-600 transition-colors">MODE A (Ide)</button>
+                        <button onclick="switchSavedTab('B')" id="tab-saved-b" class="flex-1 py-3 text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-slate-600 transition-colors">MODE B (Carousel)</button>
+                    </div>
+
+                    <div id="saved-container" class="space-y-4 min-h-[150px]">
+                        <!-- Saved items will be injected here -->
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 flex justify-center gap-3">
+                        <button onclick="exportJSON()" class="px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors border border-slate-200 shadow-sm">
+                            <i class="fa-solid fa-download mr-1"></i> Export JSON
+                        </button>
+                        <label class="cursor-pointer px-4 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors border border-slate-200 shadow-sm">
+                            <i class="fa-solid fa-upload mr-1"></i> Import JSON
+                            <input type="file" id="import-file" accept=".json" class="hidden" onchange="importJSON(event)">
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </main>
 
-    <!-- UI Overlay for Modals/Toast -->
-    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-5 py-3 rounded-xl shadow-2xl transition-all duration-300 opacity-0 translate-y-10 font-medium text-sm flex items-center gap-2 z-50 pointer-events-none">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i> <span id="toast-msg">Success</span>
+    </div>
 
     <script>
         let currentMode = 'B'; 
         let currentSavedTab = 'A';
+        let savedData = JSON.parse(localStorage.getItem('nomuka_saved_data')) || [];
 
-        // Fake DB arrays based on the exhaustive instructions
+        // Definition Arrays to prevent ReferenceErrors during Auto-Set
         const styleArtsList = [
-            "1. GAYA 1 / 3D Papercraft", "2. GAYA 2 / Layered Papercut", "3. GAYA 3 / Origami Paper Art",
+            "1. GAYA 1 / 3D Papercraft", "2. GAYA 2 / Layered Papercut", "3. GAYA 3 / Origami Paper Art", 
             "4. GAYA 4 / Paper Diorama", "5. GAYA 5 / Islamic Layered Papercut", "6. GAYA 6 / Paper Quilling",
-            "7. GAYA 7 / Kirigami Illustration", "8. GAYA 8 / Cut Paper Collage", "9. GAYA 9 / Cardboard Craft", "10. GAYA 10 / Paper Sculpture"
+            "7. GAYA 7 / Kirigami Illustration", "8. GAYA 8 / Cut Paper Collage", "9. GAYA 9 / Cardboard Craft", 
+            "10. GAYA 10 / Paper Sculpture"
         ];
-
         const fontDNAList = [
-            "FONT 1. Friendly Rounded Handwritten ⭐⭐⭐⭐⭐", "FONT 2. Soft Brush Handwriting", "FONT 3. Modern Editorial Serif",
-            "FONT 4. Humanist Sans", "FONT 5. Geometric Sans", "FONT 6. Rounded Sans", "FONT 7. Storybook Typography ⭐⭐⭐⭐⭐",
-            "FONT 8. Notebook Handwriting", "FONT 9. Premium Calligraphy", "FONT 10. Modern Script", "FONT 11. Vintage Sign Painting",
-            "FONT 12. Chalkboard", "FONT 13. Pencil Sketch", "FONT 14. Ink Pen", "FONT 15. Comic Friendly", "FONT 16. Children's Book",
-            "FONT 17. Scandinavian Minimal", "FONT 18. Japanese Lifestyle", "FONT 19. Luxury Magazine", "FONT 20. Cozy Journal ⭐⭐⭐⭐⭐",
-            "FONT 21. Bold Condensed Display ⭐⭐⭐⭐⭐", "FONT 22. Elegant Slab Serif ⭐⭐⭐⭐⭐", "FONT 23. Minimal Monospace ⭐⭐⭐⭐⭐",
-            "FONT 24. Art Deco Display ⭐⭐⭐⭐⭐", "FONT 25. Retro Groovy ⭐⭐⭐⭐⭐", "FONT 26. Pixel Retro Gaming ⭐⭐⭐⭐⭐",
-            "FONT 27. Futuristic Tech Display ⭐⭐⭐⭐⭐", "FONT 28. Blackletter Gothic ⭐⭐⭐⭐⭐", "FONT 29. Elegant Art Nouveau ⭐⭐⭐⭐⭐",
-            "FONT 30. Luxury Signature Script ⭐⭐⭐⭐⭐", "FONT 31. Brush Street Typography ⭐⭐⭐⭐⭐"
+            "FONT 1. Friendly Rounded Handwritten", "FONT 2. Soft Brush Handwriting", "FONT 3. Modern Editorial Serif",
+            "FONT 4. Humanist Sans", "FONT 5. Geometric Sans", "FONT 6. Rounded Sans", "FONT 7. Storybook Typography",
+            "FONT 8. Notebook Handwriting", "FONT 9. Premium Calligraphy", "FONT 10. Modern Script",
+            "FONT 11. Vintage Sign Painting", "FONT 12. Chalkboard", "FONT 13. Pencil Sketch", "FONT 14. Ink Pen",
+            "FONT 15. Comic Friendly", "FONT 16. Children's Book", "FONT 17. Scandinavian Minimal",
+            "FONT 18. Japanese Lifestyle", "FONT 19. Luxury Magazine", "FONT 20. Cozy Journal",
+            "FONT 21. Bold Condensed Display", "FONT 22. Elegant Slab Serif", "FONT 23. Minimal Monospace",
+            "FONT 24. Art Deco Display", "FONT 25. Retro Groovy", "FONT 26. Pixel Retro Gaming",
+            "FONT 27. Futuristic Tech Display", "FONT 28. Blackletter Gothic", "FONT 29. Elegant Art Nouveau",
+            "FONT 30. Luxury Signature Script", "FONT 31. Brush Street Typography"
         ];
 
-        function setMode(mode) {
+        // Konfigurasi Dinamis Detail Karakter
+        const charOptions = {
+            male: {
+                headwear: ["Tertutup/ Rapi", "Rambut Pendek Rapi", "Peci Hitam Nasional", "Peci Rajut Putih", "Sorban/ Keffiyeh", "Topi Kasual", "kustom"],
+                outfit: ["Dinamis Sesuai Konteks", "Baju Koko Modern", "Kemeja Lengan Panjang", "Kaos Kasual Longgar", "Jubah/ Gamis Pria", "Sweater/ Hoodie", "Jas Formal", "kustom"],
+                aksesoris: ["Minimalis (Tanpa Aksesoris)", "Kacamata", "Jam Tangan Silver", "Sorban di Pundak", "Ransel", "Buku Catatan", "kustom"]
+            },
+            female: {
+                headwear: ["Khimar Instan Panjang", "Pashmina Syar'i Menutup Dada", "Jilbab Segi Empat Syar'i", "Cadar/ Niqab", "French Khimar", "Bergo Tali", "kustom"],
+                outfit: ["Dinamis Sesuai Konteks", "Gamis Polos Elegan", "Abaya Hitam Timur Tengah", "Tunik Panjang & Rok", "Dress Syar'i Bermotif Floral", "kustom"],
+                aksesoris: ["Minimalis (Tanpa Aksesoris)", "Kacamata", "Tas Selempang Kecil", "Bros Bunga Kecil", "Membawa Buku/ Mushaf", "kustom"]
+            },
+            boy: {
+                headwear: ["Rambut Pendek Rapi", "Peci Anak", "Topi Kasual", "kustom"],
+                outfit: ["Dinamis Sesuai Konteks", "Kaos & Celana Panjang", "Baju Koko Anak", "Seragam Sekolah", "Sweater Anak", "kustom"],
+                aksesoris: ["Minimalis (Tanpa Aksesoris)", "Ransel Sekolah", "Mainan Kecil", "Kacamata", "kustom"]
+            },
+            girl: {
+                headwear: ["Khimar Anak", "Kerudung Instan Bergo", "Khimar dengan Pita", "kustom"],
+                outfit: ["Dinamis Sesuai Konteks", "Gamis Anak", "Rok Panjang & Kaos", "Dress Anak Syar'i", "kustom"],
+                aksesoris: ["Minimalis (Tanpa Aksesoris)", "Tas Ransel Lucu", "Boneka Kecil", "Bros Lucu", "kustom"]
+            }
+        };
+
+        function populateSelect(selectId, optionsArray) {
+            const selectEl = document.getElementById(selectId);
+            if(!selectEl) return;
+            selectEl.innerHTML = "";
+            optionsArray.forEach(opt => {
+                const optionNode = document.createElement("option");
+                optionNode.value = opt;
+                optionNode.textContent = opt === 'kustom' ? 'KUSTOM (Isi Sendiri)' : opt;
+                selectEl.appendChild(optionNode);
+            });
+            const kustomInput = document.getElementById(selectId + '-kustom');
+            if(kustomInput) {
+                kustomInput.classList.add('hidden');
+                kustomInput.value = '';
+            }
+        }
+
+        function handleCharacterChange(selectEl) {
+            handleKustom(selectEl); 
+            const val = selectEl.value;
+            const container = document.getElementById('character-details-container');
+            const labelHeadwear = document.getElementById('label-char-headwear');
+            
+            if(!container || !labelHeadwear) return; // Safety check
+
+            // Reset dropdown detail wajah
+            const wajahSelect = document.getElementById('set-char-wajah');
+            const wajahKustom = document.getElementById('set-char-wajah-kustom');
+            if(wajahSelect) {
+                wajahSelect.selectedIndex = 0;
+                handleKustom(wajahSelect);
+            }
+
+            if (val === 'Pria Dewasa') {
+                container.classList.remove('hidden');
+                labelHeadwear.textContent = 'B. Gaya Rambut/ Peci';
+                populateSelect('set-char-headwear', charOptions.male.headwear);
+                populateSelect('set-char-outfit', charOptions.male.outfit);
+                populateSelect('set-char-aksesoris', charOptions.male.aksesoris);
+            } else if (val === 'Wanita') {
+                container.classList.remove('hidden');
+                labelHeadwear.textContent = 'B. Model Khimar/ Cadar';
+                populateSelect('set-char-headwear', charOptions.female.headwear);
+                populateSelect('set-char-outfit', charOptions.female.outfit);
+                populateSelect('set-char-aksesoris', charOptions.female.aksesoris);
+            } else if (val === 'Anak Laki-laki') {
+                container.classList.remove('hidden');
+                labelHeadwear.textContent = 'B. Rambut/ Peci Anak';
+                populateSelect('set-char-headwear', charOptions.boy.headwear);
+                populateSelect('set-char-outfit', charOptions.boy.outfit);
+                populateSelect('set-char-aksesoris', charOptions.boy.aksesoris);
+            } else if (val === 'Anak Perempuan') {
+                container.classList.remove('hidden');
+                labelHeadwear.textContent = 'B. Khimar Anak';
+                populateSelect('set-char-headwear', charOptions.girl.headwear);
+                populateSelect('set-char-outfit', charOptions.girl.outfit);
+                populateSelect('set-char-aksesoris', charOptions.girl.aksesoris);
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        function toggleAccordion(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            if(content.classList.contains('active')) {
+                content.classList.remove('active');
+                if(icon) icon.classList.remove('rotate-180');
+            } else {
+                content.classList.add('active');
+                if(icon) icon.classList.add('rotate-180');
+            }
+        }
+
+        // Make all accordions active by default
+        window.onload = function() {
+            document.querySelectorAll('.fa-chevron-up').forEach(icon => icon.classList.add('rotate-180'));
+            switchMode('B');
+            renderSavedBlocks();
+        }
+
+        function switchMode(mode) {
             currentMode = mode;
             const btnA = document.getElementById('btn-mode-a');
             const btnB = document.getElementById('btn-mode-b');
-            const warnA = document.getElementById('setting-mode-a-warning');
-            const contentB = document.getElementById('setting-mode-b-content');
+            const cardSetting = document.getElementById('card-setting');
 
-            if (mode === 'A') {
-                btnA.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-amber-950 shadow-sm";
-                btnB.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white";
-                warnA.classList.remove('hidden');
-                contentB.classList.add('hidden');
-            } else {
-                btnB.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all bg-amber-500 text-emerald-950 shadow-sm";
-                btnA.className = "px-4 py-2 text-xs font-bold uppercase rounded-lg transition-all text-slate-300 hover:text-white";
-                warnA.classList.add('hidden');
-                contentB.classList.remove('hidden');
-            }
-        }
-
-        function toggleMainAccordion(cardId) {
-            const section = document.getElementById(cardId);
-            const icon = document.getElementById(`icon-${cardId}`);
-            
-            if (section.classList.contains('hidden')) {
-                // Buka Akordion
-                section.classList.remove('hidden');
-                section.classList.add('flex');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
+            if(mode === 'A') {
+                btnA.classList.replace('bg-transparent', 'bg-white');
+                btnA.classList.replace('text-slate-500', 'text-emerald-700');
+                btnA.classList.add('shadow-sm', 'border', 'border-slate-200');
                 
-                if (cardId === 'card-saved') {
-                    renderSaved(currentSavedTab);
-                }
+                btnB.classList.replace('bg-white', 'bg-transparent');
+                btnB.classList.replace('text-emerald-700', 'text-slate-500');
+                btnB.classList.remove('shadow-sm', 'border', 'border-slate-200');
+                
+                cardSetting.classList.add('hidden');
+                switchSavedTab('A');
             } else {
-                // Tutup Akordion
-                section.classList.add('hidden');
-                section.classList.remove('flex');
-                icon.classList.add('fa-chevron-down');
-                icon.classList.remove('fa-chevron-up');
+                btnB.classList.replace('bg-transparent', 'bg-white');
+                btnB.classList.replace('text-slate-500', 'text-emerald-700');
+                btnB.classList.add('shadow-sm', 'border', 'border-slate-200');
+                
+                btnA.classList.replace('bg-white', 'bg-transparent');
+                btnA.classList.replace('text-emerald-700', 'text-slate-500');
+                btnA.classList.remove('shadow-sm', 'border', 'border-slate-200');
+                
+                cardSetting.classList.remove('hidden');
+                switchSavedTab('B');
             }
-        }
-
-        function openAccordion(cardId) {
-            const section = document.getElementById(cardId);
-            const icon = document.getElementById(`icon-${cardId}`);
-            section.classList.remove('hidden');
-            section.classList.add('flex');
-            icon.classList.remove('fa-chevron-down');
-            icon.classList.add('fa-chevron-up');
-        }
-
-        function goToNextStep(cardId) {
-            if (currentMode === 'A' && cardId === 'card-setting') {
-                openAccordion('card-output'); 
-                document.getElementById('card-output').scrollIntoView({ behavior: 'smooth', block: 'start' });
-            } else {
-                openAccordion(cardId);
-                document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-
-        function clearInput(id) {
-            document.getElementById(id).value = "";
         }
 
         function handleKustom(selectEl) {
-            const kustomInputId = selectEl.id + '-kustom';
-            const kustomInput = document.getElementById(kustomInputId);
-            if (selectEl.value === 'kustom') {
-                kustomInput.classList.remove('hidden');
-                kustomInput.focus();
-            } else {
-                kustomInput.classList.add('hidden');
+            if(!selectEl) return;
+            const kustomInput = document.getElementById(selectEl.id + '-kustom');
+            if(kustomInput) {
+                if(selectEl.value === 'kustom') {
+                    kustomInput.classList.remove('hidden');
+                    kustomInput.focus();
+                } else {
+                    kustomInput.classList.add('hidden');
+                }
             }
         }
 
         function autoSetSettings() {
-            // Intelligent randomizer for Auto-Set behavior
             const getRand = (arr) => arr[Math.floor(Math.random() * arr.length)];
             
-            document.getElementById('set-slide-count').value = 7;
-            document.getElementById('set-ratio').value = "3:4";
-            document.getElementById('set-character').value = "Wanita";
+            const slideCount = document.getElementById('set-slide-count');
+            const ratio = document.getElementById('set-ratio');
+            const charSelect = document.getElementById('set-character');
+            const style = document.getElementById('set-style');
+            const font = document.getElementById('set-font');
+            const effect = document.getElementById('set-texteffect');
+            const align = document.getElementById('set-alignment');
+            const comp = document.getElementById('set-composition');
+            const body = document.getElementById('set-bodyformat');
+            const pal = document.getElementById('set-palette');
+            const patch = document.getElementById('set-patch-footer');
+            const headPT = document.getElementById('set-pt-header');
+            const bodyPT = document.getElementById('set-pt-body');
+            const footPT = document.getElementById('set-pt-footer');
+
+            if(slideCount) slideCount.value = 7;
+            if(ratio) ratio.value = "3:4";
             
-            document.getElementById('set-style').value = getRand(styleArtsList);
-            document.getElementById('set-font').value = getRand(fontDNAList);
+            if(charSelect) {
+                charSelect.value = "Wanita";
+                handleCharacterChange(charSelect);
+            }
             
-            document.getElementById('set-texteffect').value = "FLAT (BAWAAN FONT)";
-            document.getElementById('set-alignment').value = "Auto-Set by AI (DINAMIS/ SEEMLESS)";
-            document.getElementById('set-composition').value = "TEKS DOMINAN (60% TEKS : 40% VISUAL)";
-            document.getElementById('set-bodyformat').value = "DENGAN POINT-POINT";
+            if(style) { style.value = getRand(styleArtsList); handleKustom(style); }
+            if(font) { font.value = getRand(fontDNAList); handleKustom(font); }
+            if(effect) { effect.value = "FLAT (BAWAAN FONT)"; handleKustom(effect); }
+            if(align) { align.value = "Auto-Set by AI (DINAMIS/ SEEMLESS)"; handleKustom(align); }
+            if(comp) { comp.value = "TEKS DOMINAN (60% TEKS : 40% VISUAL)"; handleKustom(comp); }
+            if(body) { body.value = "DENGAN POINT-POINT"; handleKustom(body); }
             
             const palettes = ["EARTH TONE", "SOFT PASTEL", "WARM"];
-            document.getElementById('set-palette').value = getRand(palettes);
+            if(pal) { pal.value = getRand(palettes); handleKustom(pal); }
             
-            document.getElementById('set-pt-header').value = "64";
-            document.getElementById('set-pt-body').value = "32";
-            document.getElementById('set-pt-footer').value = "24";
+            if(patch) { patch.value = "Auto-Set by AI"; handleKustom(patch); }
+            
+            if(headPT) headPT.value = "64";
+            if(bodyPT) bodyPT.value = "32";
+            if(footPT) footPT.value = "24";
 
-            // Hide all kustom fields just in case
-            document.querySelectorAll('input[id$="-kustom"]').forEach(el => el.classList.add('hidden'));
-            
             showToast("Auto-Set Berhasil Diterapkan");
         }
 
         function resetSettings() {
-            const selects = document.querySelectorAll('#setting-mode-b-content select');
+            const selects = document.querySelectorAll('#acc-setting select');
             selects.forEach(select => {
-                select.selectedIndex = 0; // Set to Auto-Set by AI
-                handleKustom(select);
+                select.selectedIndex = 0;
+                if(select.id !== 'set-char-wajah' && select.id !== 'set-char-headwear' && select.id !== 'set-char-outfit' && select.id !== 'set-char-aksesoris') {
+                    handleKustom(select);
+                }
             });
-            document.getElementById('set-slide-count').value = 7;
-            document.getElementById('set-pt-header').value = "";
-            document.getElementById('set-pt-body').value = "";
-            document.getElementById('set-pt-footer').value = "";
+            
+            const headPT = document.getElementById('set-pt-header');
+            const bodyPT = document.getElementById('set-pt-body');
+            const footPT = document.getElementById('set-pt-footer');
+            const slideCount = document.getElementById('set-slide-count');
+            const charCont = document.getElementById('character-details-container');
+
+            if(slideCount) slideCount.value = 7;
+            if(headPT) headPT.value = "";
+            if(bodyPT) bodyPT.value = "";
+            if(footPT) footPT.value = "";
+            if(charCont) charCont.classList.add('hidden');
+            
             showToast("Setting telah direset");
         }
 
         function getSettingValue(baseId) {
             const selectEl = document.getElementById(baseId);
+            if(!selectEl) return '';
             if (selectEl.value === 'kustom') {
-                return document.getElementById(baseId + '-kustom').value || "Auto-Set by AI";
+                const kustomEl = document.getElementById(baseId + '-kustom');
+                return kustomEl ? (kustomEl.value || 'Auto-Set by AI') : 'Auto-Set by AI';
             }
             return selectEl.value;
         }
 
-        function processGenerate() {
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-10');
+            setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10'), 2500);
+        }
+
+        function createOutputBlock(id, title, content) {
+            return `
+            <div id="${id}" class="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden shadow-sm relative group">
+                <div class="bg-slate-100 border-b border-slate-200 px-4 py-2 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">${title}</span>
+                    <div class="flex gap-2">
+                        <button onclick="copyText('${id}')" class="w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 hover:border-emerald-300 flex items-center justify-center transition-colors" title="Copy Block">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                        <button onclick="saveBlock('${id}')" class="w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-amber-500 hover:border-amber-300 flex items-center justify-center transition-colors" title="Save Block">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4 overflow-x-auto">
+                    <pre class="text-xs text-slate-700 font-mono leading-relaxed" id="${id}-content">${content}</pre>
+                </div>
+            </div>`;
+        }
+
+        function generateContent() {
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
             
-            if (!topic) {
-                alert("Mohon masukkan Ide / Topik terlebih dahulu di Kartu Input.");
-                switchCard('input');
+            if (!topic && !instructions) {
+                showToast("Silakan isi topik atau instruksi terlebih dahulu.");
                 return;
             }
 
-            const container = document.getElementById('output-blocks-container');
-            container.innerHTML = ""; // Clear existing
+            const container = document.getElementById('output-container');
+            container.innerHTML = '<div class="text-center py-10 text-emerald-600"><i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i><br>Processing Data...</div>';
+            
+            // Ensure Output accordion is open
+            const accOutput = document.getElementById('acc-output');
+            const iconOutput = document.getElementById('icon-output');
+            accOutput.classList.add('active');
+            if(iconOutput) iconOutput.classList.add('rotate-180');
 
-            if (currentMode === 'A') {
-                generateModeA(topic, instructions, container);
-            } else {
-                generateModeB(topic, instructions, container);
-            }
-
-            openAccordion('card-output');
-            document.getElementById('card-output').scrollIntoView({ behavior: 'smooth', block: 'center' });
-            showToast(`Generate Mode ${currentMode} Selesai!`);
+            setTimeout(() => {
+                if(currentMode === 'A') {
+                    generateModeA(topic, instructions, container);
+                } else {
+                    generateModeB(topic, instructions, container);
+                }
+                document.getElementById('output-actions').classList.remove('hidden');
+                showToast("Berhasil generate prompt!");
+                
+                // Scroll to output
+                document.getElementById('icon-output').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 600);
         }
 
         function generateModeA(topic, instructions, container) {
-            // Mode A strictly outputs 5 independent ideas based on researcher rules
-            for (let i = 1; i <= 5; i++) {
-                const blockId = `output-a-${Date.now()}-${i}`;
-                const rawText = `### IDE TOPIK ${i}\n` +
-                    `* Topic: Eksplorasi mendalam tentang [${topic}]\n` +
-                    `* Cover Title Options:\n` +
-                    `  - Option A: Judul Menarik ${i} Terkait Topik\n` +
-                    `  - Option B: Judul Penasaran ${i} Terkait Topik\n` +
-                    `* Unique Angle: Sudut pandang analitis dan psikologis Islami berdasarkan Qur'an dan Hadits Sahih. ${instructions ? 'Catatan: ' + instructions : ''}\n` +
-                    `* Data Sources: QS. Relevan & HR. Bukhari/Muslim.\n` +
-                    `* Core Idea: Menjelaskan akar masalah dan memberikan solusi praktis (Feynman Style).\n` +
-                    `* Recommended Style Art: GAYA 5 / Islamic Layered Papercut\n` +
-                    `* Recommended Color Palette: Earth Tone & Muted Green\n` +
-                    `* Recommended Typography: FONT 7. Storybook Typography / FONT 4. Humanist Sans\n\n` +
-                    `Make the aspect ratio 3:4`;
-
-                container.appendChild(createOutputCardHTML(blockId, `Ide Topik ${i}`, rawText, 'A'));
+            container.innerHTML = ""; // clear
+            const systemPrompt = `[SYSTEM: YOU ARE IN MODE A - RESEARCHER. Generate exactly 5 unique Islamic content ideas based on the topic. Provide ONLY the 5 ideas in separate clear blocks ready to be copied.]`;
+            
+            for(let i=1; i<=5; i++) {
+                const blockId = `mode-a-block-${Date.now()}-${i}`;
+                const text = `${i===1 ? systemPrompt + '\n\n' : ''}=== IDE KONTEN ${i} ===
+Topik: ${topic || 'Ide Niche Islami'}
+Cover Title: [Berikan 2-3 opsi judul Clickbait Islami]
+Unique Angle: [Sudut pandang unik/ Feynman approach]
+Dalil Pendukung: [Sebutkan ayat Qur'an atau Hadits spesifik]
+Core Idea: [Jelaskan inti cerita/ alur konten dalam 2 kalimat]
+Visual Recommendation:
+- Style Art: [Pilih 1 dari Style Art]
+- Typography: [Pilih kombinasi DNA Font]
+- Color Palette: [Saran warna dominan]`;
+                container.innerHTML += createOutputBlock(blockId, `Ide Topik ${i}`, text);
             }
         }
 
         function generateModeB(topic, instructions, container) {
-            // Fetch settings manually to enforce rules
             const slideCount = parseInt(document.getElementById('set-slide-count').value) || 7;
             const ratio = getSettingValue('set-ratio');
             const character = getSettingValue('set-character');
@@ -622,461 +810,384 @@
             const composition = getSettingValue('set-composition');
             const bodyFormat = getSettingValue('set-bodyformat');
             const palette = getSettingValue('set-palette');
+            const patchFooter = getSettingValue('set-patch-footer');
+            
+            let charWajah = "FACELESS, NO EYES (MANDATORY RULES)";
+            let charHeadwear = "Tertutup/ Rapi";
+            let charOutfit = "DINAMIS SESUAI KONTEKS TIAP SLIDE (Menutup aurat syar'i)";
+            let charAksesoris = "Minimalis";
+
+            const charContainer = document.getElementById('character-details-container');
+            if (charContainer && !charContainer.classList.contains('hidden')) {
+                const wjh = getSettingValue('set-char-wajah');
+                charWajah = wjh + " - TAPI WAJIB FACELESS, NO EYES (MANDATORY RULES)";
+                charHeadwear = getSettingValue('set-char-headwear');
+                charOutfit = getSettingValue('set-char-outfit') + " (Pastikan Menutup Aurat)";
+                charAksesoris = getSettingValue('set-char-aksesoris');
+            }
             
             const ptHead = document.getElementById('set-pt-header').value || 'Auto';
             const ptBody = document.getElementById('set-pt-body').value || 'Auto';
             const ptFoot = document.getElementById('set-pt-footer').value || 'Auto';
             
-            const rawLogos = document.getElementById('set-watermark-logo').value.split(',').map(s=>s.trim()).filter(s=>s);
+            const rawLogosInput = document.getElementById('set-watermark-logo').value || 'Instagram, Threads';
+            const rawLogos = rawLogosInput.split(',').map(s=>s.trim()).filter(s=>s);
             const watermarkLogos = rawLogos.map(logo => `[minimalist monochrome vector ${logo.toLowerCase()} logo icon]`).join(' ');
             const username = document.getElementById('set-watermark-user').value || "@username";
             
-            // Build Block 1 (Global Config + Slide 1)
+            let htmlBuffer = "";
+
+            // Block 1: Global Config + Slide 1
             const block1Id = `output-b-${Date.now()}-1`;
             const block1Text = `@createimage\n` +
                 `==========================================================\n` +
-                `GLOBAL CONFIGURATION & SLIDE 1\n` +
+                `GLOBAL CONFIGURATION & SLIDE 1 (COVER/ HOOK)\n` +
                 `==========================================================\n` +
                 `* OPERATION MODE: MODE B\n` +
                 `* TOPIK/ MATERI KONTEN: ${topic}\n` +
                 `${instructions ? '* INSTRUKSI KHUSUS: ' + instructions + '\n' : ''}` +
                 `* STYLE ART: ${style}\n` +
                 `* RATIO: ${ratio}\n` +
-                `* KOMPOSISI TEKS/ ILUSTRASI (DALAM PERSEN): ${composition}\n` +
+                `* KOMPOSISI TEKS/ ILUSTRASI: ${composition} (PENTING: Jangan monoton dengan layout teks di kiri & gambar di kanan. Variasikan secara dramatis di tiap slide!)\n` +
                 `* TYPOGRAPHY\n` +
                 `  * NAMA/ DNA FONT: ${font}\n` +
                 `  * EFEK FONT: ${effect}\n` +
                 `  * UKURAN FONT (HEADER, BODY, FOOTER): ${ptHead}, ${ptBody}, ${ptFoot}\n` +
                 `  * TEXT ALIGNMENT: ${alignment}\n` +
                 `* PALET WARNA: ${palette}\n` +
-                `* LATAR: Living environment reinforcing educational message\n` +
-                `* KARAKTER UTAMA\n` +
+                `* LATAR: Dinamis dan berubah-ubah secara spesifik mewakili edukasi tiap slide.\n` +
+                `* KARAKTER UTAMA (HANYA DIMUNCULKAN JIKA RELEVAN. JIKA TIDAK, GUNAKAN METAFORA)\n` +
                 `  * GENDER: ${character}\n` +
-                `  * WAJAH: FACELESS, NO EYES (MANDATORY RULES)\n` +
-                `  * HAIRCUT (LAKI-LAKI): Tertutup/ Rapi\n` +
-                `  * OUTFIT: DINAMIS SESUAI KONTEKS TIAP SLIDE (Menutup aurat syar'i)\n` +
-                `  * AKSESORIS: Minimalis tanpa emas untuk pria\n` +
+                `  * WAJAH: ${charWajah}\n` +
+                `  * PENUTUP KEPALA/ RAMBUT: ${charHeadwear}\n` +
+                `  * OUTFIT: ${charOutfit}\n` +
+                `  * AKSESORIS: ${charAksesoris}\n` +
                 `* BODY TEXT: ${bodyFormat}\n` +
                 `* FOOTER\n` +
-                `  * BENTUK PATCH FOOTER: Minimalist\n` +
+                `  * BENTUK PATCH FOOTER: ${patchFooter}\n` +
                 `  * MEDIA SOSIAL: ${rawLogos.join(', ')}\n` +
                 `  * USERNAME: ${username}\n` +
-                `* WRITING BLOCK KHUSUS MODE B\n` +
-                `  * SETIAP WRITING BLOCK WAJIB DIBUKA/ DIAWALI DENGAN KALIMAT: @createimage\n` +
-                `  * SETIAP WRITING BLOCK WAJIB DITUTUP/ DIAKHIRI DENGAN KALIMAT: Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}\n\n` +
                 `----------------------------------------------------------\n` +
-                `SLIDE 1 (HOOK)\n` +
+                `[SLIDE 1 SPECS]\n` +
+                `* SAFE MARGIN: Top 100px, Bottom 100px, Left 100px, Right 100px\n` +
+                `* BACKGROUND: [Deskripsikan lingkungan yang sangat relevan dengan hook]\n` +
+                `* VISUAL HIERARCHY: 1. Header (Pusat), 2. Visual Hook (Kuat), 3. Footer\n` +
                 `----------------------------------------------------------\n` +
-                `* SPECS: Cover Hook slide, curiosity driven.\n` +
-                `* VISUAL GUIDE: Karakter utama (${character}) digambarkan FACELESS TANPA MATA, berinteraksi dengan lingkungan sejalan dengan topik ${topic}.\n` +
-                `* GEN AI PROMPT: Premium ${style}, faceless character, modest clothing, ${palette} colors, soft shadows, cozy studio lighting. --ar ${ratio === 'Auto-Set by AI' ? '3:4' : ratio.replace(':',' ')}\n` +
-                `* NASKAH:\n` +
-                `  - HEADER: (Judul Menarik Berdasarkan Topik)\n` +
-                `  - BODY: (Kosong, tanpa bullet points)\n` +
-                `  - FOOTER: ${watermarkLogos} ${username} | 1/${slideCount}\n\n` +
-                `Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}`;
+                `[VISUAL GUIDE SLIDE 1]\n` +
+                `[Deskripsikan visual hook yang memancing rasa penasaran tanpa banyak teks. PASTIKAN KARAKTER (JIKA ADA) FACELESS NO EYES, MENGGUNAKAN PAKAIAN SYAR'I/ MENUTUP AURAT]\n` +
+                `----------------------------------------------------------\n` +
+                `[GEN AI PROMPT SLIDE 1]\n` +
+                `[Tulis prompt bahasa Inggris untuk AI Generator sesuai Visual Guide dan Style Art. Pastikan menyertakan "Faceless, no eyes, completely blank face"]\n` +
+                `----------------------------------------------------------\n` +
+                `[NASKAH SLIDE 1]\n` +
+                `HEADER: [Judul Clickbait/ Hook yang relevan]\n` +
+                `BODY: [KOSONGKAN. Slide 1 tidak boleh ada body text]\n` +
+                `FOOTER: ${watermarkLogos} ${username} | 1/${slideCount}\n` +
+                `Make the aspect ratio ${ratio}`;
+            htmlBuffer += createOutputBlock(block1Id, "Slide 1 (Hook & Config)", block1Text);
 
-            container.appendChild(createOutputCardHTML(block1Id, `Global Config & Slide 1`, block1Text, 'B'));
-
-            // Build Slide 2 to Slide N
+            // Blocks 2 to N
             for (let i = 2; i <= slideCount; i++) {
                 const blockId = `output-b-${Date.now()}-${i}`;
-                let slideType = i === slideCount ? 'CALL TO ACTION' : (i === 5 ? 'DALIL (QURAN/HADITS)' : 'CONTENT EXPLANATION');
-                const blockText = `@createimage\n` +
+                const text = `@createimage\n` +
+                    `==========================================================\n` +
+                    `SLIDE ${i}\n` +
+                    `==========================================================\n` +
+                    `[SLIDE ${i} SPECS]\n` +
+                    `* SAFE MARGIN: Top 100px, Bottom 100px, Left 100px, Right 100px\n` +
+                    `* BACKGROUND: [Latar yang berbeda/ progresif dari slide sebelumnya]\n` +
+                    `* VISUAL HIERARCHY: 1. Header, 2. Visual Pendukung, 3. Body Text (Point), 4. Footer\n` +
                     `----------------------------------------------------------\n` +
-                    `SLIDE ${i} (${slideType})\n` +
+                    `[VISUAL GUIDE SLIDE ${i}]\n` +
+                    `[Deskripsikan komposisi. Variasikan letak objek/ karakter (misal di bawah, tengah, siluet). JANGAN MONOTON teks kiri-gambar kanan. FACELESS NO EYES MUTLAK.]\n` +
                     `----------------------------------------------------------\n` +
-                    `* SPECS: Modular content page, clean typography alignment.\n` +
-                    `* VISUAL GUIDE: Visualisasi metaforis atau aksi nyata terkait edukasi slide. Karakter utama FACELESS TANPA MATA.\n` +
-                    `* GEN AI PROMPT: Premium ${style}, faceless character, modest clothing, ${palette} colors, soft shadows. --ar ${ratio === 'Auto-Set by AI' ? '3:4' : ratio.replace(':',' ')}\n` +
-                    `* NASKAH:\n` +
-                    `  - HEADER: (Sub-judul poin ke-${i})\n` +
-                    `  - BODY:\n` +
-                    `    • (Penjelasan Feynman yang mudah dimengerti)\n` +
-                    `  - FOOTER: ${watermarkLogos} ${username} | ${i}/${slideCount}\n\n` +
-                    `Make the aspect ratio ${ratio === 'Auto-Set by AI' ? '3:4' : ratio}`;
-                
-                container.appendChild(createOutputCardHTML(blockId, `Slide ${i} (${slideType})`, blockText, 'B'));
+                    `[GEN AI PROMPT SLIDE ${i}]\n` +
+                    `[Tulis prompt bahasa Inggris detail sesuai Visual Guide. Include "Faceless, no eyes".]\n` +
+                    `----------------------------------------------------------\n` +
+                    `[NASKAH SLIDE ${i}]\n` +
+                    `HEADER: [Sub-judul ringkas. PENTING: DILARANG MENAMBAHKAN ANGKA PENOMORAN DI AWAL HEADER]\n` +
+                    `BODY: \n[Isi Feynman Explanation. ${bodyFormat.includes('TANPA') ? 'Tulis paragraf pendek 2-3 baris.' : 'Gunakan bullet points ringkas.'}]\n` +
+                    `FOOTER: ${watermarkLogos} ${username} | ${i}/${slideCount}\n` +
+                    `Make the aspect ratio ${ratio}`;
+                htmlBuffer += createOutputBlock(blockId, `Slide ${i}`, text);
             }
 
-            // Build Caption
-            const captionId = `output-b-${Date.now()}-cap`;
-            const captionText = `==========================================================\n` +
-                `CAPTION COPYWRITING & HASHTAGS\n` +
-                `==========================================================\n` +
-                `Ringkasan mendalam tentang ${topic}. (Teks caption memikat, edukatif, dan ramah. Total di bawah 500 huruf.)\n\n` +
-                `#islamiceducation #reminder #visualdakwah`;
-            container.appendChild(createOutputCardHTML(captionId, `Social Media Caption`, captionText, 'B'));
+            // Caption Block
+            const capId = `output-b-${Date.now()}-cap`;
+            const capText = `=== CAPTION & HASHTAG ===\n` +
+                `[Tulis caption menarik merangkum Carousel di atas. Maksimal 500 karakter termasuk spasi.]\n\n` +
+                `CTA: [Call to Action yang natural]\n\n` +
+                `Hashtag:\n#[Topik] #DakwahVisual #Muhasabah #IslamicReminder`;
+            htmlBuffer += createOutputBlock(capId, "Caption", capText);
+
+            container.innerHTML = htmlBuffer;
         }
 
-        function createOutputCardHTML(id, title, content, mode) {
-            const div = document.createElement('div');
-            div.className = "bg-stone-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-3 shadow-sm";
-            div.innerHTML = `
-                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span class="font-extrabold text-sm text-emerald-800 uppercase"><i class="fa-solid fa-cube mr-1"></i> ${title}</span>
-                    <div class="flex gap-2">
-                        <button onclick="copySingleBlock('${id}')" class="px-3 py-1 text-[10px] font-bold bg-amber-500 text-emerald-950 rounded uppercase hover:bg-amber-400 transition-all">Copy</button>
-                        <button onclick="saveSingleBlock('${id}', '${mode}', '${title}')" class="px-3 py-1 text-[10px] font-bold bg-emerald-700 text-white rounded uppercase hover:bg-emerald-600 transition-all">Save</button>
-                    </div>
-                </div>
-                <textarea id="${id}" class="w-full h-48 p-3 text-xs font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${content}</textarea>
-            `;
-            return div;
-        }
-
-        function copySingleBlock(id) {
-            const el = document.getElementById(id);
-            el.select();
-            document.execCommand('copy');
-            showToast("Block berhasil disalin!");
-        }
-
-        function copyAllOutputBlocks() {
-            const textareas = document.querySelectorAll('#output-blocks-container textarea');
-            let combined = "";
-            textareas.forEach(ta => {
-                combined += ta.value + "\n\n";
+        // Copy/Save Functionality
+        function copyText(blockId) {
+            const text = document.getElementById(blockId + '-content').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast("Teks berhasil dicopy ke clipboard!");
             });
-            const temp = document.createElement('textarea');
-            temp.value = combined;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            showToast("Semua block berhasil disalin!");
         }
 
-        function saveSingleBlock(id, mode, title) {
-            const el = document.getElementById(id);
-            const content = el.value;
-            const savedItem = {
-                id: 'saved-' + Date.now(),
-                mode: mode,
-                title: title,
-                content: content,
-                image: null,
-                timestamp: new Date().toLocaleString('id-ID')
+        function copyAllBlocks() {
+            const outputNodes = document.querySelectorAll('#output-container pre');
+            if(outputNodes.length === 0) return;
+            
+            let fullText = "";
+            outputNodes.forEach(node => {
+                fullText += node.innerText + "\n\n";
+            });
+            navigator.clipboard.writeText(fullText).then(() => {
+                showToast("Semua block berhasil dicopy!");
+            });
+        }
+
+        function saveBlock(blockId) {
+            const text = document.getElementById(blockId + '-content').innerText;
+            const titleNode = document.querySelector(`#${blockId} span`);
+            const blockTitle = titleNode ? titleNode.innerText : 'Saved Block';
+
+            const newItem = {
+                id: 'save-' + Date.now(),
+                type: 'single',
+                mode: currentMode,
+                timestamp: new Date().toLocaleString('id-ID'),
+                topic: document.getElementById('input-topic').value || 'Tanpa Judul',
+                title: blockTitle,
+                content: text,
+                image: null
             };
-            
-            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-            let existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            existing.unshift(savedItem); // prepend
-            localStorage.setItem(storageKey, JSON.stringify(existing));
-            
-            showToast("Block berhasil disimpan ke Local Storage!");
-            
-            const savedSection = document.getElementById('card-saved');
-            if(!savedSection.classList.contains('hidden')) {
-                renderSaved(currentSavedTab);
-            }
+
+            savedData.push(newItem);
+            saveToLocalStorage();
+            renderSavedBlocks();
+            showToast("Block berhasil disimpan ke tab Saved!");
         }
 
-        function saveAllOutputBlocks() {
-            const container = document.getElementById('output-blocks-container');
-            const wrappers = container.children;
-            let blocks = [];
+        function saveAllBlocks() {
+            const outputNodes = document.querySelectorAll('#output-container > div[id^="output-"]');
+            if(outputNodes.length === 0 && currentMode === 'B') {
+                const altNodes = document.querySelectorAll('#output-container > div[id^="mode-a"]');
+                if(altNodes.length === 0) {
+                     showToast("Tidak ada output untuk disimpan.");
+                     return;
+                }
+                saveBundleNodes(altNodes);
+                return;
+            }
+            saveBundleNodes(outputNodes);
+        }
+
+        function saveBundleNodes(nodes) {
+            const bundleId = 'bundle-' + Date.now();
+            const blocks = [];
             
-            Array.from(wrappers).forEach(wrap => {
-                const ta = wrap.querySelector('textarea');
-                if (ta) {
-                    const titleEl = wrap.querySelector('span');
-                    const title = titleEl ? titleEl.innerText.trim() : 'Block';
+            nodes.forEach(node => {
+                const pre = node.querySelector('pre');
+                const titleNode = node.querySelector('span');
+                if(pre && titleNode) {
                     blocks.push({
-                        id: ta.id,
-                        title: title,
-                        content: ta.value
+                        title: titleNode.innerText,
+                        content: pre.innerText
                     });
                 }
             });
 
-            if (blocks.length === 0) {
-                showToast("Tidak ada output untuk disimpan!");
-                return;
-            }
-
-            const topic = document.getElementById('input-topic').value.trim() || "Generated Prompt";
-            const groupTitle = `BUNDLE - ${topic.substring(0, 30)}`;
-
-            const savedItem = {
-                id: 'saved-group-' + Date.now(),
+            const bundleData = {
+                id: bundleId,
+                type: 'bundle',
                 mode: currentMode,
-                title: groupTitle,
-                type: 'group',
+                timestamp: new Date().toLocaleString('id-ID'),
+                topic: document.getElementById('input-topic').value || 'Tanpa Judul',
                 blocks: blocks,
-                image: null,
-                timestamp: new Date().toLocaleString('id-ID')
+                image: null
             };
-            
-            const storageKey = currentMode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-            let existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            existing.unshift(savedItem); // prepend
-            localStorage.setItem(storageKey, JSON.stringify(existing));
-            
-            showToast(`Semua Block berhasil disimpan sebagai 1 Grup!`);
-            
-            const savedSection = document.getElementById('card-saved');
-            if(!savedSection.classList.contains('hidden')) {
-                renderSaved(currentSavedTab);
-            }
+
+            savedData.push(bundleData);
+            saveToLocalStorage();
+            renderSavedBlocks();
+            showToast("Semua block berhasil disimpan sebagai grup!");
         }
 
-        function renderSaved(mode) {
+        function saveToLocalStorage() {
+            localStorage.setItem('nomuka_saved_data', JSON.stringify(savedData));
+        }
+
+        function switchSavedTab(mode) {
             currentSavedTab = mode;
-            const btnA = document.getElementById('tab-saved-a');
-            const btnB = document.getElementById('tab-saved-b');
-            if (mode === 'A') {
-                btnA.className = "px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase";
-                btnB.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase";
+            const tabA = document.getElementById('tab-saved-a');
+            const tabB = document.getElementById('tab-saved-b');
+            
+            if(mode === 'A') {
+                tabA.classList.replace('border-transparent', 'border-emerald-600');
+                tabA.classList.replace('text-slate-400', 'text-emerald-600');
+                tabB.classList.replace('border-emerald-600', 'border-transparent');
+                tabB.classList.replace('text-emerald-600', 'text-slate-400');
             } else {
-                btnB.className = "px-4 py-2 text-sm font-bold border-b-2 border-emerald-600 text-emerald-700 transition-all uppercase";
-                btnA.className = "px-4 py-2 text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-all uppercase";
+                tabB.classList.replace('border-transparent', 'border-emerald-600');
+                tabB.classList.replace('text-slate-400', 'text-emerald-600');
+                tabA.classList.replace('border-emerald-600', 'border-transparent');
+                tabA.classList.replace('text-emerald-600', 'text-slate-400');
             }
+            renderSavedBlocks();
+        }
 
-            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-            const data = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            const container = document.getElementById('saved-blocks-container');
+        function renderSavedBlocks() {
+            const container = document.getElementById('saved-container');
             container.innerHTML = "";
-
-            if (data.length === 0) {
-                container.innerHTML = `<div class="col-span-1 md:col-span-2 p-8 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400">Belum ada prompt tersimpan di Mode ${mode}.</div>`;
+            
+            const filtered = savedData.filter(d => d.mode === currentSavedTab);
+            
+            if(filtered.length === 0) {
+                container.innerHTML = '<div class="text-center py-6 text-slate-400 text-sm italic">Belum ada item yang tersimpan di mode ini.</div>';
                 return;
             }
 
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "bg-stone-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-3 shadow-xs";
-                
-                let imgHtml = '';
-                if (item.image) {
-                    // Update agar gambar tidak terpotong (menggunakan object-contain dan membiarkan max-h dinamis)
-                    imgHtml = `<div class="w-full bg-slate-200/50 rounded-lg overflow-hidden border border-slate-200 mb-2 flex justify-center p-2"><img src="${item.image}" class="max-w-full h-auto max-h-80 object-contain rounded"></div>`;
-                }
-
-                if (item.type === 'group') {
-                    let blocksHtml = item.blocks.map(b => `
-                        <div class="flex flex-col gap-1 mb-3 bg-white p-3 border border-slate-200 rounded-lg shadow-sm">
-                            <span class="font-extrabold text-[10px] text-emerald-700 uppercase"><i class="fa-solid fa-cube mr-1"></i> ${b.title}</span>
-                            <textarea id="${item.id}-${b.id}-text" class="w-full h-40 p-2 text-[10px] font-mono bg-stone-50 border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${b.content}</textarea>
-                        </div>
-                    `).join('');
-
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center border-b border-slate-200 pb-2 cursor-pointer group" onclick="toggleSavedGroup('${item.id}')">
+            // Reverse to show newest first
+            [...filtered].reverse().forEach(item => {
+                let html = '';
+                if(item.type === 'single') {
+                    html = `
+                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm flex flex-col">
+                        <div class="bg-slate-50 border-b border-slate-200 px-4 py-2 flex justify-between items-center">
                             <div>
-                                <span class="font-extrabold text-[11px] text-emerald-800 uppercase block"><i class="fa-solid fa-layer-group mr-1 text-emerald-600"></i> ${item.title}</span>
-                                <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                                <span class="text-xs font-bold text-slate-700">${item.title}</span>
+                                <p class="text-[10px] text-slate-400">${item.timestamp} | ${item.topic}</p>
                             </div>
-                            <i id="icon-group-${item.id}" class="fa-solid fa-chevron-down text-slate-400 group-hover:text-emerald-600 transition-transform"></i>
-                        </div>
-                        ${imgHtml}
-                        <div id="content-group-${item.id}" class="hidden flex-col gap-2 mt-2">
-                            ${blocksHtml}
-                            <div class="flex flex-wrap gap-2 mt-1 border-t border-slate-200 pt-3">
-                                <button onclick="copySavedGroup('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy All Group</button>
-                                <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
-                                <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah Gambar</button>
-                                <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
+                            <div class="flex gap-2">
+                                <label class="cursor-pointer w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 flex items-center justify-center" title="Unggah Gambar">
+                                    <i class="fa-solid fa-image"></i>
+                                    <input type="file" class="hidden" accept="image/*" onchange="handleImageUpload(event, '${item.id}')">
+                                </label>
+                                <button onclick="deleteSaved('${item.id}')" class="w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-red-500 flex items-center justify-center" title="Hapus">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
                             </div>
                         </div>
-                    `;
-                } else {
-                    card.innerHTML = `
-                        <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <div class="p-4 flex-1 flex flex-col md:flex-row gap-4">
+                            <div class="flex-1 overflow-x-auto max-h-48 relative group">
+                                <pre class="text-xs text-slate-600 font-mono whitespace-pre-wrap">${item.content}</pre>
+                                <button onclick="navigator.clipboard.writeText(\`${item.content.replace(/`/g, '\\`')}\`); showToast('Teks dicopy!');" class="absolute top-2 right-2 px-3 py-1 bg-white border border-slate-200 text-xs font-bold text-emerald-600 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">COPY TEKS</button>
+                            </div>
+                            ${item.image ? `<div class="w-full md:w-1/3 bg-slate-100 rounded-lg flex items-center justify-center p-2 border border-slate-200"><img src="${item.image}" class="max-w-full max-h-48 object-contain rounded" alt="Saved Preview"></div>` : ''}
+                        </div>
+                    </div>`;
+                } else if (item.type === 'bundle') {
+                    const bundleAccId = 'acc-bundle-' + item.id;
+                    const bundleIconId = 'icon-bundle-' + item.id;
+                    
+                    let innerBlocks = '';
+                    let fullBundleText = '';
+                    item.blocks.forEach((blk, idx) => {
+                        fullBundleText += blk.content + '\n\n';
+                        innerBlocks += `
+                            <div class="border border-slate-200 rounded-lg overflow-hidden mb-3">
+                                <div class="bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-600 border-b border-slate-200 flex justify-between">
+                                    ${blk.title}
+                                    <button onclick="navigator.clipboard.writeText(\`${blk.content.replace(/`/g, '\\`')}\`); showToast('Block dicopy!');" class="text-emerald-600 hover:text-emerald-800"><i class="fa-regular fa-copy"></i></button>
+                                </div>
+                                <div class="p-3 bg-white max-h-32 overflow-y-auto">
+                                    <pre class="text-[10px] text-slate-600 font-mono whitespace-pre-wrap">${blk.content}</pre>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html = `
+                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="bg-emerald-50/50 border-b border-slate-200 px-4 py-3 flex justify-between items-center cursor-pointer hover:bg-emerald-50" onclick="toggleAccordion('${bundleAccId}', '${bundleIconId}')">
                             <div>
-                                <span class="font-extrabold text-[11px] text-emerald-800 uppercase block">${item.title}</span>
-                                <span class="text-[9px] text-slate-400">${item.timestamp}</span>
+                                <span class="text-xs font-bold text-emerald-800 flex items-center gap-2"><i class="fa-solid fa-layer-group"></i> GROUP SAVED: ${item.topic}</span>
+                                <p class="text-[10px] text-slate-500">${item.timestamp} | ${item.blocks.length} Blocks</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button onclick="event.stopPropagation(); navigator.clipboard.writeText(\`${fullBundleText.replace(/`/g, '\\`')}\`); showToast('Seluruh grup dicopy!');" class="px-3 py-1 bg-white border border-slate-200 text-[10px] font-bold text-emerald-600 rounded hover:bg-emerald-50">COPY ALL GROUP</button>
+                                <label onclick="event.stopPropagation();" class="cursor-pointer w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-image"></i>
+                                    <input type="file" class="hidden" accept="image/*" onchange="handleImageUpload(event, '${item.id}')">
+                                </label>
+                                <button onclick="event.stopPropagation(); deleteSaved('${item.id}')" class="w-7 h-7 rounded bg-white border border-slate-200 text-slate-500 hover:text-red-500 flex items-center justify-center">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                                <i id="${bundleIconId}" class="fa-solid fa-chevron-up text-slate-400 transition-transform duration-300"></i>
                             </div>
                         </div>
-                        ${imgHtml}
-                        <textarea id="${item.id}-text" class="w-full h-32 p-3 text-[10px] font-mono bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500" readonly>${item.content}</textarea>
-                        <div class="flex flex-wrap gap-2 mt-1">
-                            <button onclick="copySaved('${item.id}')" class="flex-1 py-1.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded uppercase hover:bg-emerald-200 transition-all"><i class="fa-solid fa-copy"></i> Copy</button>
-                            <button onclick="editSaved('${item.id}', '${mode}')" id="btn-edit-${item.id}" class="flex-1 py-1.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded uppercase hover:bg-amber-200 transition-all"><i class="fa-solid fa-pen"></i> Edit</button>
-                            <input type="file" id="file-${item.id}" accept="image/*" class="hidden" onchange="uploadSavedImage(event, '${item.id}', '${mode}')">
-                            <button onclick="document.getElementById('file-${item.id}').click()" class="flex-1 py-1.5 text-[10px] font-bold bg-indigo-100 text-indigo-800 rounded uppercase hover:bg-indigo-200 transition-all"><i class="fa-solid fa-upload"></i> Unggah</button>
-                            <button onclick="deleteSaved('${item.id}', '${mode}')" class="py-1.5 px-3 text-[10px] font-bold bg-red-100 text-red-800 rounded uppercase hover:bg-red-200 transition-all"><i class="fa-solid fa-trash"></i></button>
+                        <div id="${bundleAccId}" class="accordion-content px-4 bg-slate-50">
+                            <div class="py-4 flex flex-col md:flex-row gap-4">
+                                <div class="flex-1">
+                                    ${innerBlocks}
+                                </div>
+                                ${item.image ? `<div class="w-full md:w-1/3 bg-slate-100 rounded-lg flex items-center justify-center p-2 border border-slate-200 self-start"><img src="${item.image}" class="max-w-full h-auto object-contain rounded" alt="Saved Preview"></div>` : ''}
+                            </div>
                         </div>
-                    `;
+                    </div>`;
                 }
-                container.appendChild(card);
+                container.innerHTML += html;
             });
         }
 
-        function toggleSavedGroup(id) {
-            const content = document.getElementById(`content-group-${id}`);
-            const icon = document.getElementById(`icon-group-${id}`);
-            if (content.classList.contains('hidden')) {
-                content.classList.remove('hidden');
-                content.classList.add('flex');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                content.classList.add('hidden');
-                content.classList.remove('flex');
-                icon.classList.add('fa-chevron-down');
-                icon.classList.remove('fa-chevron-up');
-            }
-        }
-
-        function copySavedGroup(id) {
-            const contentDiv = document.getElementById(`content-group-${id}`);
-            const textareas = contentDiv.querySelectorAll('textarea');
-            let combined = "";
-            textareas.forEach(ta => {
-                combined += ta.value + "\n\n";
-            });
-            const temp = document.createElement('textarea');
-            temp.value = combined;
-            document.body.appendChild(temp);
-            temp.select();
-            document.execCommand('copy');
-            document.body.removeChild(temp);
-            showToast("Seluruh isi grup berhasil disalin!");
-        }
-
-        function copySaved(id) {
-            const el = document.getElementById(`${id}-text`);
-            el.select();
-            document.execCommand('copy');
-            showToast("Teks tersimpan berhasil disalin!");
-        }
-
-        function editSaved(id, mode) {
-            const el = document.getElementById(`${id}-text`);
-            const btn = document.getElementById(`btn-edit-${id}`);
-            
-            if (el.hasAttribute('readonly')) {
-                el.removeAttribute('readonly');
-                el.classList.replace('bg-white', 'bg-amber-50');
-                el.classList.add('border-amber-400');
-                btn.innerHTML = `<i class="fa-solid fa-check"></i> Save Edit`;
-                btn.classList.replace('bg-amber-100', 'bg-amber-500');
-                btn.classList.replace('text-amber-800', 'text-amber-950');
-                el.focus();
-            } else {
-                // Save changes
-                el.setAttribute('readonly', 'true');
-                el.classList.replace('bg-amber-50', 'bg-white');
-                el.classList.remove('border-amber-400');
-                btn.innerHTML = `<i class="fa-solid fa-pen"></i> Edit`;
-                btn.classList.replace('bg-amber-500', 'bg-amber-100');
-                btn.classList.replace('text-amber-950', 'text-amber-800');
-                
-                // Update Local Storage
-                const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-                let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                const itemIndex = data.findIndex(item => item.id === id);
-                if (itemIndex > -1) {
-                    data[itemIndex].content = el.value;
-                    localStorage.setItem(storageKey, JSON.stringify(data));
-                    showToast("Perubahan berhasil disimpan.");
-                }
-            }
-        }
-
-        function deleteSaved(id, mode) {
-            if(!confirm("Yakin ingin menghapus data ini?")) return;
-            const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-            let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            data = data.filter(item => item.id !== id);
-            localStorage.setItem(storageKey, JSON.stringify(data));
-            renderSaved(mode);
-            showToast("Data berhasil dihapus.");
-        }
-
-        function uploadSavedImage(event, id, mode) {
+        function handleImageUpload(event, id) {
             const file = event.target.files[0];
-            if (!file) return;
-
+            if(!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Compress image minimally via Canvas to prevent localstorage limit crash
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 600;
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
-
-                    // Save to local storage
-                    const storageKey = mode === 'A' ? 'islamic_studio_saved_a' : 'islamic_studio_saved_b';
-                    let data = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                    const itemIndex = data.findIndex(item => item.id === id);
-                    if (itemIndex > -1) {
-                        data[itemIndex].image = dataUrl;
-                        localStorage.setItem(storageKey, JSON.stringify(data));
-                        renderSaved(mode);
-                        showToast("Gambar berhasil diunggah dan disimpan.");
-                    }
+                const targetIdx = savedData.findIndex(d => d.id === id);
+                if(targetIdx > -1) {
+                    savedData[targetIdx].image = e.target.result;
+                    saveToLocalStorage();
+                    renderSavedBlocks();
+                    showToast("Gambar berhasil diunggah dan disimpan lokal.");
                 }
-                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
 
-        function handleExportJSON() {
-            const dataA = JSON.parse(localStorage.getItem('islamic_studio_saved_a') || '[]');
-            const dataB = JSON.parse(localStorage.getItem('islamic_studio_saved_b') || '[]');
-            const exportData = {
-                export_date: new Date().toISOString(),
-                version: "3.0",
-                saved_a: dataA,
-                saved_b: dataB
-            };
-
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
-            const dlAnchorElem = document.createElement('a');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", `islamic_studio_backup_${Date.now()}.json`);
-            dlAnchorElem.click();
-            showToast("Data berhasil dieksport!");
+        function deleteSaved(id) {
+            if(confirm('Yakin ingin menghapus item ini?')) {
+                savedData = savedData.filter(d => d.id !== id);
+                saveToLocalStorage();
+                renderSavedBlocks();
+                showToast("Item berhasil dihapus.");
+            }
         }
 
-        function handleImportJSON(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function exportJSON() {
+            if(savedData.length === 0) {
+                showToast("Tidak ada data untuk dieksport.");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(savedData, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", "nomuka_saved_data.json");
+            dlAnchorElem.click();
+            showToast("Data berhasil dieksport.");
+        }
 
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if(!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const imported = JSON.parse(e.target.result);
-                    if (imported.saved_a && Array.isArray(imported.saved_a)) {
-                        let existingA = JSON.parse(localStorage.getItem('islamic_studio_saved_a') || '[]');
-                        // Append without checking duplicates for simplicity, or we could filter by ID
-                        localStorage.setItem('islamic_studio_saved_a', JSON.stringify([...imported.saved_a, ...existingA]));
+                    if(Array.isArray(imported)) {
+                        savedData = [...savedData, ...imported];
+                        saveToLocalStorage();
+                        renderSavedBlocks();
+                        showToast("Data berhasil diimport dan digabungkan.");
+                    } else {
+                        showToast("Format JSON tidak valid.");
                     }
-                    if (imported.saved_b && Array.isArray(imported.saved_b)) {
-                        let existingB = JSON.parse(localStorage.getItem('islamic_studio_saved_b') || '[]');
-                        localStorage.setItem('islamic_studio_saved_b', JSON.stringify([...imported.saved_b, ...existingB]));
-                    }
-                    renderSaved(currentSavedTab);
-                    showToast("Import JSON berhasil! Data ditambahkan.");
-                } catch (error) {
-                    alert("File JSON tidak valid atau rusak.");
+                } catch(err) {
+                    showToast("Error parsing JSON file.");
                 }
             };
             reader.readAsText(file);
+            event.target.value = ''; // reset input
         }
-
-        function showToast(msg) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg text-xs font-bold fade-in';
-            toast.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i> ${msg}`;
-            container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(10px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 2500);
-        }
-
     </script>
 </body>
 </html>
