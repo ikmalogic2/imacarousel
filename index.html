@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IKMALOGIC</title>
+    <title>NOMUKA - Islamic Content Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -368,7 +368,6 @@
         let currentMode = 'B';
         let generatedBlocks = [];
         let savedData = JSON.parse(localStorage.getItem('nomuka_saved')) || [];
-        let toastTimeout;
 
         const styleArtsList = [
             "1. GAYA 1 / 3D Papercraft", "2. GAYA 2 / Layered Papercut", "3. GAYA 3 / Origami Paper Art",
@@ -415,39 +414,7 @@
             if (!toast) return;
             document.getElementById('toast-msg').textContent = message;
             toast.classList.remove('opacity-0', 'translate-y-10');
-            
-            if (toastTimeout) clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10'), 2500);
-        }
-
-        function copyToClipboard(text, successMessage) {
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast(successMessage);
-                }).catch(() => {
-                    fallbackCopyTextToClipboard(text, successMessage);
-                });
-            } else {
-                fallbackCopyTextToClipboard(text, successMessage);
-            }
-        }
-
-        function fallbackCopyTextToClipboard(text, successMessage) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-999999px";
-            textArea.style.top = "-999999px";
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast(successMessage);
-            } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
-            }
-            document.body.removeChild(textArea);
+            setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10'), 2500);
         }
 
         function createOutputBlock(id, title, content, isFirst = false) {
@@ -632,21 +599,8 @@
             const ptHead = document.getElementById('set-pt-header').value || 'Auto';
             const ptBody = document.getElementById('set-pt-body').value || 'Auto';
             const ptFoot = document.getElementById('set-pt-footer').value || 'Auto';
-            
-            const wtLogos = document.getElementById('set-watermark-logos').value.trim();
-            const wtUser = document.getElementById('set-watermark-username').value.trim();
-
-            // Fungsi cerdas merakit watermark berdasarkan input kosong atau tidak
-            function getWatermarkStr(slideNumStr, totalSlides) {
-                let result = "";
-                if (wtLogos !== "") {
-                    result += `[minimalist monochrome vector ${wtLogos} logo icon] `;
-                }
-                if (wtUser !== "") {
-                    result += `${wtUser} | ${slideNumStr}/${totalSlides}`;
-                }
-                return result.trim();
-            }
+            const wtLogos = document.getElementById('set-watermark-logos').value || 'Instagram, Threads';
+            const wtUser = document.getElementById('set-watermark-username').value || '@username';
 
             let alignStr = alignment;
             if(alignStr.toLowerCase().includes('seemless') || alignStr.toLowerCase().includes('dinamis')) {
@@ -654,9 +608,6 @@
             }
 
             const charDetails = getCharacterDetailsString();
-
-            const globalWmStr = getWatermarkStr('{x}', slides);
-            const globalWatermarkLine = globalWmStr ? `\n  * WATERMARK: ${globalWmStr}` : '';
 
             const globalConfig = `[GLOBAL CONFIGURATION]
 * OPERATION MODE: MODE B
@@ -676,16 +627,15 @@ ${instructions ? '* INSTRUKSI KHUSUS: ' + instructions + '\n' : ''}
 ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai konteks. (JIKA ADA KARAKTER WAJIB FACELESS & NO EYES)' : charDetails}
 * BODY TEXT: ${bodyFormat}
 * FOOTER:
-  * BENTUK PATCH: ${patchFooter}${globalWatermarkLine}`;
+  * BENTUK PATCH: ${patchFooter}
+  * WATERMARK: [minimalist monochrome vector ${wtLogos} logo icon] ${wtUser} | {x}/${slides}`;
 
             const container = document.getElementById('output-container');
 
             // SLIDE 1
             const id1 = `mode-b-slide-1`;
             const title1 = `SLIDE 1 (COVER/ HOOK)`;
-            const slide1WmStr = getWatermarkStr('1', slides);
-            const slide1Footer = slide1WmStr ? `  * FOOTER: ${slide1WmStr}` : `  * FOOTER: (KOSONGKAN/ TANPA WATERMARK)`;
-            let content1 = `@createimage\n${globalConfig}\n\n[SLIDE 1 (COVER/ HOOK)]\n* SPECS: Aspect Ratio ${ratio}, Style: ${style}\n* VISUAL GUIDE: (Deskripsikan visual hook memancing, konseptual, estetik. JANGAN buat karakter jika tidak perlu. Jika ada, WAJIB faceless no eyes)\n* GEN AI PROMPT: (Tulis prompt bahasa inggris)\n* NASKAH:\n  * HEADER: (Judul Hook Pancingan)\n  * SUB HEADER: (Opsional)\n  * BODY: (KOSONGKAN. SLIDE 1 TIDAK BOLEH ADA BODY TEXT)\n${slide1Footer}\n\nMake the aspect ratio ${ratio}`;
+            let content1 = `@createimage\n${globalConfig}\n\n[SLIDE 1 (COVER/ HOOK)]\n* SPECS: Aspect Ratio ${ratio}, Style: ${style}\n* VISUAL GUIDE: (Deskripsikan visual hook memancing, konseptual, estetik. JANGAN buat karakter jika tidak perlu. Jika ada, WAJIB faceless no eyes)\n* GEN AI PROMPT: (Tulis prompt bahasa inggris)\n* NASKAH:\n  * HEADER: (Judul Hook Pancingan)\n  * SUB HEADER: (Opsional)\n  * BODY: (KOSONGKAN. SLIDE 1 TIDAK BOLEH ADA BODY TEXT)\n  * FOOTER: [minimalist monochrome vector ${wtLogos} logo icon] ${wtUser} | 1/${slides}\n\nMake the aspect ratio ${ratio}`;
             generatedBlocks.push({ id: id1, title: title1, content: content1, type: 'single' });
             
             // Only open Slide 1
@@ -695,9 +645,7 @@ ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai k
             for(let i=2; i<=slides; i++) {
                 const idN = `mode-b-slide-${i}`;
                 const titleN = `SLIDE ${i}`;
-                const slideNWmStr = getWatermarkStr(i, slides);
-                const slideNFooter = slideNWmStr ? `  * FOOTER: ${slideNWmStr}` : `  * FOOTER: (KOSONGKAN/ TANPA WATERMARK)`;
-                let contentN = `@createimage\n[SLIDE ${i}]\n* SPECS: Aspect Ratio ${ratio}, Style: ${style}\n* VISUAL GUIDE: (Deskripsikan scene metafora/lanskap yang BERBEDA. Jangan monoton, layout teks mengalir dinamis. Hanya munculkan karakter jika wajib)\n* GEN AI PROMPT: (Tulis prompt bahasa inggris)\n* NASKAH:\n  * HEADER: (Sub-judul ringkas. PENTING: DILARANG MENAMBAHKAN ANGKA PENOMORAN DI AWAL HEADER)\n  * BODY: (Penjelasan Feynman style, ${bodyFormat})\n${slideNFooter}\n\nMake the aspect ratio ${ratio}`;
+                let contentN = `@createimage\n[SLIDE ${i}]\n* SPECS: Aspect Ratio ${ratio}, Style: ${style}\n* VISUAL GUIDE: (Deskripsikan scene metafora/lanskap yang BERBEDA. Jangan monoton, layout teks mengalir dinamis. Hanya munculkan karakter jika wajib)\n* GEN AI PROMPT: (Tulis prompt bahasa inggris)\n* NASKAH:\n  * HEADER: (Sub-judul ringkas. PENTING: DILARANG MENAMBAHKAN ANGKA PENOMORAN DI AWAL HEADER)\n  * BODY: (Penjelasan Feynman style, ${bodyFormat})\n  * FOOTER: [minimalist monochrome vector ${wtLogos} logo icon] ${wtUser} | ${i}/${slides}\n\nMake the aspect ratio ${ratio}`;
                 generatedBlocks.push({ id: idN, title: titleN, content: contentN, type: 'single' });
                 container.innerHTML += createOutputBlock(idN, titleN, contentN, false);
             }
@@ -860,13 +808,17 @@ ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai k
         function copyText(id) {
             const preEl = document.getElementById(id + '-content');
             if(!preEl) return;
-            copyToClipboard(preEl.innerText, "Teks berhasil dicopy!");
+            navigator.clipboard.writeText(preEl.innerText).then(() => {
+                showToast("Teks berhasil dicopy!");
+            });
         }
 
         function copyAllBlocks() {
             if (generatedBlocks.length === 0) return;
             let fullText = generatedBlocks.map(b => b.content).join('\n\n--------------------------------------------------\n\n');
-            copyToClipboard(fullText, "Seluruh block berhasil dicopy!");
+            navigator.clipboard.writeText(fullText).then(() => {
+                showToast("Seluruh block berhasil dicopy!");
+            });
         }
 
         function saveBlock(id) {
@@ -961,7 +913,7 @@ ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai k
                         <div class="p-4 flex-1 flex flex-col md:flex-row gap-4">
                             <div class="flex-1 overflow-x-auto max-h-64 relative group">
                                 <pre id="pre-${item.id}" class="text-xs text-slate-600 font-mono whitespace-pre-wrap break-words outline-none p-2 rounded transition-colors">${item.content}</pre>
-                                <button onclick="copyToClipboard(document.getElementById('pre-${item.id}').innerText, 'Teks dicopy!');" class="absolute top-2 right-2 px-3 py-1 bg-white border border-slate-200 text-[10px] font-bold text-emerald-600 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10">COPY TEKS</button>
+                                <button onclick="navigator.clipboard.writeText(document.getElementById('pre-${item.id}').innerText); showToast('Teks dicopy!');" class="absolute top-2 right-2 px-3 py-1 bg-white border border-slate-200 text-[10px] font-bold text-emerald-600 rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-sm z-10">COPY TEKS</button>
                             </div>
                             ${item.image ? `<div class="w-full md:w-1/3 bg-slate-50 rounded-lg flex flex-col items-center justify-center p-2 border border-slate-200 relative group"><img src="${item.image}" class="max-w-full h-auto max-h-48 object-contain rounded" alt="Saved Preview"><button onclick="removeSingleImage('${item.id}')" class="absolute top-2 right-2 w-7 h-7 bg-red-100 text-red-600 rounded opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs" title="Hapus Gambar"><i class="fa-solid fa-xmark"></i></button></div>` : ''}
                         </div>
@@ -979,7 +931,7 @@ ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai k
                                 <div class="bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600 border-b border-slate-200 flex justify-between items-center">
                                     <span>${blk.title}</span>
                                     <div class="flex gap-2">
-                                        <button onclick="copyToClipboard(document.getElementById('pre-${item.id}-${idx}').innerText, 'Block dicopy!');" class="w-7 h-7 flex items-center justify-center bg-white rounded border border-slate-200 text-emerald-600 hover:text-emerald-800 transition-colors" title="Copy Block"><i class="fa-regular fa-copy"></i></button>
+                                        <button onclick="navigator.clipboard.writeText(document.getElementById('pre-${item.id}-${idx}').innerText); showToast('Block dicopy!');" class="w-7 h-7 flex items-center justify-center bg-white rounded border border-slate-200 text-emerald-600 hover:text-emerald-800 transition-colors" title="Copy Block"><i class="fa-regular fa-copy"></i></button>
                                         <button onclick="toggleEditBundleBlock('${item.id}', ${idx})" id="edit-btn-${item.id}-${idx}" class="w-7 h-7 flex items-center justify-center bg-white rounded border border-slate-200 text-blue-500 hover:text-blue-700 transition-colors" title="Edit Teks"><i class="fa-solid fa-pen"></i></button>
                                         <label class="cursor-pointer w-7 h-7 flex items-center justify-center bg-white rounded border border-slate-200 text-slate-500 hover:text-amber-500 transition-colors" title="Unggah Gambar Slide">
                                             <i class="fa-solid fa-image"></i>
@@ -1005,7 +957,7 @@ ${charDetails === 'Auto-Set by AI' || charDetails === '' ? '  * Dinamis sesuai k
                                 <p class="text-[10px] text-slate-500 mt-1">${item.timestamp} | ${item.blocks.length} Blocks</p>
                             </div>
                             <div class="flex items-center gap-3">
-                                <button onclick="event.stopPropagation(); copyToClipboard(\`${fullBundleText.replace(/`/g, '\\`')}\`, 'Seluruh grup dicopy!');" class="px-4 py-1.5 bg-white border border-slate-200 text-xs font-bold text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors shadow-sm">COPY ALL GROUP</button>
+                                <button onclick="event.stopPropagation(); navigator.clipboard.writeText(\`${fullBundleText.replace(/`/g, '\\`')}\`); showToast('Seluruh grup dicopy!');" class="px-4 py-1.5 bg-white border border-slate-200 text-xs font-bold text-emerald-600 rounded-lg hover:bg-emerald-50 transition-colors shadow-sm">COPY ALL GROUP</button>
                                 <button onclick="event.stopPropagation(); deleteSaved('${item.id}')" class="w-8 h-8 rounded bg-white border border-slate-200 text-slate-500 hover:text-red-500 flex items-center justify-center transition-colors" title="Hapus Group">
                                     <i class="fa-solid fa-trash"></i>
                                 </button>
