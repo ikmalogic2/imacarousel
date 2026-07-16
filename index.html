@@ -3,317 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOMUKA - Islamic Content Studio</title>
+    <title>imapro - Islamic Content Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ios: {
+                            bg: '#F2F2F7',
+                            darkBg: '#000000',
+                            panel: '#ffffff',
+                            darkPanel: '#1C1C1E',
+                            blue: '#007AFF',
+                            text: '#000000',
+                            darkText: '#FFFFFF',
+                            border: '#E5E5EA',
+                            darkBorder: '#38383A',
+                            input: '#FAFAFA',
+                            darkInput: '#2C2C2E'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .accordion-content { transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease; max-height: 0; opacity: 0; overflow: hidden; }
+        /* UI/UX ala iOS */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .accordion-content { transition: max-height 0.35s ease-in-out, opacity 0.35s ease-in-out, padding 0.35s ease; max-height: 0; opacity: 0; overflow: hidden; }
         .accordion-content.open { max-height: 5000px; opacity: 1; overflow: visible; }
         .rotate-180 { transform: rotate(180deg); }
-        .glass-panel { background: white; border: 1px solid #e2e8f0; border-radius: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 1rem; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .glass-panel { 
+            border-radius: 1.25rem; 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03); 
+            overflow: hidden; 
+            margin-bottom: 1.25rem; 
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .ios-input {
+            border-radius: 0.75rem;
+            transition: all 0.2s ease;
+        }
+        .ios-input:focus {
+            border-color: #007AFF !important;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+        }
+        
+        .ios-btn-primary {
+            background-color: #007AFF;
+            color: white;
+            border-radius: 0.875rem;
+            font-weight: 600;
+            transition: transform 0.1s ease, opacity 0.2s ease, background-color 0.3s ease;
+        }
+        .ios-btn-primary:active { transform: scale(0.97); opacity: 0.9; }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D1D1D6; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #636366; }
+        
         .toast-enter { opacity: 1 !important; transform: translateY(0) !important; }
+        #toast { backdrop-filter: blur(10px); background-color: rgba(44, 44, 46, 0.9); border-radius: 1rem; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-8 px-4 relative pb-24">
-    <!-- TOAST -->
-    <div id="toast" class="fixed top-4 right-4 bg-slate-800 text-white px-4 py-2 rounded shadow-lg opacity-0 translate-y-[-10px] transition-all duration-300 z-50 pointer-events-none flex items-center gap-2">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-        <span id="toast-msg">Success</span>
+<body class="min-h-screen flex flex-col items-center py-8 px-4 relative pb-24 bg-ios-bg dark:bg-ios-darkBg text-ios-text dark:text-ios-darkText">
+    
+    <div id="toast" class="fixed top-6 right-4 text-white px-5 py-3 shadow-lg opacity-0 translate-y-[-20px] transition-all duration-300 z-50 pointer-events-none flex items-center gap-3">
+        <svg class="w-5 h-5 text-[#34C759]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toast-msg" class="font-medium text-sm">Success</span>
     </div>
 
-    <!-- HEADER -->
     <div class="w-full max-w-4xl mb-6 flex justify-between items-center">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">NOMUKA</h1>
-            <p class="text-sm text-slate-500">Islamic Content Studio</p>
+            <h1 class="text-3xl font-bold tracking-tight">imapro</h1>
+            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Islamic Content Studio</p>
         </div>
-        <div class="flex bg-slate-200 p-1 rounded-lg">
-            <button id="btn-mode-a" onclick="switchMode('A')" class="px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-900 transition-all duration-300">Mode A</button>
-            <button id="btn-mode-b" onclick="switchMode('B')" class="px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-700 transition-all duration-300">Mode B</button>
+        <div class="flex items-center gap-4">
+            <!-- Theme Toggle -->
+            <button onclick="toggleTheme()" class="p-2 rounded-full bg-white dark:bg-ios-darkPanel text-gray-600 dark:text-gray-300 shadow-sm border border-transparent dark:border-ios-darkBorder hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                <svg id="theme-icon-light" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="theme-icon-dark" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+            
+            <div class="flex bg-[#E3E3E8] dark:bg-[#2C2C2E] p-1 rounded-xl shadow-inner">
+                <button id="btn-mode-a" onclick="switchMode('A')" class="px-5 py-1.5 text-sm font-semibold rounded-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-all duration-300">Mode A</button>
+                <button id="btn-mode-b" onclick="switchMode('B')" class="px-5 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-[#3A3A3C] shadow-sm text-black dark:text-white transition-all duration-300">Mode B</button>
+            </div>
         </div>
     </div>
 
-    <div class="w-full max-w-4xl space-y-4">
-        
-        <!-- 1. KARTU INPUT -->
-        <div class="glass-panel">
-            <button onclick="toggleAccordion('input-content', 'input-icon')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
-                <span class="font-bold text-slate-800">1. KARTU INPUT</span>
-                <svg id="input-icon" class="w-5 h-5 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    <div class="w-full max-w-4xl space-y-2">
+        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+            <button onclick="toggleAccordion('input-content', 'input-icon')" class="w-full px-6 py-4 flex justify-between items-center border-b border-ios-border dark:border-ios-darkBorder hover:bg-gray-50 dark:hover:bg-[#2C2C2E] transition-colors">
+                <span class="font-semibold">1. KARTU INPUT</span>
+                <svg id="input-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="input-content" class="accordion-content open px-6 py-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div id="input-content" class="accordion-content px-6 py-0">
+                <div class="py-5 grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="relative">
-                        <textarea id="input-topic" rows="5" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-y text-slate-700 placeholder-slate-400" placeholder="Ketik topik, ide, atau paste artikel materi di sini..."></textarea>
-                        <button onclick="document.getElementById('input-topic').value=''" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <textarea id="input-topic" rows="5" class="w-full p-3 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik topik, ide, atau paste artikel materi di sini..."></textarea>
+                        <button onclick="document.getElementById('input-topic').value=''" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                     </div>
                     <div class="relative">
-                        <textarea id="input-instructions" rows="5" class="w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-y text-slate-700 placeholder-slate-400" placeholder="Ketik instruksi tambahan (opsional)..."></textarea>
-                        <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        <textarea id="input-instructions" rows="5" class="w-full p-3 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik instruksi tambahan (opsional)..."></textarea>
+                        <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 2. KARTU SETTING -->
-        <div id="setting-card" class="glass-panel" style="display: none;">
-            <button onclick="toggleAccordion('setting-content', 'setting-icon')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
-                <span class="font-bold text-slate-800">2. KARTU SETTING</span>
-                <svg id="setting-icon" class="w-5 h-5 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div id="setting-card" class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder" style="display: block;">
+            <button onclick="toggleAccordion('setting-content', 'setting-icon')" class="w-full px-6 py-4 flex justify-between items-center border-b border-ios-border dark:border-ios-darkBorder hover:bg-gray-50 dark:hover:bg-[#2C2C2E] transition-colors">
+                <span class="font-semibold">2. KARTU SETTING</span>
+                <svg id="setting-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="setting-content" class="accordion-content open px-6 py-4">
-                <div class="flex justify-end gap-2 mb-4">
-                    <button onclick="resetSettings()" class="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 border border-slate-200 rounded hover:bg-slate-200 transition-colors">Reset</button>
-                    <button onclick="autoSetSettings()" class="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Auto-Set AI</button>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <!-- A. Jumlah Slide -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">A. Jumlah Slide</label>
-                        <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full p-2 border rounded outline-none focus:border-blue-500">
+            <div id="setting-content" class="accordion-content px-6 py-0">
+                <div class="py-5">
+                    <div class="flex justify-end gap-2 mb-5">
+                        <button onclick="resetSettings()" class="px-4 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
+                        <button onclick="autoSetSettings()" class="px-4 py-1.5 text-xs font-semibold text-white bg-[#007AFF] rounded-lg hover:bg-[#0056b3] transition-colors flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Auto-Set AI</button>
                     </div>
                     
-                    <!-- B. Gaya Seni -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">B. Gaya Seni</label>
-                        <div class="flex gap-2">
-                            <select id="set-style" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500"></select>
-                            <input type="text" id="set-style-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik gaya...">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">A. Jumlah Slide</label>
+                            <input type="number" id="set-slide-count" min="1" max="30" value="7" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
                         </div>
-                    </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">B. Gaya Seni</label>
+                            <div class="flex gap-2">
+                                <select id="set-style" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white"></select>
+                                <input type="text" id="set-style-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik gaya...">
+                            </div>
+                        </div>
 
-                    <!-- C. Tipografi -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">C. Tipografi (DNA Font)</label>
-                        <div class="flex gap-2">
-                            <select id="set-font" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500"></select>
-                            <input type="text" id="set-font-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik font...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">C. Tipografi (DNA Font)</label>
+                            <div class="flex gap-2">
+                                <select id="set-font" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white"></select>
+                                <input type="text" id="set-font-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik font...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- D. Efek Teks -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">D. Efek Teks</label>
-                        <div class="flex gap-2">
-                            <select id="set-texteffect" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
-                                <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
-                                <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
-                                <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
-                                <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
-                                <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
-                                <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
-                            </select>
-                            <input type="text" id="set-texteffect-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik efek...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">D. Efek Teks</label>
+                            <div class="flex gap-2">
+                                <select id="set-texteffect" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+                                    <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
+                                    <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+                                    <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
+                                    <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
+                                    <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
+                                    <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
+                                </select>
+                                <input type="text" id="set-texteffect-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik efek...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- E. Rata Teks -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">E. Rata Teks</label>
-                        <div class="flex gap-2">
-                            <select id="set-alignment" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI (SEEMLESS)">Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="RATA KIRI">RATA KIRI</option>
-                                <option value="RATA TENGAH">RATA TENGAH</option>
-                                <option value="RATA KANAN">RATA KANAN</option>
-                            </select>
-                            <input type="text" id="set-alignment-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik alignment...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">E. Rata Teks</label>
+                            <div class="flex gap-2">
+                                <select id="set-alignment" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI (SEEMLESS)">Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="RATA KIRI">RATA KIRI</option>
+                                    <option value="RATA TENGAH">RATA TENGAH</option>
+                                    <option value="RATA KANAN">RATA KANAN</option>
+                                </select>
+                                <input type="text" id="set-alignment-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik alignment...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- F. Aspect Ratio -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">F. Aspect Ratio</label>
-                        <div class="flex gap-2">
-                            <select id="set-ratio" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="1:1">1:1</option>
-                                <option value="3:4" selected>3:4</option>
-                                <option value="4:5">4:5</option>
-                                <option value="9:16">9:16</option>
-                                <option value="16:9">16:9</option>
-                                <option value="5:4">5:4</option>
-                                <option value="4:3">4:3</option>
-                            </select>
-                            <input type="text" id="set-ratio-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik ratio...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">F. Aspect Ratio</label>
+                            <div class="flex gap-2">
+                                <select id="set-ratio" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="1:1">1:1</option>
+                                    <option value="3:4" selected>3:4</option>
+                                    <option value="4:5">4:5</option>
+                                    <option value="9:16">9:16</option>
+                                    <option value="16:9">16:9</option>
+                                    <option value="5:4">5:4</option>
+                                    <option value="4:3">4:3</option>
+                                </select>
+                                <input type="text" id="set-ratio-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik ratio...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- G. Komposisi -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">G. Komposisi (Teks : Visual)</label>
-                        <div class="flex gap-2">
-                            <select id="set-composition" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
-                                <option value="TEKS DOMINAN (60/40)">TEKS DOMINAN (60/40)</option>
-                                <option value="VISUAL DOMINAN (40/60)">VISUAL DOMINAN (40/60)</option>
-                                <option value="MINIMALIS TEKS (30/70)">MINIMALIS TEKS (30/70)</option>
-                            </select>
-                            <input type="text" id="set-composition-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik komposisi...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">G. Komposisi (Teks : Visual)</label>
+                            <div class="flex gap-2">
+                                <select id="set-composition" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="SEIMBANG (50:50)">SEIMBANG (50:50)</option>
+                                    <option value="TEKS DOMINAN (60/40)">TEKS DOMINAN (60/40)</option>
+                                    <option value="VISUAL DOMINAN (40/60)">VISUAL DOMINAN (40/60)</option>
+                                    <option value="MINIMALIS TEKS (30/70)">MINIMALIS TEKS (30/70)</option>
+                                </select>
+                                <input type="text" id="set-composition-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik komposisi...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- H. Format Body -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">H. Format Body Text</label>
-                        <div class="flex gap-2">
-                            <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
-                                <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
-                            </select>
-                            <input type="text" id="set-bodyformat-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik format...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">H. Format Body Text</label>
+                            <div class="flex gap-2">
+                                <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
+                                    <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
+                                </select>
+                                <input type="text" id="set-bodyformat-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik format...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- I. Ukuran Font PT -->
-                    <div class="md:col-span-2">
-                        <label class="block text-slate-700 font-medium mb-1">I. Ukuran Font (PT)</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <input type="number" id="set-pt-header" placeholder="Header (60)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                            <input type="number" id="set-pt-body" placeholder="Body (40)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                            <input type="number" id="set-pt-footer" placeholder="Footer (20)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">I. Ukuran Font (PT)</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <input type="number" id="set-pt-header" placeholder="Header (60)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                <input type="number" id="set-pt-body" placeholder="Body (40)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                <input type="number" id="set-pt-footer" placeholder="Footer (20)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- J. Palet Warna -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">J. Palet Warna</label>
-                        <div class="flex gap-2">
-                            <select id="set-palette" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="EARTH TONE">EARTH TONE</option>
-                                <option value="SOFT PASTEL">SOFT PASTEL</option>
-                                <option value="MONOCHROME">MONOCHROME</option>
-                                <option value="WARM">WARM</option>
-                                <option value="COOL">COOL</option>
-                            </select>
-                            <input type="text" id="set-palette-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik palet warna...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">J. Palet Warna</label>
+                            <div class="flex gap-2">
+                                <select id="set-palette" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="EARTH TONE">EARTH TONE</option>
+                                    <option value="SOFT PASTEL">SOFT PASTEL</option>
+                                    <option value="MONOCHROME">MONOCHROME</option>
+                                    <option value="WARM">WARM</option>
+                                    <option value="COOL">COOL</option>
+                                </select>
+                                <input type="text" id="set-palette-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik palet warna...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- K. Karakter Utama -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">K. Karakter Utama</label>
-                        <div class="flex gap-2">
-                            <select id="set-character" onchange="handleCharacterChange(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="Pria Dewasa">Pria Dewasa</option>
-                                <option value="Wanita">Wanita</option>
-                                <option value="Pasutri">Pasutri</option>
-                                <option value="Anak Laki-laki">Anak Laki-laki</option>
-                                <option value="Anak Perempuan">Anak Perempuan</option>
-                                <option value="Tanpa Karakter">Tanpa Karakter</option>
-                            </select>
-                            <input type="text" id="set-character-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik karakter...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">K. Karakter Utama</label>
+                            <div class="flex gap-2">
+                                <select id="set-character" onchange="handleCharacterChange(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="Pria Dewasa">Pria Dewasa</option>
+                                    <option value="Wanita">Wanita</option>
+                                    <option value="Pasutri">Pasutri</option>
+                                    <option value="Anak Laki-laki">Anak Laki-laki</option>
+                                    <option value="Anak Perempuan">Anak Perempuan</option>
+                                    <option value="Tanpa Karakter">Tanpa Karakter</option>
+                                </select>
+                                <input type="text" id="set-character-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik karakter...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Dynamic Character Details Container -->
-                    <div id="character-details-container" class="md:col-span-2 hidden bg-slate-50 p-3 rounded border border-slate-200">
-                        <p class="text-xs text-red-500 font-medium mb-2">*Aturan Faceless & No Eyes mutlak berlaku.</p>
-                        <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <!-- Injected dynamically -->
+                        <div id="character-details-container" class="md:col-span-2 hidden bg-gray-50 dark:bg-[#2C2C2E] p-4 rounded-xl border border-gray-200 dark:border-ios-darkBorder">
+                            <p class="text-xs text-red-500 dark:text-red-400 font-medium mb-3">*Aturan Faceless & No Eyes mutlak berlaku.</p>
+                            <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Injected dynamically -->
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- L. Bentuk Patch Footer -->
-                    <div>
-                        <label class="block text-slate-700 font-medium mb-1">L. Bentuk Patch Footer</label>
-                        <div class="flex gap-2">
-                            <select id="set-patch-footer" onchange="handleKustom(this)" class="w-full p-2 border rounded outline-none focus:border-blue-500">
-                                <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                <option value="KUSTOM">KUSTOM</option>
-                                <option value="Tanpa Patch (Teks Transparan)">Tanpa Patch (Teks Transparan)</option>
-                                <option value="Pill Hollow Capsule">Pill Hollow Capsule</option>
-                                <option value="Kotak Minimalis">Kotak Minimalis</option>
-                                <option value="Rounded Rectangle">Rounded Rectangle</option>
-                                <option value="Pita/ Ribbon">Pita/ Ribbon</option>
-                            </select>
-                            <input type="text" id="set-patch-footer-custom" class="hidden w-full p-2 border rounded outline-none focus:border-blue-500" placeholder="Ketik patch footer custom...">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">L. Bentuk Patch Footer</label>
+                            <div class="flex gap-2">
+                                <select id="set-patch-footer" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="Tanpa Patch (Teks Transparan)">Tanpa Patch (Teks Transparan)</option>
+                                    <option value="Pill Hollow Capsule">Pill Hollow Capsule</option>
+                                    <option value="Kotak Minimalis">Kotak Minimalis</option>
+                                    <option value="Rounded Rectangle">Rounded Rectangle</option>
+                                    <option value="Pita/ Ribbon">Pita/ Ribbon</option>
+                                </select>
+                                <input type="text" id="set-patch-footer-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik patch footer custom...">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- M. Watermark Footer -->
-                    <div class="md:col-span-2">
-                        <label class="block text-slate-700 font-medium mb-1">M. Watermark Footer</label>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                            <input type="text" id="set-watermark-logos" placeholder="Logo (cth: Instagram, Threads)" class="w-full p-2 border rounded outline-none focus:border-blue-500" value="Instagram, Threads">
-                            <input type="text" id="set-watermark-username" placeholder="nama akun, misal: @ikmalogic" class="w-full p-2 border rounded outline-none focus:border-blue-500">
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">M. Watermark Footer</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <input type="text" id="set-watermark-logos" placeholder="Logo (cth: IG, Threads)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" value="Instagram, Threads">
+                                <input type="text" id="set-watermark-username" placeholder="@username" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                            </div>
                         </div>
+
+                        <div>
+                            <label class="block text-gray-700 dark:text-gray-300 font-medium mb-1.5">N. Copywriting</label>
+                            <div class="flex gap-2">
+                                <select id="set-copywriting" onchange="handleKustom(this)" class="w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="Tanpa Framework">Tanpa Framework</option>
+                                    <option value="AIDA (Attention, Interest, Desire, Action)">AIDA (Attention, Interest, Desire, Action)</option>
+                                    <option value="PAS (Problem, Agitate, Solve)">PAS (Problem, Agitate, Solve)</option>
+                                    <option value="BAB (Before, After, Bridge)">BAB (Before, After, Bridge)</option>
+                                    <option value="4P (Picture, Promise, Prove, Push)">4P (Picture, Promise, Prove, Push)</option>
+                                    <option value="FAB (Features, Advantages, Benefits)">FAB (Features, Advantages, Benefits)</option>
+                                </select>
+                                <input type="text" id="set-copywriting-custom" class="hidden w-full p-2.5 ios-input border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white" placeholder="Ketik framework...">
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- GENERATE BUTTON -->
-        <button onclick="handleGenerate()" class="w-full py-3 bg-slate-900 text-white font-bold rounded-lg shadow-md hover:bg-slate-800 transition-colors flex justify-center items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        <button onclick="handleGenerate()" class="w-full py-4 mt-2 mb-2 ios-btn-primary shadow-md flex justify-center items-center gap-2 text-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
             GENERATE PROMPT
         </button>
 
-        <!-- 3. KARTU OUTPUT -->
-        <div class="glass-panel">
-            <button onclick="toggleAccordion('output-wrapper', 'output-icon')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
-                <span class="font-bold text-slate-800">3. KARTU OUTPUT</span>
-                <svg id="output-icon" class="w-5 h-5 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+            <button onclick="toggleAccordion('output-wrapper', 'output-icon')" class="w-full px-6 py-4 flex justify-between items-center border-b border-ios-border dark:border-ios-darkBorder hover:bg-gray-50 dark:hover:bg-[#2C2C2E] transition-colors">
+                <span class="font-semibold">3. KARTU OUTPUT</span>
+                <svg id="output-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="output-wrapper" class="accordion-content open px-6 py-4">
-                <div class="flex justify-end gap-2 mb-4">
-                    <button onclick="copyAllBlocks()" class="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 transition-colors">Copy All</button>
-                    <button onclick="saveAllBlocks()" class="px-3 py-1.5 text-xs font-medium text-white bg-green-600 rounded hover:bg-green-700 transition-colors">Save All Group</button>
-                </div>
-                <!-- Dynamic Output Container -->
-                <div id="output-container" class="space-y-4">
-                    <p class="text-sm text-slate-500 text-center py-4">Hasil generate akan muncul di sini.</p>
+            <div id="output-wrapper" class="accordion-content px-6 py-0">
+                <div class="py-5">
+                    <div class="flex justify-end gap-3 mb-4">
+                        <button onclick="copyAllBlocks()" class="px-4 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">Copy All</button>
+                        <button onclick="saveAllBlocks()" class="px-4 py-1.5 text-xs font-semibold text-white bg-[#34C759] rounded-lg hover:bg-green-600 transition-colors">Save All Group</button>
+                    </div>
+                    <div id="output-container" class="space-y-4">
+                        <p class="text-sm text-gray-400 text-center py-6 font-medium">Hasil generate akan muncul di sini.</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 4. KARTU SAVED -->
-        <div class="glass-panel">
-            <button onclick="toggleAccordion('saved-wrapper', 'saved-icon')" class="w-full px-6 py-4 flex justify-between items-center bg-slate-50 border-b border-slate-100 hover:bg-slate-100 transition-colors">
-                <span class="font-bold text-slate-800">4. KARTU SAVED</span>
-                <svg id="saved-icon" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+            <button onclick="toggleAccordion('saved-wrapper', 'saved-icon')" class="w-full px-6 py-4 flex justify-between items-center border-b border-ios-border dark:border-ios-darkBorder hover:bg-gray-50 dark:hover:bg-[#2C2C2E] transition-colors">
+                <span class="font-semibold">4. KARTU SAVED</span>
+                <svg id="saved-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="saved-wrapper" class="accordion-content px-6 py-4">
-                <!-- Tabs for Saved A and B -->
-                <div class="flex border-b border-slate-200 mb-4">
-                    <button id="tab-saved-a" onclick="switchSavedTab('A')" class="px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600">Mode A (Ideas)</button>
-                    <button id="tab-saved-b" onclick="switchSavedTab('B')" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700">Mode B (Carousel)</button>
-                </div>
-                
-                <div id="saved-container" class="space-y-4">
-                    <!-- Saved items will be rendered here -->
-                </div>
-
-                <!-- Export/Import -->
-                <div class="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center">
-                    <div>
-                        <h4 class="text-sm font-bold text-slate-800">Data Management</h4>
-                        <p class="text-xs text-slate-500">Ekspor atau impor data tersimpan (JSON).</p>
+            <div id="saved-wrapper" class="accordion-content px-6 py-0">
+                <div class="py-5">
+                    <div class="flex border-b border-gray-200 dark:border-ios-darkBorder mb-5">
+                        <button id="tab-saved-a" onclick="switchSavedTab('A')" class="px-5 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white">Mode A (Ideas)</button>
+                        <button id="tab-saved-b" onclick="switchSavedTab('B')" class="px-5 py-2.5 text-sm font-semibold border-b-2 border-[#007AFF] text-[#007AFF]">Mode B (Carousel)</button>
                     </div>
-                    <div class="flex gap-2">
-                        <label class="cursor-pointer px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 transition-colors">
-                            Import JSON
-                            <input type="file" accept=".json" class="hidden" onchange="importData(this)">
-                        </label>
-                        <button onclick="exportData()" class="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 transition-colors">Export JSON</button>
+                    
+                    <div id="saved-container" class="space-y-4">
+                        </div>
+
+                    <div class="mt-8 pt-5 border-t border-gray-200 dark:border-ios-darkBorder flex justify-between items-center bg-gray-50 dark:bg-[#1C1C1E] -mx-6 -mb-5 px-6 py-4 rounded-b-2xl">
+                        <div>
+                            <h4 class="text-sm font-bold">Data Management</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Ekspor atau impor data tersimpan (JSON).</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <label class="cursor-pointer px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-300 dark:border-ios-darkBorder rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors">
+                                Import JSON
+                                <input type="file" accept=".json" class="hidden" onchange="importData(this)">
+                            </label>
+                            <button onclick="exportData()" class="px-4 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-300 dark:border-ios-darkBorder rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors">Export JSON</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -339,18 +404,38 @@
         ];
 
         // --- STATE VARIABLES ---
-        let currentMode = 'A';
-        let currentSavedTab = 'A';
-        let savedData = JSON.parse(localStorage.getItem('nomuka_saved')) || { A: [], B: [] };
-        let currentOutputBlocks = []; // To store generated blocks before saving
-        let currentTopicTemp = ""; // Store current topic for saving group name
+        let currentMode = 'B'; // Default Mode B
+        let currentSavedTab = 'B'; // Default Mode B
+        let savedData = JSON.parse(localStorage.getItem('imapro_saved')) || { A: [], B: [] };
+        let currentOutputBlocks = []; 
+        let currentTopicTemp = ""; 
 
         // --- INITIALIZATION ---
         window.onload = () => {
             populateSelect('set-style', styleArtsList);
             populateSelect('set-font', fontDNAList);
+            
+            // Check Theme Preference
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
             renderSaved();
+            // Initial UI state for Mode B
+            switchMode('B');
         };
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
 
         function populateSelect(id, list) {
             const el = document.getElementById(id);
@@ -366,12 +451,12 @@
             const settingCard = document.getElementById('setting-card');
 
             if (mode === 'A') {
-                btnA.className = 'px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-900 transition-all duration-300';
-                btnB.className = 'px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-700 transition-all duration-300';
+                btnA.className = 'px-5 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-[#3A3A3C] shadow-sm text-black dark:text-white transition-all duration-300';
+                btnB.className = 'px-5 py-1.5 text-sm font-semibold rounded-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-all duration-300';
                 if (settingCard) settingCard.style.display = 'none';
             } else {
-                btnA.className = 'px-4 py-2 text-sm font-medium rounded-md text-slate-500 hover:text-slate-700 transition-all duration-300';
-                btnB.className = 'px-4 py-2 text-sm font-medium rounded-md bg-white shadow-sm text-slate-900 transition-all duration-300';
+                btnA.className = 'px-5 py-1.5 text-sm font-semibold rounded-lg text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-all duration-300';
+                btnB.className = 'px-5 py-1.5 text-sm font-semibold rounded-lg bg-white dark:bg-[#3A3A3C] shadow-sm text-black dark:text-white transition-all duration-300';
                 if (settingCard) settingCard.style.display = 'block';
             }
         }
@@ -426,28 +511,28 @@
 
             container.classList.remove('hidden');
             let html = `
-                <div><label class="block text-xs font-medium text-slate-600 mb-1">A. Wajah</label>
-                <select id="char-face" class="w-full p-1.5 text-sm border rounded outline-none" onchange="checkCharCustom(this)"><option value="Normal (Proporsional)">Normal (Proporsional)</option><option value="Chibi (Cute)">Chibi (Cute)</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-face-custom" class="hidden w-full p-1.5 text-sm border rounded mt-1" placeholder="Ketik wajah..."></div>
+                <div><label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">A. Wajah</label>
+                <select id="char-face" class="w-full p-2 text-sm border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white" onchange="checkCharCustom(this)"><option value="Normal (Proporsional)">Normal (Proporsional)</option><option value="Chibi (Cute)">Chibi (Cute)</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-face-custom" class="hidden w-full p-2 text-sm ios-input dark:bg-ios-darkInput dark:text-white mt-1" placeholder="Ketik wajah..."></div>
             `;
 
             if (val === 'Wanita' || val === 'Anak Perempuan') {
                 html += `
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">B. Penutup Kepala</label>
-                    <select id="char-headwear" class="w-full p-1.5 text-sm border rounded outline-none" onchange="checkCharCustom(this)"><option value="Khimar Panjang Menutup Dada">Khimar Panjang Menutup Dada</option><option value="Khimar & Cadar/Niqab">Khimar & Cadar/Niqab</option><option value="Bergo Anak">Bergo Anak</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-1.5 text-sm border rounded mt-1" placeholder="Ketik detail..."></div>
+                    <div><label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">B. Penutup Kepala</label>
+                    <select id="char-headwear" class="w-full p-2 text-sm border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white" onchange="checkCharCustom(this)"><option value="Khimar Panjang Menutup Dada">Khimar Panjang Menutup Dada</option><option value="Khimar & Cadar/Niqab">Khimar & Cadar/Niqab</option><option value="Bergo Anak">Bergo Anak</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-2 text-sm ios-input dark:bg-ios-darkInput dark:text-white mt-1" placeholder="Ketik detail..."></div>
                 `;
             } else {
                 html += `
-                    <div><label class="block text-xs font-medium text-slate-600 mb-1">B. Haircut/ Penutup Kepala</label>
-                    <select id="char-headwear" class="w-full p-1.5 text-sm border rounded outline-none" onchange="checkCharCustom(this)"><option value="Peci/ Kopiah Hitam">Peci/ Kopiah Hitam</option><option value="Rapi Standar">Rapi Standar</option><option value="Messy Curly">Messy Curly</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-1.5 text-sm border rounded mt-1" placeholder="Ketik detail..."></div>
+                    <div><label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">B. Haircut/ Penutup Kepala</label>
+                    <select id="char-headwear" class="w-full p-2 text-sm border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white" onchange="checkCharCustom(this)"><option value="Peci/ Kopiah Hitam">Peci/ Kopiah Hitam</option><option value="Rapi Standar">Rapi Standar</option><option value="Messy Curly">Messy Curly</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-2 text-sm ios-input dark:bg-ios-darkInput dark:text-white mt-1" placeholder="Ketik detail..."></div>
                 `;
             }
 
             html += `
-                <div><label class="block text-xs font-medium text-slate-600 mb-1">C. Outfit/ Pakaian</label>
-                <select id="char-outfit" class="w-full p-1.5 text-sm border rounded outline-none" onchange="checkCharCustom(this)"><option value="Gamis Longgar (Modest)">Gamis Longgar (Modest)</option><option value="Kemeja Koko">Kemeja Koko</option><option value="Casual Sopan">Casual Sopan</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-outfit-custom" class="hidden w-full p-1.5 text-sm border rounded mt-1" placeholder="Ketik outfit..."></div>
+                <div><label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">C. Outfit/ Pakaian</label>
+                <select id="char-outfit" class="w-full p-2 text-sm border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white" onchange="checkCharCustom(this)"><option value="Gamis Longgar (Modest)">Gamis Longgar (Modest)</option><option value="Kemeja Koko">Kemeja Koko</option><option value="Casual Sopan">Casual Sopan</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-outfit-custom" class="hidden w-full p-2 text-sm ios-input dark:bg-ios-darkInput dark:text-white mt-1" placeholder="Ketik outfit..."></div>
                 
-                <div><label class="block text-xs font-medium text-slate-600 mb-1">D. Aksesoris</label>
-                <select id="char-accessories" class="w-full p-1.5 text-sm border rounded outline-none" onchange="checkCharCustom(this)"><option value="Tanpa Aksesoris">Tanpa Aksesoris</option><option value="Kacamata Bulat">Kacamata Bulat</option><option value="Membawa Buku">Membawa Buku</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-accessories-custom" class="hidden w-full p-1.5 text-sm border rounded mt-1" placeholder="Ketik aksesoris..."></div>
+                <div><label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">D. Aksesoris</label>
+                <select id="char-accessories" class="w-full p-2 text-sm border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white" onchange="checkCharCustom(this)"><option value="Tanpa Aksesoris">Tanpa Aksesoris</option><option value="Kacamata Bulat">Kacamata Bulat</option><option value="Membawa Buku">Membawa Buku</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-accessories-custom" class="hidden w-full p-2 text-sm ios-input dark:bg-ios-darkInput dark:text-white mt-1" placeholder="Ketik aksesoris..."></div>
             `;
             fields.innerHTML = html;
         }
@@ -485,15 +570,15 @@
         }
 
         function resetSettings() {
-            const selects = ['set-style', 'set-font', 'set-texteffect', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer'];
+            const selects = ['set-style', 'set-font', 'set-texteffect', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting'];
             selects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) {
-                    el.selectedIndex = 0; // Set to Auto-Set
+                    el.selectedIndex = 0; 
                     handleKustom(el);
                 }
             });
-            document.getElementById('set-ratio').value = '3:4'; // Default ratio
+            document.getElementById('set-ratio').value = '3:4'; 
             document.getElementById('set-slide-count').value = '7';
             document.getElementById('set-pt-header').value = '';
             document.getElementById('set-pt-body').value = '';
@@ -505,22 +590,20 @@
         }
 
         function autoSetSettings() {
-            // Smart Mapping logic
             const style = document.getElementById('set-style');
             const font = document.getElementById('set-font');
             const effect = document.getElementById('set-texteffect');
+            const copywriting = document.getElementById('set-copywriting');
             const topic = document.getElementById('input-topic').value.toLowerCase();
 
-            // Randomize Style if it's Auto
             if(style.value === 'Auto-Set by AI') {
-               const randStyleIndex = Math.floor(Math.random() * (styleArtsList.length - 2)) + 2; // skip Auto and Kustom
+               const randStyleIndex = Math.floor(Math.random() * (styleArtsList.length - 2)) + 2; 
                style.selectedIndex = randStyleIndex;
             }
 
             const currentStyleStr = style.value.toLowerCase();
             
-            // Map Font and Effect based on Style
-            let mappedFont = "FONT 4. Humanist Sans"; // fallback
+            let mappedFont = "FONT 4. Humanist Sans"; 
             let mappedEffect = "FLAT (BAWAAN FONT)";
 
             if(currentStyleStr.includes('papercraft') || currentStyleStr.includes('origami') || currentStyleStr.includes('diorama') || currentStyleStr.includes('kirigami')) {
@@ -546,18 +629,15 @@
                 mappedEffect = "NEON GLOW (MENYALA)";
             }
 
-            // Set Font if Auto
             if(font.value === 'Auto-Set by AI') {
                 for(let i=0; i<font.options.length; i++){
                     if(font.options[i].value.includes(mappedFont)) font.selectedIndex = i;
                 }
             }
-            // Set Effect if Auto
             if(effect.value === 'Auto-Set by AI') {
                 effect.value = mappedEffect;
             }
 
-            // Contextual Overrides based on Topic
             const palette = document.getElementById('set-palette');
             const comp = document.getElementById('set-composition');
             const char = document.getElementById('set-character');
@@ -565,23 +645,24 @@
             if (topic.includes('anak') || topic.includes('parenting')) {
                 if(palette.value === 'Auto-Set by AI') palette.value = 'SOFT PASTEL';
                 if(char.value === 'Auto-Set by AI') { char.value = 'Anak Laki-laki'; handleCharacterChange(char); }
+                if(copywriting.value === 'Auto-Set by AI') copywriting.value = 'PAS (Problem, Agitate, Solve)';
             } else if (topic.includes('suami') || topic.includes('istri') || topic.includes('nikah')) {
                 if(palette.value === 'Auto-Set by AI') palette.value = 'WARM';
                 if(char.value === 'Auto-Set by AI') { char.value = 'Pasutri'; handleCharacterChange(char); }
+                if(copywriting.value === 'Auto-Set by AI') copywriting.value = 'BAB (Before, After, Bridge)';
             } else if (topic.includes('sejarah') || topic.includes('sirah')) {
                 if(palette.value === 'Auto-Set by AI') palette.value = 'EARTH TONE';
+                if(copywriting.value === 'Auto-Set by AI') copywriting.value = 'AIDA (Attention, Interest, Desire, Action)';
             } else if (topic.includes('quotes') || topic.includes('motivasi')) {
                 if(comp.value === 'Auto-Set by AI') comp.value = 'TEKS DOMINAN (60/40)';
+                if(copywriting.value === 'Auto-Set by AI') copywriting.value = 'Tanpa Framework';
             }
 
-            // Set remaining autos to Kustom/Contextual Defaults if still Auto
             if(palette.value === 'Auto-Set by AI') palette.value = 'EARTH TONE';
             if(comp.value === 'Auto-Set by AI') comp.value = 'SEIMBANG (50:50)';
+            if(copywriting.value === 'Auto-Set by AI') copywriting.value = 'AIDA (Attention, Interest, Desire, Action)';
             if(document.getElementById('set-patch-footer').value === 'Auto-Set by AI') document.getElementById('set-patch-footer').value = 'Tanpa Patch (Teks Transparan)';
-            if(document.getElementById('set-alignment').value === 'Auto-Set by AI (SEEMLESS)') {
-                // leave it as is, prompt engine handles it
-            }
-
+            
             showToast("Auto-Set Applied Cerdas!");
         }
 
@@ -596,12 +677,11 @@
             }
 
             currentTopicTemp = topic;
-            currentOutputBlocks = []; // reset
+            currentOutputBlocks = []; 
             
             const container = document.getElementById('output-container');
-            container.innerHTML = `<div class="flex justify-center p-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-900"></div></div>`;
+            container.innerHTML = `<div class="flex justify-center p-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#007AFF]"></div></div>`;
             
-            // Simulate generation (In real app, call LLM here)
             setTimeout(() => {
                 if (currentMode === 'A') {
                     generateModeA(topic, instructions);
@@ -609,7 +689,6 @@
                     generateModeB(topic, instructions);
                 }
                 
-                // Open output accordion automatically
                 const outContent = document.getElementById('output-wrapper');
                 if(outContent && !outContent.classList.contains('open')) {
                     toggleAccordion('output-wrapper', 'output-icon');
@@ -619,25 +698,27 @@
 
         function createOutputBlockHTML(index, title, content, isFirst) {
             const id = `out-blk-${Date.now()}-${index}`;
-            const openClass = isFirst ? 'open' : '';
-            const iconRotate = isFirst ? 'rotate-180' : '';
+            // Output blocks also closed by default now
+            const openClass = '';
+            const iconRotate = '';
             
-            // Format HTML for display
             let displayContent = content.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
 
             return `
-                <div class="border border-slate-200 rounded-lg overflow-hidden bg-white mb-3">
-                    <div class="flex justify-between items-center bg-slate-50 px-4 py-2 border-b border-slate-200">
-                        <button onclick="toggleAccordion('${id}-content', '${id}-icon')" class="flex-grow flex items-center gap-2 text-left font-semibold text-slate-800 text-sm">
-                            <svg id="${id}-icon" class="w-4 h-4 transition-transform ${iconRotate}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <div class="border border-gray-200 dark:border-ios-darkBorder rounded-xl overflow-hidden bg-white dark:bg-ios-darkPanel mb-4 shadow-sm">
+                    <div class="flex justify-between items-center bg-[#F9F9FB] dark:bg-[#1C1C1E] px-5 py-3 border-b border-gray-200 dark:border-ios-darkBorder">
+                        <button onclick="toggleAccordion('${id}-content', '${id}-icon')" class="flex-grow flex items-center gap-2 text-left font-semibold text-sm">
+                            <svg id="${id}-icon" class="w-4 h-4 text-gray-400 transition-transform ${iconRotate}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             ${title}
                         </button>
                         <div class="flex gap-2">
-                            <button onclick="copyText(this, ${index})" class="px-2 py-1 text-xs text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition-colors">Copy</button>
-                            <button onclick="saveBlock(${index})" class="px-2 py-1 text-xs text-green-600 bg-green-50 rounded hover:bg-green-100 transition-colors">Save</button>
+                            <button onclick="copyText(this, ${index})" class="px-3 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">Copy</button>
+                            <button onclick="saveBlock(${index})" class="px-3 py-1.5 text-xs font-semibold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors">Save</button>
                         </div>
                     </div>
-                    <div id="${id}-content" class="accordion-content ${openClass} px-4 py-3 text-sm font-mono text-slate-700 bg-slate-50 whitespace-pre-wrap">${content}</div>
+                    <div id="${id}-content" class="accordion-content ${openClass} px-5 py-0">
+                        <div class="py-4 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">${content}</div>
+                    </div>
                 </div>
             `;
         }
@@ -646,10 +727,10 @@
             let html = "";
             for (let i = 1; i <= 5; i++) {
                 const title = `Ide Konten #${i}`;
-                const content = `[IDE KONTEN #${i}]\nTopik: ${topic}\nAngle: Pendekatan edukatif tentang pentingnya hal ini dalam kehidupan sehari-hari.\nJudul Hook: "Rahasia ${topic} yang Jarang Dibahas"\nDalil: QS. Al-Baqarah/ Hadits Riwayat Bukhari (Relevan)\nVisual Rekomendasi: Style Kustom dengan warna dominan Earth Tone.\n\nInstruksi Tambahan: ${instructions || 'Tidak ada'}`;
+                const content = `[IDE KONTEN #${i}]\nTopik: ${topic}\nAngle: Pendekatan edukatif (Feynman Muslim) membedah akar permasalahan secara sederhana dengan kacamata tauhid/syariat.\nJudul Hook: "Rahasia ${topic} yang Jarang Dibahas"\nDalil: QS/Hadits sahih yang relevan dan menenangkan.\nVisual Rekomendasi: Style Kustom dengan warna dominan Earth Tone.\n\nInstruksi Tambahan: ${instructions || 'Tidak ada'}`;
                 
                 currentOutputBlocks.push({ title, content });
-                html += createOutputBlockHTML(i-1, title, content, i === 1);
+                html += createOutputBlockHTML(i-1, title, content, false); // isFirst = false
             }
             document.getElementById('output-container').innerHTML = html;
         }
@@ -664,6 +745,7 @@
             const comp = getSettingValue('set-composition');
             const bodyFmt = getSettingValue('set-bodyformat');
             const palette = getSettingValue('set-palette');
+            const copyfw = getSettingValue('set-copywriting');
             
             const ptHead = document.getElementById('set-pt-header').value || '60';
             const ptBody = document.getElementById('set-pt-body').value || '40';
@@ -679,17 +761,20 @@
 
             // --- SLIDE 1 (HOOK & GLOBAL CONFIG) ---
             const s1Title = `[Kartu 1] - Global Config & Slide 1`;
+            let fwText = copyfw === 'Auto-Set by AI' ? 'AIDA (Attention, Interest, Desire, Action)' : copyfw;
+            
             const s1Content = `@createimage
 [GLOBAL CONFIGURATION]
 * OPERATION MODE: MODE B
 * TOPIK/ MATERI KONTEN: ${topic.toUpperCase()}
 * STYLE ART: ${style}
 * RATIO: ${ratio}
-* KOMPOSISI TEKS/ ILUSTRASI (DALAM PERSEN): ${comp}
+* KOMPOSISI TEKS/ ILUSTRASI: ${comp}
+* COPYWRITING FRAMEWORK: ${fwText}
 * TYPOGRAPHY
 \t* NAMA/ DNA FONT: ${font}
-\t* EFEK FONT (HEADER, BODY, FOOTER): ${effect}
-\t* UKURAN FONT DALAM PT (HEADER, BODY, FOOTER): ${ptHead}, ${ptBody}, ${ptFoot}
+\t* EFEK FONT: ${effect}
+\t* UKURAN FONT (HEADER, BODY, FOOTER): ${ptHead}, ${ptBody}, ${ptFoot}
 \t* TEXT ALIGNMENT: ${alignment}
 * PALET WARNA: ${palette}
 * LATAR: Living background reinforcing the educational storytelling, not just plain color.
@@ -699,7 +784,7 @@ ${charDetails}
 
 [SLIDE 1] (COVER/ HOOK)
 * SPECS: Aspect Ratio ${ratio}, Safe Margin 100px.
-* VISUAL GUIDE: [Deskripsi scene metaforis yang kuat memancing rasa penasaran, menggunakan style ${style}. Dinamika komposisi disesuaikan konteks (tidak harus teks kiri, gambar kanan). Munculkan karakter hanya jika relevan. FACELLES, NO EYES.]
+* VISUAL GUIDE: [Deskripsi scene metaforis yang kuat memancing rasa penasaran, menggunakan style ${style}. Dinamika komposisi disesuaikan. Munculkan karakter jika relevan. FACELESS, NO EYES.]
 * GEN AI PROMPT: [Prompt komprehensif bahasa Inggris untuk AI Image Generator berdasarkan visual guide. Masterpiece, highly detailed, faceless no eyes.]
 * NASKAH:
 \t* HEADER: [Judul Hook Penasaran - PENTING: DILARANG MENAMBAHKAN ANGKA PENOMORAN DI AWAL HEADER]
@@ -707,19 +792,22 @@ ${charDetails}
 Make the aspect ratio ${ratio}`;
             
             currentOutputBlocks.push({ title: s1Title, content: s1Content });
-            html += createOutputBlockHTML(0, s1Title, s1Content, true);
+            html += createOutputBlockHTML(0, s1Title, s1Content, false); // isFirst = false
 
             // --- SLIDE 2 to N-1 ---
             for(let i = 2; i <= slides; i++) {
                 const sTitle = `[Kartu ${i}] - Slide ${i}`;
+                const feynmanInstruction = "Penjelasan gaya Feynman Muslim: Sederhanakan bahasa seperti menjelaskan kepada awam, namun kaitkan esensinya dengan nilai tauhid, syariat, akhlak, atau hikmah islami. Sertakan tamsil/perumpamaan yang relevan.";
+                const copyInstruction = fwText !== "Tanpa Framework" ? ` Terapkan alur/prinsip ${fwText} pada bagian ini.` : "";
+
                 const sContent = `@createimage
 [SLIDE ${i}]
 * SPECS: Aspect Ratio ${ratio}, Safe Margin 100px.
-* VISUAL GUIDE: [Deskripsi scene lanjutan. WAJIB BERVARIASI dari slide sebelumnya. Gunakan metafora, objek, atau lanskap jika karakter tidak mutlak diperlukan. FACELLES, NO EYES.]
+* VISUAL GUIDE: [Deskripsi scene lanjutan bervariasi. Gunakan metafora Islami, objek, atau lanskap. FACELESS, NO EYES.]
 * GEN AI PROMPT: [Prompt AI Image Generator mendetail. Faceless no eyes.]
 * NASKAH:
-\t* HEADER: [Sub-judul ringkas. PENTING: DILARANG MENAMBAHKAN ANGKA PENOMORAN DI AWAL HEADER]
-\t* BODY: [Penjelasan gaya Feynman, mudah dipahami, relevan dengan gambar]
+\t* HEADER: [Sub-judul ringkas. PENTING: TANPA PENOMORAN]
+\t* BODY: [${feynmanInstruction}${copyInstruction}]
 \t* FOOTER: ${wtLogos} ${wtUser} | ${i}/${slides}
 Make the aspect ratio ${ratio}`;
                 
@@ -730,7 +818,7 @@ Make the aspect ratio ${ratio}`;
             // --- CAPTION ---
             const capTitle = `[Kartu ${slides + 1}] - Caption`;
             const capContent = `[CAPTION]
-Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, dan mengajak audiens pada kebaikan. (Maksimal 500 huruf).
+Ringkasan materi "${topic}" bergaya Feynman Muslim. Penjelasan di-breakdown dengan mudah, menyentuh hati, dan mengajak audiens pada ketaatan. (Maksimal 500 huruf).
 
 #edukasi #dakwahvisual #islamicreminder #muhasabah #${topic.replace(/\s+/g, '')}`;
             
@@ -747,17 +835,11 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
                 await navigator.clipboard.writeText(text);
                 showToast(`Block ${index + 1} Copied!`);
             } catch (err) {
-                // Fallback method
                 const textArea = document.createElement("textarea");
                 textArea.value = currentOutputBlocks[index].content;
                 document.body.appendChild(textArea);
                 textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast(`Block ${index + 1} Copied (Fallback)!`);
-                } catch (e) {
-                    console.error('Fallback copy failed', e);
-                }
+                try { document.execCommand('copy'); showToast(`Block ${index + 1} Copied (Fallback)!`); } catch (e) { }
                 document.body.removeChild(textArea);
             }
         }
@@ -773,18 +855,12 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
                 textArea.value = fullText;
                 document.body.appendChild(textArea);
                 textArea.select();
-                try {
-                    document.execCommand('copy');
-                    showToast(`All Blocks Copied (Fallback)!`);
-                } catch (e) {
-                     console.error('Fallback copy failed', e);
-                }
+                try { document.execCommand('copy'); showToast(`All Blocks Copied (Fallback)!`); } catch (e) { }
                 document.body.removeChild(textArea);
             }
         }
 
         function saveBlock(index) {
-            // Save single block functionality inside generation is usually superseded by save group, but kept for individual needs
             const block = currentOutputBlocks[index];
             const bundle = {
                 id: Date.now(),
@@ -811,7 +887,6 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
             renderSaved();
             showToast(`Group Saved to Mode ${currentMode}!`);
             
-            // Auto open saved card
             const savedWrapper = document.getElementById('saved-wrapper');
             if(savedWrapper && !savedWrapper.classList.contains('open')) {
                 toggleAccordion('saved-wrapper', 'saved-icon');
@@ -820,7 +895,7 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
         }
 
         function saveToLocal() {
-            localStorage.setItem('nomuka_saved', JSON.stringify(savedData));
+            localStorage.setItem('imapro_saved', JSON.stringify(savedData));
         }
 
         // --- SAVED CARD LOGIC ---
@@ -830,11 +905,11 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
             const tabB = document.getElementById('tab-saved-b');
             
             if (mode === 'A') {
-                tabA.className = 'px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600';
-                tabB.className = 'px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700';
+                tabA.className = 'px-5 py-2.5 text-sm font-semibold border-b-2 border-[#007AFF] text-[#007AFF]';
+                tabB.className = 'px-5 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white';
             } else {
-                tabB.className = 'px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600';
-                tabA.className = 'px-4 py-2 text-sm font-medium border-b-2 border-transparent text-slate-500 hover:text-slate-700';
+                tabB.className = 'px-5 py-2.5 text-sm font-semibold border-b-2 border-[#007AFF] text-[#007AFF]';
+                tabA.className = 'px-5 py-2.5 text-sm font-semibold border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white';
             }
             renderSaved();
         }
@@ -846,35 +921,34 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
             
             const items = savedData[currentSavedTab];
             if (items.length === 0) {
-                container.innerHTML = `<p class="text-sm text-slate-500 text-center py-4">Belum ada data tersimpan di Mode ${currentSavedTab}.</p>`;
+                container.innerHTML = `<p class="text-sm text-gray-400 text-center py-6 font-medium">Belum ada data tersimpan di Mode ${currentSavedTab}.</p>`;
                 return;
             }
 
-            // Render Bundles as Accordions
             items.forEach((bundle, bIdx) => {
                 const bundleId = `bundle-${bundle.id}`;
                 
                 let cardsHtml = bundle.blocks.map((blk, i) => {
                     const blockId = `${bundleId}-blk-${i}`;
                     return `
-                    <div class="bg-white border border-slate-200 rounded-lg p-4 mb-3 shadow-sm">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="font-semibold text-sm text-slate-700">${blk.title}</span>
+                    <div class="bg-white dark:bg-ios-darkPanel border border-gray-200 dark:border-ios-darkBorder rounded-xl p-5 mb-4 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-sm">${blk.title}</span>
                             <div class="flex gap-2">
-                                <button onclick="copySavedText('${blockId}-text')" class="p-1.5 text-blue-600 bg-blue-50 rounded hover:bg-blue-100" title="Copy"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
-                                <button onclick="enableEdit('${blockId}-text', ${bIdx}, ${i})" class="p-1.5 text-orange-600 bg-orange-50 rounded hover:bg-orange-100" title="Edit Teks"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                <label class="cursor-pointer p-1.5 text-green-600 bg-green-50 rounded hover:bg-green-100" title="Upload Gambar Hasil">
+                                <button onclick="copySavedText('${blockId}-text')" class="p-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors" title="Copy"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
+                                <button onclick="enableEdit('${blockId}-text', ${bIdx}, ${i})" class="p-2 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors" title="Edit Teks"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
+                                <label class="cursor-pointer p-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors" title="Upload Gambar Hasil">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                                     <input type="file" accept="image/*" class="hidden" onchange="uploadSavedImg(${bIdx}, ${i}, this)">
                                 </label>
                             </div>
                         </div>
-                        <textarea id="${blockId}-text" class="w-full p-3 text-sm font-mono border border-slate-200 rounded-md bg-slate-50 outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-y transition-colors" rows="5" readonly onblur="saveEditedText(${bIdx}, ${i}, this.value)">${blk.content}</textarea>
+                        <textarea id="${blockId}-text" class="w-full p-4 text-sm font-mono border border-gray-200 dark:border-ios-darkBorder rounded-xl bg-[#FAFAFA] dark:bg-ios-darkInput outline-none focus:ring-2 focus:ring-[#007AFF] focus:bg-white dark:focus:bg-[#1C1C1E] resize-y transition-colors leading-relaxed" rows="5" readonly onblur="saveEditedText(${bIdx}, ${i}, this.value)">${blk.content}</textarea>
                         
                         ${blk.image ? `
-                        <div class="mt-3 relative bg-slate-100 rounded-lg overflow-hidden flex justify-center border border-slate-200 p-2">
-                            <img src="${blk.image}" class="w-full h-auto object-contain max-h-[500px] rounded">
-                            <button onclick="removeImg(${bIdx}, ${i})" class="absolute top-4 right-4 p-1.5 bg-white text-red-600 rounded-full shadow-md hover:bg-red-50"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                        <div class="mt-4 relative bg-[#F2F2F7] dark:bg-[#1C1C1E] rounded-xl overflow-hidden flex justify-center border border-gray-200 dark:border-ios-darkBorder p-2">
+                            <img src="${blk.image}" class="w-full h-auto object-contain max-h-[500px] rounded-lg">
+                            <button onclick="removeImg(${bIdx}, ${i})" class="absolute top-4 right-4 p-2 bg-white dark:bg-ios-darkPanel text-red-500 rounded-full shadow hover:bg-red-50 dark:hover:bg-red-900/30"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                         </div>
                         ` : ''}
                     </div>
@@ -882,19 +956,21 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
                 }).join('');
 
                 container.innerHTML += `
-                <div class="border border-slate-200 rounded-lg overflow-hidden bg-slate-50 mb-4">
-                    <div class="flex justify-between items-center px-4 py-3 border-b border-slate-200 bg-white">
-                        <button onclick="toggleAccordion('${bundleId}-content', '${bundleId}-icon')" class="flex-grow flex items-center gap-2 text-left font-bold text-slate-800">
-                            <svg id="${bundleId}-icon" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <div class="border border-gray-200 dark:border-ios-darkBorder rounded-2xl overflow-hidden bg-[#F9F9FB] dark:bg-[#1C1C1E] mb-5 shadow-sm">
+                    <div class="flex justify-between items-center px-5 py-4 border-b border-gray-200 dark:border-ios-darkBorder bg-white dark:bg-ios-darkPanel">
+                        <button onclick="toggleAccordion('${bundleId}-content', '${bundleId}-icon')" class="flex-grow flex items-center gap-2 text-left font-bold text-sm">
+                            <svg id="${bundleId}-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             ${bundle.title}
                         </button>
                         <div class="flex gap-2">
-                            <button onclick="copyGroup(${bIdx})" class="px-2 py-1 text-xs text-blue-600 bg-blue-50 border border-blue-100 rounded hover:bg-blue-100">Copy Group</button>
-                            <button onclick="deleteGroup(${bIdx})" class="px-2 py-1 text-xs text-red-600 bg-red-50 border border-red-100 rounded hover:bg-red-100">Delete</button>
+                            <button onclick="copyGroup(${bIdx})" class="px-3 py-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50">Copy Group</button>
+                            <button onclick="deleteGroup(${bIdx})" class="px-3 py-1.5 text-xs font-semibold text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/50">Delete</button>
                         </div>
                     </div>
-                    <div id="${bundleId}-content" class="accordion-content px-4 py-3">
-                        ${cardsHtml}
+                    <div id="${bundleId}-content" class="accordion-content px-5 py-0">
+                        <div class="py-4">
+                            ${cardsHtml}
+                        </div>
                     </div>
                 </div>
                 `;
@@ -951,7 +1027,6 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
         function saveEditedText(bIdx, i, newVal) {
             savedData[currentSavedTab][bIdx].blocks[i].content = newVal;
             saveToLocal();
-            // Re-apply readonly
             renderSaved(); 
             showToast("Teks Diperbarui!");
         }
@@ -980,7 +1055,7 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
         function exportData() {
             const dataStr = JSON.stringify(savedData);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'nomuka_data.json';
+            const exportFileDefaultName = 'imapro_data.json';
             
             let linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
@@ -996,14 +1071,13 @@ Ringkasan materi "${topic}" bergaya Feynman. Penjelasan mudah, menyentuh hati, d
                     try {
                         const importedData = JSON.parse(e.target.result);
                         if(importedData.A && importedData.B) {
-                            // Merge
                             savedData.A = [...importedData.A, ...savedData.A];
                             savedData.B = [...importedData.B, ...savedData.B];
                             saveToLocal();
                             renderSaved();
                             showToast("Data Berhasil Diimpor & Digabungkan!");
                         } else {
-                            alert("Format JSON tidak valid untuk NOMUKA.");
+                            alert("Format JSON tidak valid untuk imapro.");
                         }
                     } catch(err) {
                         alert("Gagal membaca file JSON.");
