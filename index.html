@@ -46,6 +46,7 @@
             }
         }
     </script>
+    
     <style>
         body { 
             font-family: 'Space Grotesk', sans-serif;
@@ -189,7 +190,7 @@
                 <div class="py-6">
                     <!-- Actions -->
                     <div class="flex justify-between items-center mb-2">
-                        <button onclick="window.open('https://share.gemini.google/6QyGmt6mdAJl', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/pnFLDEtAGbpz', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
@@ -534,36 +535,37 @@
                             </div>
                         </div>
 
-                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                        <!-- TAMBAHAN BARU UNTUK UPLOAD FILE LOGO DI CHATGPT -->
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
                             <div>
                                 <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">URL Logo ImageKit (Opsional)</label>
-                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-url', 'logo_url', 'STRING', 'URL logo gambar dari ImageKit atau link lainnya')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Nama File Logo (Upload di ChatGPT)</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-logo-filename', 'logo_filename', 'STRING', 'Nama file logo, misal: logo.png')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                                 </div>
-                                <input type="text" id="set-watermark-url" placeholder="Paste URL gambar (https://...)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                <input type="text" id="set-logo-filename" placeholder="Kosongkan atau ketik misal: logo.png" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Posisi Logo</label>
-                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-pos', 'logo_position', 'STRING', 'Posisi letak logo di kanvas')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Posisi File Logo</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-logo-position', 'logo_position', 'STRING', 'Posisi penempatan logo')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                                 </div>
                                 <div class="flex gap-2">
-                                    <select id="set-watermark-pos" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                    <select id="set-logo-position" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                         <option value="Auto-Set by AI">Auto-Set by AI</option>
                                         <option value="KUSTOM">KUSTOM</option>
+                                        <option value="Tanpa File Logo" selected>Tanpa File Logo</option>
                                         <option value="Pojok Kiri Atas">Pojok Kiri Atas</option>
                                         <option value="Pojok Kanan Atas">Pojok Kanan Atas</option>
-                                        <option value="Tengah Atas">Tengah Atas</option>
                                         <option value="Pojok Kiri Bawah">Pojok Kiri Bawah</option>
                                         <option value="Pojok Kanan Bawah">Pojok Kanan Bawah</option>
+                                        <option value="Tengah Atas">Tengah Atas</option>
                                     </select>
-                                    <input type="text" id="set-watermark-pos-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi...">
+                                    <input type="text" id="set-logo-position-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi...">
                                 </div>
                             </div>
                         </div>
 
                     </div>
-
                 </div>
             </div>
         </div>
@@ -784,10 +786,10 @@
         };
 
         const strictSyariatRule = `
-* STRICT SYARIAT RULES (WAJIB DIIKUTI 100% KARENA KETENTUAN ISLAM):
-  1. WANITA: DILARANG KERAS menampakkan aurat. Yang boleh terlihat HANYA wajah dan telapak tangan. WAJIB menggunakan khimar (hijab lebar menutupi seluruh kepala, dada, hingga lutut) dan menutupi seluruh lengan (tidak boleh ada bagian lengan baju yang membentuk atau memperlihatkan kulit lengan). Dilarang keras menampakkan leher, rambut, atau betis.
+* STRICT SYARIAT RULES (WAJIB DIIKUTI KETAT):
+  1. WANITA: DILARANG KERAS menampakkan aurat. Yang boleh terlihat HANYA wajah dan telapak tangan. WAJIB menggunakan khimar (hijab lebar menutupi seluruh kepala, dada, hingga lutut) dan menutupi seluruh lengan. Dilarang keras menampakkan leher, rambut, atau betis. Dada wanita WAJIB tertutup rapat oleh khimar.
   2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, hewan (kuda, unta, gajah, burung, ikan dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS.
-  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam. Wajah harus "completely blank face area" (rata tanpa elemen mata sama sekali).`;
+  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam (NO EYE LINES, NO EYE CURVES). Wajah harus "completely blank face area" (rata tanpa elemen mata sama sekali).`;
 
         let currentMode = 'B'; 
         let currentSavedTab = 'B'; 
@@ -844,6 +846,8 @@
             const btnA = document.getElementById('btn-mode-a');
             const btnB = document.getElementById('btn-mode-b');
             const settingCard = document.getElementById('setting-card');
+
+            if(!btnA || !btnB) return; // Safeguard if DOM is missing elements
 
             const activeClass = 'w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-bold rounded-xl bg-white dark:bg-ios-darkPanel shadow-sm text-black dark:text-white transition-all duration-300';
             const inactiveClass = 'w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300';
@@ -965,16 +969,16 @@
         function getCharacterDetailsString() {
             const charType = getSettingValue('set-character');
             if (charType === 'Auto-Set by AI' || charType === 'KUSTOM' || charType === 'Tanpa Karakter' || charType === "") {
-                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis`;
+                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES LINES, NO EYE CURVES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis`;
             }
             
-            let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR LEBAR MENUTUP DADA' : 'HAIRCUT/ PENUTUP KEPALA';
+            let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR LEBAR MENUTUP DADA & LENGAN' : 'HAIRCUT/ PENUTUP KEPALA';
             
-            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}`;
+            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES LINES, NO EYE CURVES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}`;
         }
 
         function resetSettings() {
-            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting', 'set-hook', 'set-language-style', 'set-watermark-pos'];
+            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting', 'set-hook', 'set-language-style'];
             selects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) { el.selectedIndex = 0; handleKustom(el); }
@@ -986,7 +990,10 @@
             document.getElementById('set-pt-footer').value = '';
             document.getElementById('set-watermark-logos').value = 'Instagram, Threads';
             document.getElementById('set-watermark-username').value = '';
-            document.getElementById('set-watermark-url').value = '';
+            document.getElementById('set-logo-filename').value = '';
+            const logoPos = document.getElementById('set-logo-position');
+            if(logoPos) { logoPos.value = 'Tanpa File Logo'; handleKustom(logoPos); }
+            
             document.getElementById('set-negative-prompt').value = 'APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
             handleCharacterChange(document.getElementById('set-character'));
             showToast("Settings Reset");
@@ -1008,7 +1015,7 @@
                 }
             }
 
-            // Jika tidak match ATAU kalimatnya sangat panjang (spesifik), paksa KUSTOM
+            // Force KUSTOM if long/specific text or no match
             if (!matchFound || String(aiValue).length > 30) {
                 for (let i = 0; i < selectEl.options.length; i++) {
                     if (selectEl.options[i].value === 'KUSTOM') {
@@ -1073,8 +1080,8 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                     "pt_footer": { "type": "INTEGER" },
                     "watermark_logos": { "type": "STRING" },
                     "watermark_username": { "type": "STRING" },
-                    "logo_url": { "type": "STRING", "description": "Ekstrak URL logo/gambar jika user menyediakannya" },
-                    "logo_position": { "type": "STRING", "description": "Ekstrak posisi peletakan logo (kiri atas, dll)" }
+                    "logo_filename": { "type": "STRING" },
+                    "logo_position": { "type": "STRING" }
                 };
 
                 const result = await callGeminiAPI(promptText, schemaProps);
@@ -1097,7 +1104,7 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                         'set-bodyformat': config.body_format,
                         'set-alignment': config.alignment,
                         'set-patch-footer': config.patch_footer,
-                        'set-watermark-pos': config.logo_position
+                        'set-logo-position': config.logo_position
                     };
 
                     for (const [id, val] of Object.entries(mapString)) {
@@ -1111,7 +1118,7 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                     if (config.pt_footer) document.getElementById('set-pt-footer').value = String(config.pt_footer).replace(/[^0-9]/g, '');
                     if (config.watermark_logos) document.getElementById('set-watermark-logos').value = config.watermark_logos;
                     if (config.watermark_username) document.getElementById('set-watermark-username').value = config.watermark_username;
-                    if (config.logo_url) document.getElementById('set-watermark-url').value = config.logo_url;
+                    if (config.logo_filename) document.getElementById('set-logo-filename').value = config.logo_filename;
 
                     handleCharacterChange(document.getElementById('set-character'));
                     showToast("✅ AI Auto-Set Berhasil!");
@@ -1158,7 +1165,7 @@ PENTING:
                 if (result && result.length > 0) {
                     const aiValue = result[0][schemaKey];
                     if (aiValue !== undefined && aiValue !== null) {
-                        if (elementId === 'set-negative-prompt' || elementId === 'set-watermark-url' || elementId === 'set-watermark-username' || elementId === 'set-watermark-logos') {
+                        if (elementId === 'set-negative-prompt' || elementId === 'set-watermark-username' || elementId === 'set-watermark-logos' || elementId === 'set-logo-filename') {
                             document.getElementById(elementId).value = aiValue;
                         } else if (['set-slide-count', 'set-pt-header', 'set-pt-body', 'set-pt-footer'].includes(elementId)) {
                             document.getElementById(elementId).value = String(aiValue).replace(/[^0-9]/g, '');
@@ -1185,7 +1192,7 @@ PENTING:
                 localStorage.setItem('imapro_gemini_key', apiKeyInput);
             }
 
-            // WAJIB menggunakan gemini-3-flash-preview agar Canvas otomatis menyuntikkan API Key gratis
+            // Using empty key format for Canvas injection
             const apiKey = apiKeyInput || "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -1223,7 +1230,6 @@ PENTING:
             throw new Error("Gagal mendapatkan respons valid dari AI LLM.");
         }
 
-        // --- GENERATION ENGINE ---
         async function handleGenerate() {
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
@@ -1362,9 +1368,14 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             const wtLogos = rawLogos.split(',').map(l => `[minimalist monochrome vector ${l.trim().toLowerCase()} logo icon]`).join(' ');
             const wtUser = document.getElementById('set-watermark-username').value || '@username';
 
-            const rawLogoUrl = document.getElementById('set-watermark-url').value.trim();
-            const rawLogoPos = getSettingValue('set-watermark-pos');
+            const logoFilename = document.getElementById('set-logo-filename').value.trim();
+            const logoPosition = getSettingValue('set-logo-position');
             
+            let fileLogoInstruction = "";
+            if (logoFilename && logoPosition && logoPosition !== 'Tanpa File Logo' && logoPosition !== 'Auto-Set by AI') {
+                fileLogoInstruction = `\n* ATTACHMENT LOGO OVERLAY: Tempelkan (overlay) file gambar lampiran yang bernama "${logoFilename}" pada posisi ${logoPosition} di setiap slide.`;
+            }
+
             const charDetails = getCharacterDetailsString();
 
             let fwText = copyfw === 'Auto-Set by AI' ? 'AIDA (Attention, Interest, Desire, Action)' : copyfw;
@@ -1425,12 +1436,6 @@ ATURAN IMAGE PROMPT:
             // --- SLIDE 1 ---
             const s1Data = slidesData[0];
             const s1Title = `[Kartu 1] - Global Config & Slide 1 (Visual Hook)`;
-            
-            let urlLogoBlock = "";
-            if (rawLogoUrl && rawLogoUrl !== "") {
-                const pos = (rawLogoPos && rawLogoPos !== "Auto-Set by AI") ? rawLogoPos : "Pojok Kiri Atas";
-                urlLogoBlock = `[IMPORTANT WATERMARK URL LOGO PLACEHOLDER: Render a minimalist flat silhouette or geometric brand mark representing the logo found at ${rawLogoUrl} precisely at the ${pos.toUpperCase()} margin of the canvas] `;
-            }
 
             let s1Naskah = "";
             if (isCustomScript) {
@@ -1453,7 +1458,7 @@ ATURAN IMAGE PROMPT:
 \t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Align: ${alignment} | Format: ${bodyFmt}
 \t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt
 * PALET WARNA (STRICT): ${paletteExpanded}
-* NEGATIVE PROMPT: ${negativePrompt}
+* NEGATIVE PROMPT: ${negativePrompt}${fileLogoInstruction}
 * STRICT TEXT RULES (ATURAN MUTLAK KANVAS):
 \t1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework.
 \t2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box kaku.
@@ -1467,7 +1472,7 @@ ${charDetails}
 * SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
 * STRICT RULE SLIDE 1: DILARANG KERAS MEMBUAT TEKS PARAGRAF BODY. SLIDE 1 ADALAH COVER HOOK. HANYA RENDER TEKS HEADER DENGAN FONT BESAR.
 * STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide-slide berikutnya. Harus persis 100% SAMA secara template, hanya hilangkan body textnya!
-* GEN AI PROMPT (VISUAL): ${urlLogoBlock}${s1Data.image_prompt}
+* GEN AI PROMPT (VISUAL): ${s1Data.image_prompt}
 ${s1Naskah}
 Make the aspect ratio ${ratio}`;
             
@@ -1493,7 +1498,7 @@ Make the aspect ratio ${ratio}`;
 * SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
 * STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide sebelumnya. Harus persis 100% SAMA!
 ${strictSyariatRule}
-* GEN AI PROMPT (VISUAL): ${urlLogoBlock}${sData.image_prompt}
+* GEN AI PROMPT (VISUAL): ${sData.image_prompt}
 ${siNaskah}
 Make the aspect ratio ${ratio}`;
                 
