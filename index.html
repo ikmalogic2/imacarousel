@@ -338,7 +338,7 @@
                         <div class="md:col-span-2">
                             <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Negative Prompt (Mencegah Objek Muncul)</label>
                             <div class="relative">
-                                <textarea id="set-negative-prompt" rows="3" placeholder="Contoh: bad anatomy, ugly, extra fingers..." class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL</textarea>
+                                <textarea id="set-negative-prompt" rows="3" placeholder="Contoh: bad anatomy, ugly, extra fingers..." class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
                                 <button onclick="document.getElementById('set-negative-prompt').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                             </div>
                         </div>
@@ -869,52 +869,48 @@
 
         function getCharacterDetailsString() {
             const charType = getSettingValue('set-character');
+            const strictAurat = "\n\t* STRICT SYARIAT ISLAM: DILARANG menampakkan aurat wanita. Yang boleh terlihat HANYA wajah dan telapak tangan. Wanita WAJIB memakai KHIMAR (hijab lebar yang menutupi seluruh tubuh bagian atas, area dada, hingga menutupi seluruh lengan sampai pergelangan). JANGAN menampakkan rambut, leher, lengan baju, betis, atau bentuk dada wanita.";
+            
             if (charType === 'Auto-Set by AI' || charType === 'KUSTOM' || charType === 'Tanpa Karakter' || charType === "") {
-                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: FACELESS, NO EYES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis`;
+                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: FACELESS, NO EYES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis${strictAurat}`;
             }
             
             let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR/ PENUTUP KEPALA' : 'HAIRCUT/ PENUTUP KEPALA';
             
-            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: FACELESS, NO EYES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}`;
+            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: FACELESS, NO EYES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}${strictAurat}`;
         }
 
-        function applySmartSetting(elementId, value) {
-            if (!value) return;
-            const el = document.getElementById(elementId);
-            if (!el) return;
+        function applySmartSetting(selectId, aiValue) {
+            if (!aiValue) return;
+            const selectEl = document.getElementById(selectId);
+            if (!selectEl) return;
             
             let found = false;
-            const lowerValue = value.toLowerCase().trim();
-            
-            for (let i = 0; i < el.options.length; i++) {
-                const optVal = el.options[i].value.toLowerCase();
-                if (optVal === 'auto-set by ai' || optVal === 'kustom') continue;
-                
-                if (optVal.includes(lowerValue) || lowerValue.includes(optVal)) {
-                    el.selectedIndex = i;
+            const target = aiValue.toString().toLowerCase();
+            for (let i = 0; i < selectEl.options.length; i++) {
+                if (selectEl.options[i].value.toLowerCase().includes(target)) {
+                    selectEl.selectedIndex = i;
                     found = true;
                     break;
                 }
             }
             
-            if (!found) { 
-                for (let i = 0; i < el.options.length; i++) {
-                    if (el.options[i].value === 'KUSTOM') {
-                        el.selectedIndex = i;
+            if (!found || target.length > 30) {
+                let hasKustom = false;
+                for (let i = 0; i < selectEl.options.length; i++) {
+                    if (selectEl.options[i].value === 'KUSTOM') {
+                        selectEl.selectedIndex = i;
+                        hasKustom = true;
                         break;
                     }
                 }
-                const customInput = document.getElementById(elementId + '-custom');
-                if (customInput) {
-                    customInput.value = value;
+                const customInput = document.getElementById(selectId + '-custom');
+                if (customInput && hasKustom) {
+                    customInput.value = aiValue;
                     customInput.classList.remove('hidden');
                 }
             } else {
-                const customInput = document.getElementById(elementId + '-custom');
-                if (customInput) {
-                    customInput.classList.add('hidden');
-                    customInput.value = '';
-                }
+                handleKustom(selectEl);
             }
         }
 
@@ -931,56 +927,68 @@
             document.getElementById('set-pt-footer').value = '';
             document.getElementById('set-watermark-logos').value = 'Instagram, Threads';
             document.getElementById('set-watermark-username').value = '';
-            document.getElementById('set-negative-prompt').value = 'APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL';
+            document.getElementById('set-negative-prompt').value = 'APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
             handleCharacterChange(document.getElementById('set-character'));
             showToast("Settings Reset");
         }
 
         async function autoSetSettings() {
+            const btn = document.getElementById('btn-auto-set');
+            let originalText = "";
+            if (btn) {
+                originalText = btn.innerHTML;
+                btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Tunggu...`;
+                btn.disabled = true;
+            }
+
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
 
             if (!topic && !instructions) {
                 showToast("❌ Gagal: Harap isi Topik atau Instruksi terlebih dahulu!");
+                if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
                 return;
             }
 
-            showToast("⏳ AI sedang menganalisis input Anda... Mohon tunggu.");
-            
-            const btn = document.getElementById('btn-auto-set');
-            let originalText = "Auto-Set AI";
-            if (btn) {
-                originalText = btn.innerHTML;
-                btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Berpikir...`;
-                btn.disabled = true;
-            }
+            showToast("⏳ AI sedang membaca & menyetel otomatis...");
 
             try {
-                const promptText = `Anda adalah AI Art Director jenius. Baca input user dan ekstrak ke dalam konfigurasi JSON.
-TOPIK: "${topic}"
-INSTRUKSI: "${instructions}"
+                let slides = parseInt(document.getElementById('set-slide-count').value);
+                if(isNaN(slides) || slides < 2) slides = 7;
+                
+                const fwText = getSettingValue('set-copywriting') === 'Auto-Set by AI' ? 'AIDA' : getSettingValue('set-copywriting');
+                const hookInstruction = getSettingValue('set-hook');
+                const appliedLang = getSettingValue('set-language-style');
+                const style = getSettingValue('set-style');
+                const rawPalette = getSettingValue('set-palette');
+                const ratio = getSettingValue('set-ratio');
 
-ANALISIS KEBUTUHAN:
-1. Jika user meminta hal spesifik (contoh rasio 16:9, watermark @katasirah, font Anton), KEMBALIKAN NILAI ITU UTUH.
-2. Jika tidak eksplisit, pilihkan yang terbaik.
+                // FULL AUTO-GENERATE VIA GEMINI AI
+                const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter.
+SAYA MEMBERIKAN ANDA TOPIK DAN INSTRUKSI BERIKUT:
+Topik: "${topic}"
+Instruksi Tambahan: "${instructions}"
 
-KEMBALIKAN HANYA ARRAY JSON [ { ... } ]. DILARANG MENYERTAKAN TEKS LAIN.`;
+TUGAS ANDA:
+1. Pahami secara mendalam seluruh parameter, gaya, komposisi, rasio, karakter, dll dari input di atas.
+2. Buatkan pemetaan spesifik untuk form di UI saya (kembalikan JSON).
+3. PENTING: Jika instruksi dari saya sangat rinci (misalnya meminta karakter "pria berambut perm belah tengah...", warna "monokrom...", rasio "9:16", dsb), ANDA WAJIB MENYALIN UTUH TEKS INSTRUKSI SAYA TERSEBUT dan memasukkannya ke properti yang relevan di skema JSON.`;
 
                 const schemaProps = {
                     "jumlah_slide": { "type": "STRING", "description": "Angka saja, misal 7" },
-                    "aspect_ratio": { "type": "STRING", "description": "Misal 3:4, 16:9, 1:1, atau nilai spesifik" },
+                    "aspect_ratio": { "type": "STRING", "description": "Misal 3:4, 16:9, 1:1, atau nilai spesifik dari input" },
                     "copywriting_framework": { "type": "STRING" },
                     "hook_type": { "type": "STRING" },
                     "language_style": { "type": "STRING" },
                     "art_style": { "type": "STRING" },
                     "color_palette": { "type": "STRING" },
                     "composition": { "type": "STRING" },
-                    "character": { "type": "STRING", "description": "Contoh: Pria Dewasa, Wanita, KUSTOM, dll" },
+                    "character": { "type": "STRING", "description": "Contoh: Pria Dewasa, Wanita, KUSTOM, atau deskripsi panjang dari input" },
                     "character_face": { "type": "STRING" },
                     "character_headwear": { "type": "STRING" },
                     "character_outfit": { "type": "STRING" },
                     "character_accessories": { "type": "STRING" },
-                    "negative_prompt": { "type": "STRING" },
+                    "negative_prompt": { "type": "STRING", "description": "Tambahkan aturan strict no eyes jika diminta" },
                     "font_header": { "type": "STRING" },
                     "effect_header": { "type": "STRING" },
                     "pt_header": { "type": "STRING" },
@@ -1046,6 +1054,7 @@ KEMBALIKAN HANYA ARRAY JSON [ { ... } ]. DILARANG MENYERTAKAN TEKS LAIN.`;
                     }
                 }
             } catch (error) {
+                console.error(error);
                 showToast("❌ Gagal Auto-Set: " + error.message);
             } finally {
                 if (btn) {
@@ -1206,26 +1215,6 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             let slides = parseInt(document.getElementById('set-slide-count').value);
             if(isNaN(slides) || slides < 2) slides = 2; 
 
-            let customSlides = [];
-            const slideCheckRegex = /slide\s*\d+/i;
-            if (slideCheckRegex.test(topic)) {
-                const slideSplitRegex = /(?=(?:^|\n)\s*\[?#?\s*slide\s*\d+\]?)/i;
-                const parts = topic.split(slideSplitRegex);
-                parts.forEach(p => {
-                    const cleanPart = p.trim();
-                    if (/^\[?#?\s*slide\s*\d+\]?/i.test(cleanPart)) {
-                        customSlides.push(cleanPart.replace(/^\[?#?\s*slide\s*\d+\]?[\s:\-\.]*/i, '').trim());
-                    } else if (customSlides.length === 0 && cleanPart) {
-                        instructions = (instructions ? instructions + "\n" : "") + "Info tambahan: " + cleanPart;
-                    }
-                });
-            }
-            
-            const isCustomScript = customSlides.length > 0;
-            if (isCustomScript) {
-                slides = customSlides.length;
-            }
-            
             const style = getSettingValue('set-style');
             const fontHeader = getSettingValue('set-font-header');
             const effectHeader = getSettingValue('set-texteffect-header');
@@ -1267,17 +1256,34 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             }
 
             let slidesData = [];
-
+            let customSlides = [];
+            const slideCheckRegex = /slide\s*\d+/i;
+            if (slideCheckRegex.test(topic)) {
+                const slideSplitRegex = /(?=(?:^|\n)\s*\[?#?\s*slide\s*\d+\]?)/i;
+                const parts = topic.split(slideSplitRegex);
+                parts.forEach(p => {
+                    const cleanPart = p.trim();
+                    if (/^\[?#?\s*slide\s*\d+\]?/i.test(cleanPart)) {
+                        customSlides.push(cleanPart.replace(/^\[?#?\s*slide\s*\d+\]?[\s:\-\.]*/i, '').trim());
+                    } else if (customSlides.length === 0 && cleanPart) {
+                        instructions = (instructions ? instructions + "\n" : "") + "Info tambahan: " + cleanPart;
+                    }
+                });
+            }
+            
+            const isCustomScript = customSlides.length > 0;
             if (isCustomScript) {
+                // MANUAL PARSING
                 for (let i = 0; i < slides; i++) {
                     slidesData.push({
                         slide_number: i + 1,
                         header: "",
                         body: customSlides[i], 
-                        image_prompt: `[Prompt komprehensif bahasa Inggris untuk AI Image Generator. Masterpiece, highly detailed, faceless no eyes, gunakan palet ${rawPalette}. Seamless floating text concept.]`
+                        image_prompt: `[Prompt komprehensif bahasa Inggris untuk AI Image Generator. Masterpiece, highly detailed, faceless no eyes, jika ada binatang pastikan closed eyes, gunakan palet ${rawPalette}. Seamless floating text concept.]`
                     });
                 }
             } else {
+                // FULL AUTO-GENERATE VIA GEMINI AI
                 const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter (Midjourney/DALL-E).
 Buatkan naskah spesifik untuk carousel Instagram sebanyak tepat ${slides} slide.
 Topik: "${topic}"
@@ -1295,7 +1301,8 @@ ATURAN NASKAH TEKS KETAT:
 ATURAN IMAGE PROMPT:
 1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci.
 2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. SETIAP prompt WAJIB diakhiri dengan instruksi absolut ini: "Faceless no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+3. SETIAP prompt WAJIB diakhiri dengan instruksi absolut ini: "Faceless no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."
+4. JIKA ADA BINATANG APAPUN (Misal: Kuda, Unta, Gajah, Burung, dll), WAJIB tambahkan deskripsi "with closed eyes" (mata tertutup) pada binatang tersebut di dalam prompt bahasa Inggris.`;
 
                 const schemaProps = {
                     "slide_number": { "type": "INTEGER" },
@@ -1344,6 +1351,7 @@ ATURAN IMAGE PROMPT:
 \t3. BREATHABLE LAYOUT: Area teks tidak boleh terasa sempit. Pecah line teks agar lega.
 \t4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%. DILARANG menambahkan border pinggiran gambar/ frame list foto.
 \t5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi (Atas, Bawah, Kiri, Kanan) KHUSUS untuk teks. JANGAN JADIKAN RUANG INI SEBAGAI BORDER VISUAL.
+\t6. STRICT ANIMAL RULE: JIKA MENGGAMBARKAN BINATANG/HEWAN APAPUN, MAKA BINATANG TERSEBUT WAJIB MENUTUP MATANYA (CLOSED EYES/ SLEEPING).
 ${charDetails}
 
 [SLIDE 1] (VISUAL HOOK AWAL)
@@ -1386,7 +1394,7 @@ Make the aspect ratio ${ratio}`;
             let capContent = "";
 
             if(!isCustomScript) {
-                 const capPrompt = `Buatkan caption Instagram edukatif ringkas bergaya santai tapi sopan untuk topik "${topic}". Maksimalkan 350 huruf. Sertakan emoji dan 4-6 hashtag relevan. Jangan sertakan tag [CAPTION].`;
+                 const capPrompt = `Buatkan MURNI caption Instagram (teks sosmed) edukatif ringkas bergaya santai tapi sopan untuk topik "${topic}". Maksimalkan 350 huruf. Sertakan emoji dan 4-6 hashtag relevan. DILARANG KERAS menyertakan instruksi prompt gambar AI, arahan teknis visual, atau metadata apapun. Output HANYA teks caption siap posting.`;
                  const capSchema = { "caption": { "type": "STRING" } };
                  const capRes = await callGeminiAPI(capPrompt, capSchema);
                  capContent = capRes[0].caption;
