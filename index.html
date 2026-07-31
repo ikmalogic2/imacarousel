@@ -190,7 +190,7 @@
                 <div class="py-6">
                     <!-- Actions -->
                     <div class="flex justify-between items-center mb-2">
-                        <button onclick="window.open('https://share.gemini.google/kp51obrFDbtY', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/ojtOuv7T4BlA', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
@@ -212,8 +212,8 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Nama File Logo (Upload di ChatGPT)</label>
-                                <button type="button" onclick="autoSetSingle(this, 'set-logo-filename', 'logo_filename', 'STRING', 'Nama file logo, misal: logo.png')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Seni (Art Style)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-style', 'art_style', 'STRING', 'Gaya visual atau art style')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                             </div>
                             <div class="flex gap-2">
                                 <select id="set-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
@@ -472,6 +472,7 @@
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
                                     <option value="KUSTOM">KUSTOM</option>
                                     <option value="DENGAN POINT-POINT">DENGAN POINT-POINT</option>
+                                    <option value="DENGAN POINT-POINT (IKON REPRESENTATIF)">DENGAN POINT-POINT (IKON REPRESENTATIF)</option>
                                     <option value="TANPA POINT-POINT">TANPA POINT-POINT</option>
                                 </select>
                                 <input type="text" id="set-bodyformat-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik format...">
@@ -1101,7 +1102,7 @@ REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
 - Komposisi: SEIMBANG (50:50), TEKS DOMINAN (60/40), VISUAL DOMINAN (40/60), MINIMALIS TEKS (30/70)
 - Karakter: Pria Dewasa, Wanita, Pasutri, Anak Laki-laki, Anak Perempuan, Tanpa Karakter
 - Efek Font Header/Body: FLAT (BAWAAN FONT), 3D EMBOSSED (TIMBUL), DEBOSSED (TENGGELAM), NEON GLOW (MENYALA), METALLIC FOIL (EMAS/ PERAK), CHALK/ TEXTURAL (KAPUR/ KASAR), WATERCOLOR BLEND (MENYATU AIR)
-- Format Body: DENGAN POINT-POINT, TANPA POINT-POINT
+- Format Body: DENGAN POINT-POINT, DENGAN POINT-POINT (IKON REPRESENTATIF), TANPA POINT-POINT
 - Alignment: RATA KIRI, RATA TENGAH, RATA KANAN
 - Patch Footer: Tanpa Patch (Teks Transparan), Pill Hollow Capsule, Kotak Minimalis, Rounded Rectangle, Pita/ Ribbon
 - Posisi Footer: Tengah Bawah (Bottom Center), Kiri Bawah (Bottom Left), Kanan Bawah (Bottom Right), Tengah Atas (Top Center)`;
@@ -1460,13 +1461,36 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
 
             let slidesData = [];
 
+            const schemaProps = {
+                "slide_number": { "type": "INTEGER" },
+                "image_prompt": { "type": "STRING", "description": "Prompt gambar AI bahasa inggris mendetail" },
+                "header": { "type": "STRING", "description": "Judul/Teks utama tebal (Sentence case)" },
+                "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
+            };
+
             if (isCustomScript) {
+                const promptTextCustom = `Anda adalah Master AI Image Prompter & Desainer Visual.
+User telah membuat naskah copywriting sendiri untuk ${slides} slide. Berikut naskahnya:
+
+${customSlides.map((txt, idx) => `[SLIDE ${idx + 1}]\n${txt}`).join('\n\n')}
+
+Tugas Anda HANYA membuatkan 'image_prompt' (Prompt visual AI bahasa Inggris yang mendetail) untuk masing-masing slide agar gambarnya relevan dengan cerita/pesan pada naskah slide tersebut.
+Biarkan field 'header' dan 'body' KOSONG (empty string), karena teks aslinya akan digabungkan secara otomatis oleh sistem kami.
+
+ATURAN IMAGE PROMPT:
+1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci (suasana, objek utama, latar belakang, pencahayaan).
+2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
+3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang/boneka, Anda WAJIB mendeskripsikan secara eksplisit bahwa hewan tersebut "completely faceless with a smooth featureless blank head, zero facial features, absolutely no eyes, no nose, no mouth".
+4. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+
+                const customRes = await callGeminiAPI(promptTextCustom, schemaProps);
+                
                 for (let i = 0; i < slides; i++) {
                     slidesData.push({
                         slide_number: i + 1,
                         header: "",
-                        body: customSlides[i], 
-                        image_prompt: `[Prompt mendetail bahasa Inggris. Masterpiece, highly detailed, gunakan palet ${rawPalette}. Seamless floating text concept.]`
+                        body: customSlides[i] || "", 
+                        image_prompt: (customRes[i] && customRes[i].image_prompt) ? customRes[i].image_prompt : `[Masterpiece, highly detailed illustration in ${style} style, ${rawPalette} palette. Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion.]`
                     });
                 }
             } else {
@@ -1487,15 +1511,8 @@ ATURAN NASKAH TEKS KETAT:
 ATURAN IMAGE PROMPT:
 1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci.
 2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang (anjing, kuda, unta, burung, kucing dll) atau boneka, Anda WAJIB mendeskripsikan secara eksplisit di dalam prompt bahasa Inggris bahwa hewan tersebut "faceless", "completely blank face", "no eyes and no facial features".
+3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang/boneka, Anda WAJIB mendeskripsikan secara eksplisit bahwa hewan tersebut "completely faceless with a smooth featureless blank head, zero facial features, absolutely no eyes, no nose, no mouth".
 4. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
-
-                const schemaProps = {
-                    "slide_number": { "type": "INTEGER" },
-                    "image_prompt": { "type": "STRING", "description": "Prompt gambar AI bahasa inggris mendetail" },
-                    "header": { "type": "STRING", "description": "Judul/Teks utama tebal (Sentence case)" },
-                    "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
-                };
 
                 slidesData = await callGeminiAPI(promptText, schemaProps);
                 if (slidesData.length < slides) slides = slidesData.length;
@@ -1525,17 +1542,20 @@ ATURAN IMAGE PROMPT:
 * ALUR COPYWRITING: ${fwText}
 * GAYA BAHASA: ${appliedLang}
 * TYPOGRAPHY SETTINGS (APPLIES TO ALL SLIDES)
+\t* ALIGNMENT (RATA TEKS): ${alignment} -> [WAJIB BERLAKU SAMA UNTUK HEADER MAUPUN BODY]
 \t* HEADER: Font ${fontHeader} | Efek: ${effectHeader} | Ukuran: ${ptHead}pt
-\t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Align: ${alignment} | Format: ${bodyFmt}
+\t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Format: ${bodyFmt}
 \t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt | Posisi: ${posFooter}
 * PALET WARNA (STRICT): ${paletteExpanded}
 * NEGATIVE PROMPT: ${negativePrompt}${fileLogoInstruction}
 * STRICT TEXT RULES (ATURAN MUTLAK KANVAS):
-\t1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework.
-\t2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box kaku.
-\t3. BREATHABLE LAYOUT: Area teks tidak boleh terasa sempit. Pecah line teks agar lega.
-\t4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%.
-\t5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi KHUSUS untuk teks.
+	1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework.
+	2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box kaku.
+	3. BREATHABLE LAYOUT: Area teks tidak boleh terasa sempit. Pecah line teks agar lega.
+	4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%.
+	5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi KHUSUS untuk teks.
+	6. DYNAMIC FOOTER CONTRAST: Pewarnaan pada teks dan patch FOOTER WAJIB BERSIFAT DINAMIS! Selalu gunakan warna yang SANGAT KONTRAS terhadap background di belakangnya (Gunakan teks Putih/Terang jika background gelap, dan teks Hitam/Gelap jika background terang) agar teks maupun patch footer super jelas terbaca.
+	7. CONSISTENT ALIGNMENT: Keselarasan adalah kunci! Header dan Body WAJIB memiliki alignment (rata teks) yang sama persis agar rapi. DILARANG KERAS mencampur rata kiri dengan rata tengah di satu slide!
 ${strictSyariatRule}
 ${charDetails}
 
