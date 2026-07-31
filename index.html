@@ -188,14 +188,17 @@
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6">
                     <!-- Actions -->
-                    <div class="flex justify-end gap-3 mb-2">
-                        <button onclick="window.open('https://share.gemini.google/QvpWTHd5HUE0', '_blank')" class="px-4 py-2 text-xs font-bold text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30 rounded-xl hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
-                        <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
-                        <button id="btn-auto-set" onclick="autoSetSettings()" class="px-4 py-2 text-xs font-bold text-white bg-[#007AFF] rounded-xl hover:bg-[#0056b3] transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Auto-Set AI</button>
+                    <div class="flex justify-between items-center mb-2">
+                        <button onclick="window.open('https://share.gemini.google/6QyGmt6mdAJl', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
+                            <button id="btn-auto-set" onclick="autoSetSettings()" class="px-4 py-2 text-xs font-bold text-white bg-[#007AFF] rounded-xl hover:bg-[#0056b3] transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Global Auto-Set AI</button>
+                        </div>
                     </div>
 
                     <!-- API KEY SECTION -->
-                    <div class="setting-section-title mt-0 text-blue-500 dark:text-blue-400">0. API Key (Wajib untuk AI Generate)</div>
+                    <div class="setting-section-title mt-4 text-blue-500 dark:text-blue-400">0. API Key (Wajib untuk AI Generate)</div>
                     <div class="grid grid-cols-1 gap-5 text-sm mb-8">
                         <div>
                             <input type="password" id="gemini-api-key" placeholder="Masukkan Gemini API Key dari Google AI Studio..." class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
@@ -207,11 +210,17 @@
                     <div class="setting-section-title">I. Pengaturan Umum & Copywriting</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Jumlah Slide</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Jumlah Slide</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-slide-count', 'jumlah_slide', 'INTEGER', 'Angka jumlah slide')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <input type="number" id="set-slide-count" min="2" max="30" value="7" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" title="Minimal 2 slide (Hook + CTA)">
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Aspect Ratio</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Aspect Ratio</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-ratio', 'aspect_ratio', 'STRING', 'Misal 3:4, 16:9, 1:1')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-ratio" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -226,7 +235,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Copywriting Framework</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Copywriting Framework</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-copywriting', 'copywriting_framework', 'STRING', 'Framework copywriting')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-copywriting" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -242,7 +254,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Tipe Hook (Slide 1)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Tipe Hook (Slide 1)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-hook', 'hook_type', 'STRING', 'Tipe hook slide pertama')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-hook" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -261,7 +276,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Gaya Bahasa</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Bahasa</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-language-style', 'language_style', 'STRING', 'Tone and voice tulisan')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-language-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -282,14 +300,20 @@
                     <div class="setting-section-title">II. Visual & Art Style</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Gaya Seni / Art Style</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Seni / Art Style</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-style', 'art_style', 'STRING', 'Gaya visual spesifik')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
                                 <input type="text" id="set-style-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik gaya...">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Palet Warna (Color DNA)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Palet Warna (Color DNA)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-palette', 'color_palette', 'STRING', 'Palet warna/mood')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-palette" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <!-- Options populated by JS -->
@@ -298,7 +322,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Komposisi (Teks : Visual)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Komposisi (Teks : Visual)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-composition', 'composition', 'STRING', 'Rasio teks vs gambar')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-composition" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -312,7 +339,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Karakter Utama</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Karakter Utama</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-character', 'character', 'STRING', 'Deskripsi wujud/pakaian karakter')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-character" onchange="handleCharacterChange(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -329,16 +359,19 @@
                         </div>
                         
                         <div id="character-details-container" class="md:col-span-2 hidden bg-gray-50 dark:bg-[#1C1C1E] p-5 rounded-2xl border border-gray-100 dark:border-ios-darkBorder shadow-sm">
-                            <p class="text-xs text-red-500 dark:text-red-400 font-bold mb-4 tracking-wide">*ATURAN FACELESS & NO EYES MUTLAK BERLAKU.</p>
+                            <p class="text-xs text-red-500 dark:text-red-400 font-bold mb-4 tracking-wide">*ATURAN FACELESS & NO EYES MUTLAK BERLAKU UNTUK SYARIAT.</p>
                             <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- Injected dynamically -->
                             </div>
                         </div>
                         
                         <div class="md:col-span-2">
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Negative Prompt (Mencegah Objek Muncul)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Negative Prompt (Objek Haram/Dihindari)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-negative-prompt', 'negative_prompt', 'STRING', 'Hal yang dihindari di gambar')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="relative">
-                                <textarea id="set-negative-prompt" rows="3" placeholder="Contoh: bad anatomy, ugly, extra fingers..." class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
+                                <textarea id="set-negative-prompt" rows="3" class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
                                 <button onclick="document.getElementById('set-negative-prompt').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                             </div>
                         </div>
@@ -348,14 +381,20 @@
                     <div class="setting-section-title">III. Tipografi Header (Judul)</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Font Header</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Font Header</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-font-header', 'font_header', 'STRING', 'Pilih nama font header')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-font-header" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
                                 <input type="text" id="set-font-header-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik font...">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Efek Font Header</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Efek Font Header</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-texteffect-header', 'effect_header', 'STRING', 'Contoh: 3D, Embossed, dll')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-texteffect-header" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -372,7 +411,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Ukuran Header (PT)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Ukuran Header (PT)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-pt-header', 'pt_header', 'INTEGER', 'Angka, misal 60')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <input type="number" id="set-pt-header" placeholder="Auto-Set atau angka (cth: 60)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                         </div>
                     </div>
@@ -381,14 +423,20 @@
                     <div class="setting-section-title">IV. Tipografi Body (Teks Utama)</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Font Body</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Font Body</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-font-body', 'font_body', 'STRING', 'Pilih nama font body')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-font-body" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
                                 <input type="text" id="set-font-body-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik font...">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Efek Font Body</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Efek Font Body</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-texteffect-body', 'effect_body', 'STRING', 'Contoh: Flat, dll')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-texteffect-body" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -401,11 +449,17 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Ukuran Body (PT)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Ukuran Body (PT)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-pt-body', 'pt_body', 'INTEGER', 'Angka, misal 40')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <input type="number" id="set-pt-body" placeholder="Auto-Set atau angka (cth: 40)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Format Body Text</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Format Body Text</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-bodyformat', 'body_format', 'STRING', 'Poin atau tanpa poin')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-bodyformat" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -417,7 +471,10 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Rata Teks (Alignment)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Rata Teks (Alignment)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-alignment', 'alignment', 'STRING', 'Rata kiri/tengah/kanan')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-alignment" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI (SEEMLESS)">Auto-Set by AI (DINAMIS/ SEEMLESS)</option>
@@ -435,7 +492,10 @@
                     <div class="setting-section-title">V. Footer & Watermark</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Bentuk Patch Footer</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Bentuk Patch Footer</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-patch-footer', 'patch_footer', 'STRING', 'Bentuk wadah footer')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <div class="flex gap-2">
                                 <select id="set-patch-footer" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
@@ -450,16 +510,58 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Ukuran Footer (PT)</label>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Ukuran Footer (PT)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-pt-footer', 'pt_footer', 'INTEGER', 'Angka, misal 20')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
                             <input type="number" id="set-pt-footer" placeholder="Auto-Set atau angka (cth: 20)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                         </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-gray-700 dark:text-gray-300 font-bold mb-2">Watermark / Branding</label>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Logo (Teks/ Sosmed)</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-logos', 'watermark_logos', 'STRING', 'Contoh: Instagram, Threads, dll')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                </div>
                                 <input type="text" id="set-watermark-logos" placeholder="Logo (cth: IG, Threads)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" value="Instagram, Threads">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Username Akun</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-username', 'watermark_username', 'STRING', 'Contoh: @username')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                </div>
                                 <input type="text" id="set-watermark-username" placeholder="@username" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                             </div>
                         </div>
+
+                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">URL Logo ImageKit (Opsional)</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-url', 'logo_url', 'STRING', 'URL logo gambar dari ImageKit atau link lainnya')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                </div>
+                                <input type="text" id="set-watermark-url" placeholder="Paste URL gambar (https://...)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Posisi Logo</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-watermark-pos', 'logo_position', 'STRING', 'Posisi letak logo di kanvas')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                </div>
+                                <div class="flex gap-2">
+                                    <select id="set-watermark-pos" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                        <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                        <option value="KUSTOM">KUSTOM</option>
+                                        <option value="Pojok Kiri Atas">Pojok Kiri Atas</option>
+                                        <option value="Pojok Kanan Atas">Pojok Kanan Atas</option>
+                                        <option value="Tengah Atas">Tengah Atas</option>
+                                        <option value="Pojok Kiri Bawah">Pojok Kiri Bawah</option>
+                                        <option value="Pojok Kanan Bawah">Pojok Kanan Bawah</option>
+                                    </select>
+                                    <input type="text" id="set-watermark-pos-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi...">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -527,69 +629,69 @@
     <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
         const styleArtsList = [
-            "Auto-Set by AI", "KUSTOM",
-            "1. GAYA 1 / ImaKnit / Premium Knit & Crochet 3D",
-            "2. GAYA 2 / ImaWool / Premium 3D Wool Sculpture Art",
-            "3. GAYA 3 / ImaWaru / Premium Needle Felting 3D",
-            "4. GAYA 4 / ImaPlush / Premium 3D Plush Toy Diorama",
-            "5. GAYA 5 / ImaFlannel / Premium Stuffed Felt Art Diorama",
-            "6. GAYA 6 / ImaQupa / Premium Quilted Patchwork 3D",
-            "7. GAYA 7 / ImaStitch / Premium 3D Hand Embroidery Art",
-            "8. GAYA 8 / ImaWeave / Premium Woven Tapestry Art",
-            "9. GAYA 9 / ImaMacra / Premium Handcrafted Macrame Fiber Art",
-            "10. GAYA 10 / ImaFab / Premium Mixed Fabric Collage Art",
-            "11. GAYA 11 / ImaTile / Premium 3D Textile Storybook Art",
-            "12. GAYA 12 / ImaCraft / Premium 3D Papercraft Diorama",
-            "13. GAYA 13 / ImaPaper / Premium 3D Paper Diorama Art",
-            "14. GAYA 14 / ImaOri / 3D Origami Paper Art Diorama",
-            "15. GAYA 15 / ImaQuill / Premium 3D Paper Quilling Art Diorama",
-            "16. GAYA 16 / ImaPaper / Premium Layered Papercut 3D Diorama",
-            "17. GAYA 17 / ImaKiri / Premium 3D Kirigami Paper Cut Art",
-            "18. GAYA 18 / ImaShadow / Premium Paper Shadow Box 3D",
-            "19. GAYA 19 / ImaSculpt / Premium 3D Paper Sculpture Art",
-            "20. GAYA 20 / ImaCut / Premium Handmade Cut Paper Collage",
-            "21. GAYA 21 / ImaCard / Premium Handmade Cardboard Craft 3D",
-            "22. GAYA 22 / ImaKids / Premium Children's Book Illustration",
-            "23. GAYA 23 / ImaCozy / Premium Cozy Storybook Illustration",
-            "24. GAYA 24 / ImaCottage / Premium Cottagecore Storybook Illustration",
-            "25. GAYA 25 / ImaPencil / Premium Soft Pencil Storybook Illustration",
-            "26. GAYA 26 / ImaAqua / Premium Watercolor Storybook Illustration",
-            "27. GAYA 27 / ImaStory / Whimsical Watercolor Storybook Illustration",
-            "28. GAYA 28 / ImaWhimsi / Ink & Watercolor Whimsical Doodle",
-            "29. GAYA 29 / ImaWhim / Premium Whimsical Storybook Illustration",
-            "30. GAYA 30 / ImaTale / Premium Enchanted Fairytale Storybook Art",
-            "31. GAYA 31 / ImaVinta / Premium Vintage Storybook Illustration",
-            "32. GAYA 32 / ImaScandi / Premium Scandinavian Folk Storybook Art",
-            "33. GAYA 33 / ImaWimmel / Wimmelbilderbuch (Teeming Picture Book)",
-            "34. GAYA 34 / ImaEdito / Premium Editorial Storybook Illustration",
-            "35. GAYA 35 / ImaOil / Premium Impasto Oil Painting",
-            "36. GAYA 36 / ImaAcryl / Premium Expressive Acrylic Painting",
-            "37. GAYA 37 / ImaGouache / Premium Opaque Gouache Painting",
-            "38. GAYA 38 / ImaWaco / Watercolor & Ink Illustration",
-            "39. GAYA 39 / ImaColor / Premium Colored Pencil Illustration",
-            "40. GAYA 40 / ImaLine / Intricate Black & White Line Art Illustration",
-            "41. GAYA 41 / ImaChalk / Vintage Chalkboard Typography & Sketch",
-            "42. GAYA 42 / ImaFlato / Modern Flat Vector Illustration",
-            "43. GAYA 43 / ImaAvantAsian / Avant-Garde Geometric Asian Illustration",
-            "44. GAYA 44 / ImaNoto / Notion Minimal Monochrome Illustration",
-            "45. GAYA 45 / ImaPop / Bold Pop Art Illustration",
-            "46. GAYA 46 / ImaGraf / Risograph Vintage Graphic Print",
-            "47. GAYA 47 / ImaMix / Mixed Media Experimental Collage",
-            "48. GAYA 48 / ImaGeru / Grunge Streetwear Photocopy Collage",
-            "49. GAYA 49 / ImaGraff / Urban Street Graffiti Art",
-            "50. GAYA 50 / ImaStudy / Studygram Digital Journaling & Scrapbook",
-            "51. GAYA 51 / ImaDenim / Hand-Drawn Sketchnote & Visual Journaling",
-            "52. GAYA 52 / ImaSketch / Doodle Journal Notebook Illustration",
-            "53. GAYA 53 / ImaKomi / Comic Studio (High-Fidelity Islamic Comic)",
-            "54. GAYA 54 / ImaWebo / Premium Webtoon Comic Illustration",
-            "55. GAYA 55 / ImaDecora / Retro Psychedelic Anime Pop Illustration",
-            "56. GAYA 56 / ImaWood / Minimalist Vintage Japanese Woodcut Print",
-            "57. GAYA 57 / ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi",
-            "58. GAYA 58 / ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration",
-            "59. GAYA 59 / ImaPixar / Pixar Inspired 3D Animation",
-            "60. GAYA 60 / ImaGame / Stylized Game Art Illustration",
-            "61. GAYA 61 / ImaVoxel / Isometric 3D Voxel Art Diorama",
-            "62. GAYA 62 / ImaSand / Premium Sand Sculpture & Art Diorama 3D"
+            "Auto-Set by AI", "KUSTOM", 
+            "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D",
+            "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D",
+            "3. GAYA 3/ ImaQupa / Premium Quilted Patchwork 3D",
+            "4. GAYA 4/ ImaFlannel / Premium Stuffed Felt Art Diorama",
+            "5. GAYA 5/ ImaStitch / Premium 3D Hand Embroidery Art",
+            "6. GAYA 6/ ImaFab / Premium Mixed Fabric Collage Art",
+            "7. GAYA 7/ ImaWool / Premium 3D Wool Sculpture Art",
+            "8. GAYA 8/ ImaPlush / Premium 3D Plush Toy Diorama",
+            "9. GAYA 9/ ImaMacra / Premium Handcrafted Macrame Fiber Art",
+            "10. GAYA 10/ ImaWeave / Premium Woven Tapestry Art",
+            "11. GAYA 11/ ImaTile / Premium 3D Textile Storybook Art",
+            "12. GAYA 12/ ImaWhimsi / Ink & Watercolor Whimsical Doodle",
+            "13. GAYA 13/ ImaStudy / Studygram Digital Journaling & Scrapbook",
+            "14. GAYA 14/ ImaWaco / Watercolor & Ink Illustration",
+            "15. GAYA 15/ ImaGeru / Grunge Streetwear Photocopy Collage",
+            "16. GAYA 16/ ImaDenim / Hand-Drawn Sketchnote & Visual Journaling",
+            "17. GAYA 17/ ImaFlato / Modern Flat Vector Illustration",
+            "18. GAYA 18/ ImaNoto / Notion Minimal Monochrome Illustration",
+            "19. GAYA 19/ ImaGraf / Risograph Vintage Graphic Print",
+            "20. GAYA 20/ ImaGraff / Urban Street Graffiti Art",
+            "21. GAYA 21/ ImaSketch / Doodle Journal Notebook Illustration",
+            "22. GAYA 22/ ImaKomi / Comic Studio (High-Fidelity Islamic Comic)",
+            "23. GAYA 23/ ImaWebo / Premium Webtoon Comic Illustration",
+            "24. GAYA 24/ ImaWimmel / Wimmelbilderbuch (Teeming Picture Book)",
+            "25. GAYA 25/ ImaPixar / Pixar Inspired 3D Animation",
+            "26. GAYA 26/ ImaGame / Stylized Game Art Illustration",
+            "27. GAYA 27/ ImaVoxel / Isometric 3D Voxel Art Diorama",
+            "28. GAYA 28/ ImaSand / Premium Sand Sculpture & Art Diorama 3D",
+            "29. GAYA 29/ ImaChalk / Vintage Chalkboard Typography & Sketch",
+            "30. GAYA 30/ ImaShadow / Premium Paper Shadow Box 3D",
+            "31. GAYA 31/ ImaMix / Mixed Media Experimental Collage",
+            "32. GAYA 32/ ImaCraft / Premium 3D Papercraft Diorama",
+            "33. GAYA 33/ ImaPaper / Premium Layered Papercut 3D Diorama",
+            "34. GAYA 34/ ImaOri / 3D Origami Paper Art Diorama",
+            "35. GAYA 35/ ImaPaper / Premium 3D Paper Diorama Art",
+            "36. GAYA 36/ ImaQuill / Premium 3D Paper Quilling Art Diorama",
+            "37. GAYA 37/ ImaKiri / Premium 3D Kirigami Paper Cut Art",
+            "38. GAYA 38/ ImaCut / Premium Handmade Cut Paper Collage",
+            "39. GAYA 39/ ImaCard / Premium Handmade Cardboard Craft 3D",
+            "40. GAYA 40/ ImaSculpt / Premium 3D Paper Sculpture Art",
+            "41. GAYA 41/ ImaCozy / Premium Cozy Storybook Illustration",
+            "42. GAYA 42/ ImaVinta / Premium Vintage Storybook Illustration",
+            "43. GAYA 43/ ImaAqua / Premium Watercolor Storybook Illustration",
+            "44. GAYA 44/ ImaScandi / Premium Scandinavian Folk Storybook Art",
+            "45. GAYA 45/ ImaWhim / Premium Whimsical Storybook Illustration",
+            "46. GAYA 46/ ImaTale / Premium Enchanted Fairytale Storybook Art",
+            "47. GAYA 47/ ImaEdito / Premium Editorial Storybook Illustration",
+            "48. GAYA 48/ ImaPencil / Premium Soft Pencil Storybook Illustration",
+            "49. GAYA 49/ ImaCottage / Premium Cottagecore Storybook Illustration",
+            "50. GAYA 50/ ImaKids / Premium Children's Book Illustration",
+            "51. GAYA 51/ ImaGouache / Premium Opaque Gouache Painting",
+            "52. GAYA 52/ ImaOil / Premium Impasto Oil Painting",
+            "53. GAYA 53/ ImaAcryl / Premium Expressive Acrylic Painting",
+            "54. GAYA 54/ ImaColor / Premium Colored Pencil Illustration",
+            "55. GAYA 55/ ImaWood / Minimalist Vintage Japanese Woodcut Print",
+            "56. GAYA 56/ ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi",
+            "57. GAYA 57/ ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration",
+            "58. GAYA 58/ ImaStory / Whimsical Watercolor Storybook Illustration",
+            "59. GAYA 59/ ImaLine / Intricate Black & White Line Art Illustration",
+            "60. GAYA 60/ ImaPop / Bold Pop Art Illustration",
+            "61. GAYA 61/ ImaAvantAsian / Avant-Garde Geometric Asian Illustration",
+            "62. GAYA 62/ ImaDecora / Retro Psychedelic Anime Pop Illustration"
         ];
         
         const fontDNAList = [
@@ -602,53 +704,41 @@
             "FONT 29. Elegant Art Nouveau", "FONT 30. Luxury Signature Script", "FONT 31. Brush Street Typography"
         ];
 
-        const hookDetails = {
-            "Shocking Statistic Hook": "Data/Statistik mengejutkan -> Kaitkan ke masalah personal audiens -> Pemicu penasaran.",
-            "Emotional Story Hook": "Momen emosional (gagal/takut/down) -> Cerita manusiawi -> Harapan/Trigger penasaran.",
-            "Provocative Question Hook": "Keyakinan umum/Klise -> Pertanyaan tajam/berani -> Urgensi untuk mikir ulang.",
-            "Curiosity-Inducing Hook": "Teaser rahasia/kesalahan -> Tahan jawaban -> Janji spill di akhir.",
-            "Solution-Oriented Hook": "Masalah spesifik -> Solusi praktis -> Janji hasil nyata.",
-            "Controversial Opinion Hook": "Norma sosial/keyakinan umum -> Balik sudut pandang -> Nada tegas/Pancing diskusi.",
-            "Exclusive Access Hook": "Akses orang dalam/rahasia -> Kelangkaan -> Urgensi.",
-            "How-To Guide Hook": "Janji hasil spesifik -> Trik mudah -> Urgensi/Kelebihan.",
-            "Curated List Hook": "Janji daftar terbaik -> Nilai tambah (saving/time-saving) -> Ajak lanjut."
-        };
-
         const colorPalettesDetails = {
             "Auto-Set by AI": "AI Selection based on Topic",
             "KUSTOM": "Kustom Palette",
-            "[GHIBLI]": "DNA: Nature, Soft, Organic. CORE: Sage Green, Forest Green, Sky Blue, Warm Cream, Wood Brown. ACCENT: Sunflower Yellow, Terracotta. MOOD: Peaceful, nostalgic.",
-            "[MAKOTO SHINKAI]": "DNA: Sky, Light, Atmospheric. CORE: Deep Blue, Azure, Cyan, Cloud White. ACCENT: Sunset Orange, Pink, Magenta, Purple Glow. MOOD: Dreamy, cinematic.",
-            "[WES ANDERSON]": "DNA: Pastel, Vintage, Symmetry. CORE: Mustard, Dusty Pink, Mint, Teal, Cream. ACCENT: Coral, Burnt Orange, Olive. MOOD: Quirky, elegant.",
-            "[PIXAR]": "DNA: Bright, Happy. CORE: Blue, Red, Yellow, Green, Orange. ACCENT: White, Light Gray. MOOD: Fun, optimistic.",
-            "[DISNEY CLASSIC]": "DNA: Fairytale, Warm. CORE: Royal Blue, Gold, Red, Cream. ACCENT: Purple, Pink, Emerald. MOOD: Magical adventure.",
-            "[FROZEN]": "DNA: Ice, Crystal, Winter. CORE: Ice Blue, White, Silver, Light Cyan. ACCENT: Lavender, Soft Purple. MOOD: Cold, royal, magical.",
-            "[DREAMWORKS]": "DNA: Vibrant, Adventure. CORE: Blue, Orange, Red, Green. ACCENT: Purple, Gold. MOOD: Epic animation.",
-            "[LAIKA]": "DNA: Earthy, Handmade. CORE: Brown, Olive, Beige, Dark Green. ACCENT: Rust, Muted Orange. MOOD: Vintage, handcrafted.",
-            "[CARTOON SALOON]": "DNA: Watercolor, Celtic. CORE: Forest Green, Olive, Cream, Sky Blue. ACCENT: Gold, Orange. MOOD: Traditional illustration.",
-            "[ARCANE]": "DNA: Dark, Luxury, Neon. CORE: Emerald, Deep Navy, Charcoal, Gold. ACCENT: Magenta, Electric Blue, Purple. MOOD: Premium cinematic.",
-            "[SPIDER-VERSE]": "DNA: Comic, Pop Art. CORE: Cyan, Magenta, Purple, Black. ACCENT: Yellow, Red, Blue. MOOD: Dynamic, energetic.",
-            "[GENSHIN IMPACT]": "DNA: Fantasy, Anime. CORE: Sky Blue, White, Green, Cream. ACCENT: Gold, Pink, Purple. MOOD: Fantasy adventure.",
-            "[HONKAI STAR RAIL]": "DNA: Sci-fi, Luxury, Neon. CORE: Purple, Blue, Silver, Black. ACCENT: Cyan, Magenta, Gold. MOOD: Future fantasy.",
-            "[BREATH OF THE WILD]": "DNA: Nature, Freedom. CORE: Grass Green, Sky Blue, Cream, Brown. ACCENT: Gold, Orange. MOOD: Open world serenity.",
-            "[TEARS OF THE KINGDOM]": "DNA: Ancient, Sacred, Sky. CORE: Emerald, Gold, Blue, White. ACCENT: Turquoise, Bronze. MOOD: Divine fantasy.",
-            "[FINAL FANTASY]": "DNA: Elegant, Crystal. CORE: White, Blue, Silver, Black. ACCENT: Purple, Gold. MOOD: Epic JRPG.",
-            "[ELDEN RING]": "DNA: Dark Fantasy. CORE: Olive, Dark Gold, Brown, Black. ACCENT: Ash Gray. MOOD: Ancient kingdom.",
-            "[DARK SOULS]": "DNA: Ruins, Ash. CORE: Gray, Black, Brown. ACCENT: Dark Gold. MOOD: Hopeless fantasy.",
-            "[BLOODBORNE]": "DNA: Victorian, Gothic. CORE: Black, Dark Red, Brown, Gray. ACCENT: Wine Red. MOOD: Dark horror.",
-            "[GHOST OF TSUSHIMA]": "DNA: Samurai, Autumn. CORE: Gold, Crimson, Dark Green, Fog Blue. ACCENT: Orange, Brown. MOOD: Heroic Japan.",
-            "[JOURNEY]": "DNA: Minimal, Spiritual. CORE: Sand, Cream, Orange, Blue. ACCENT: Gold. MOOD: Meditative.",
-            "[MONUMENT VALLEY]": "DNA: Minimal, Geometry. CORE: Pastel Pink, Mint, Peach, Sky Blue. ACCENT: Lavender. MOOD: Architectural minimalism.",
-            "[ANIMAL CROSSING]": "DNA: Cozy, Pastel. CORE: Mint, Cream, Baby Blue, Light Green. ACCENT: Peach, Yellow. MOOD: Comfort.",
-            "[CHRISTOPHER NOLAN]": "DNA: Realistic, Cold. CORE: Steel Blue, Slate Gray, Black. ACCENT: Orange, Amber. MOOD: Cinematic realism.",
-            "[DENIS VILLENEUVE]": "DNA: Minimal, Sci-fi. CORE: Sand, Beige, Gray, Black. ACCENT: Orange, Gold. MOOD: Modern epic.",
-            "[BLADE RUNNER 2049]": "DNA: Cyberpunk, Neon. CORE: Orange, Black, Gray. ACCENT: Cyan, Magenta. MOOD: Future dystopia.",
-            "[DUNE]": "DNA: Desert, Monumental. CORE: Sand, Bronze, Brown, Cream. ACCENT: Black. MOOD: Ancient empire.",
-            "[INTERSTELLAR]": "DNA: Space, Silence. CORE: Navy, Black, White, Gray. ACCENT: Warm Sunlight. MOOD: Cosmic realism.",
-            "[HARRY POTTER]": "DNA: Magic, Candlelight. CORE: Brown, Gold, Dark Green. ACCENT: Burgundy. MOOD: Wizard academy.",
-            "[LORD OF THE RINGS]": "DNA: Forest, Kingdom. CORE: Forest Green, Gold, Brown, Gray. ACCENT: White. MOOD: Epic medieval.",
-            "[AMELIE]": "DNA: French Vintage. CORE: Green, Red, Brown, Cream. ACCENT: Gold. MOOD: Romantic nostalgia.",
-            "[GRAND BUDAPEST HOTEL]": "DNA: Luxury, Pink. CORE: Pink, Purple, Cream. ACCENT: Gold, Mustard. MOOD: Elegant retro.",
+            "[GHIBLI]": "DNA: Nature, Soft, Organic. CORE: Sage Green, Forest Green, Sky Blue, Warm Cream, Wood Brown.",
+            "[MAKOTO SHINKAI]": "DNA: Sky, Light, Atmospheric. CORE: Deep Blue, Azure, Cyan, Cloud White. ACCENT: Sunset Orange.",
+            "[WES ANDERSON]": "DNA: Pastel, Vintage, Symmetry. CORE: Mustard, Dusty Pink, Mint, Teal, Cream.",
+            "[PIXAR]": "DNA: Bright, Happy. CORE: Blue, Red, Yellow, Green, Orange.",
+            "[DISNEY CLASSIC]": "DNA: Fairytale, Warm. CORE: Royal Blue, Gold, Red, Cream.",
+            "[FROZEN]": "DNA: Ice, Crystal, Winter. CORE: Ice Blue, White, Silver, Light Cyan.",
+            "[DREAMWORKS]": "DNA: Vibrant, Adventure. CORE: Blue, Orange, Red, Green.",
+            "[LAIKA]": "DNA: Earthy, Handmade. CORE: Brown, Olive, Beige, Dark Green. ACCENT: Rust.",
+            "[CARTOON SALOON]": "DNA: Watercolor, Celtic. CORE: Forest Green, Olive, Cream, Sky Blue.",
+            "[ARCANE]": "DNA: Dark, Luxury, Neon. CORE: Emerald, Deep Navy, Charcoal, Gold.",
+            "[SPIDER-VERSE]": "DNA: Comic, Pop Art. CORE: Cyan, Magenta, Purple, Black.",
+            "[GENSHIN IMPACT]": "DNA: Fantasy, Anime. CORE: Sky Blue, White, Green, Cream.",
+            "[HONKAI STAR RAIL]": "DNA: Sci-fi, Luxury, Neon. CORE: Purple, Blue, Silver, Black.",
+            "[BREATH OF THE WILD]": "DNA: Nature, Freedom. CORE: Grass Green, Sky Blue, Cream, Brown.",
+            "[TEARS OF THE KINGDOM]": "DNA: Ancient, Sacred, Sky. CORE: Emerald, Gold, Blue, White.",
+            "[FINAL FANTASY]": "DNA: Elegant, Crystal. CORE: White, Blue, Silver, Black.",
+            "[ELDEN RING]": "DNA: Dark Fantasy. CORE: Olive, Dark Gold, Brown, Black.",
+            "[DARK SOULS]": "DNA: Ruins, Ash. CORE: Gray, Black, Brown.",
+            "[BLOODBORNE]": "DNA: Victorian, Gothic. CORE: Black, Dark Red, Brown, Gray.",
+            "[GHOST OF TSUSHIMA]": "DNA: Samurai, Autumn. CORE: Gold, Crimson, Dark Green, Fog Blue.",
+            "[JOURNEY]": "DNA: Minimal, Spiritual. CORE: Sand, Cream, Orange, Blue.",
+            "[MONUMENT VALLEY]": "DNA: Minimal, Geometry. CORE: Pastel Pink, Mint, Peach, Sky Blue.",
+            "[ANIMAL CROSSING]": "DNA: Cozy, Pastel. CORE: Mint, Cream, Baby Blue, Light Green.",
+            "[CHRISTOPHER NOLAN]": "DNA: Realistic, Cold. CORE: Steel Blue, Slate Gray, Black.",
+            "[DENIS VILLENEUVE]": "DNA: Minimal, Sci-fi. CORE: Sand, Beige, Gray, Black.",
+            "[BLADE RUNNER 2049]": "DNA: Cyberpunk, Neon. CORE: Orange, Black, Gray.",
+            "[DUNE]": "DNA: Desert, Monumental. CORE: Sand, Bronze, Brown, Cream.",
+            "[INTERSTELLAR]": "DNA: Space, Silence. CORE: Navy, Black, White, Gray.",
+            "[HARRY POTTER]": "DNA: Magic, Candlelight. CORE: Brown, Gold, Dark Green.",
+            "[LORD OF THE RINGS]": "DNA: Forest, Kingdom. CORE: Forest Green, Gold, Brown, Gray.",
+            "[AMELIE]": "DNA: French Vintage. CORE: Green, Red, Brown, Cream.",
+            "[GRAND BUDAPEST HOTEL]": "DNA: Luxury, Pink. CORE: Pink, Purple, Cream.",
             "[CLAUDE MONET]": "DNA: Pastel, Lavender, Sky Blue, Mint, Cream",
             "[VAN GOGH]": "DNA: Ultramarine, Sunflower Yellow, Orange, Green",
             "[HOKUSAI]": "DNA: Indigo, White, Gray, Blue",
@@ -693,6 +783,12 @@
             "[SUZUME]": "DNA: Orange, Blue, Gold"
         };
 
+        const strictSyariatRule = `
+* STRICT SYARIAT RULES (WAJIB DIIKUTI 100% KARENA KETENTUAN ISLAM):
+  1. WANITA: DILARANG KERAS menampakkan aurat. Yang boleh terlihat HANYA wajah dan telapak tangan. WAJIB menggunakan khimar (hijab lebar menutupi seluruh kepala, dada, hingga lutut) dan menutupi seluruh lengan (tidak boleh ada bagian lengan baju yang membentuk atau memperlihatkan kulit lengan). Dilarang keras menampakkan leher, rambut, atau betis.
+  2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, hewan (kuda, unta, gajah, burung, ikan dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS.
+  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam. Wajah harus "completely blank face area" (rata tanpa elemen mata sama sekali).`;
+
         let currentMode = 'B'; 
         let currentSavedTab = 'B'; 
         let savedData = JSON.parse(localStorage.getItem('imapro_saved')) || { A: [], B: [] };
@@ -712,7 +808,6 @@
                 palSelect.appendChild(opt);
             }
 
-            // Restore API Key
             const savedKey = localStorage.getItem('imapro_gemini_key');
             if(savedKey) {
                 document.getElementById('gemini-api-key').value = savedKey;
@@ -725,7 +820,7 @@
             }
 
             renderSaved();
-            switchMode('B'); // Force UI match Mode B on load
+            switchMode('B');
         };
 
         function toggleTheme() {
@@ -869,53 +964,17 @@
 
         function getCharacterDetailsString() {
             const charType = getSettingValue('set-character');
-            const strictAurat = "\n\t* STRICT SYARIAT ISLAM: DILARANG menampakkan aurat wanita. Yang boleh terlihat HANYA wajah dan telapak tangan. Wanita WAJIB memakai KHIMAR (hijab lebar yang menutupi seluruh tubuh bagian atas, area dada, hingga menutupi seluruh lengan sampai pergelangan). JANGAN menampakkan rambut, leher, lengan baju, betis, atau bentuk dada wanita.";
-            
             if (charType === 'Auto-Set by AI' || charType === 'KUSTOM' || charType === 'Tanpa Karakter' || charType === "") {
-                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: FACELESS, NO EYES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis${strictAurat}`;
+                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis`;
             }
             
-            let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR/ PENUTUP KEPALA' : 'HAIRCUT/ PENUTUP KEPALA';
+            let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR LEBAR MENUTUP DADA' : 'HAIRCUT/ PENUTUP KEPALA';
             
-            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: FACELESS, NO EYES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}${strictAurat}`;
-        }
-
-        function applySmartSetting(selectId, aiValue) {
-            if (!aiValue) return;
-            const selectEl = document.getElementById(selectId);
-            if (!selectEl) return;
-            
-            let found = false;
-            const target = aiValue.toString().toLowerCase();
-            for (let i = 0; i < selectEl.options.length; i++) {
-                if (selectEl.options[i].value.toLowerCase().includes(target)) {
-                    selectEl.selectedIndex = i;
-                    found = true;
-                    break;
-                }
-            }
-            
-            if (!found || target.length > 30) {
-                let hasKustom = false;
-                for (let i = 0; i < selectEl.options.length; i++) {
-                    if (selectEl.options[i].value === 'KUSTOM') {
-                        selectEl.selectedIndex = i;
-                        hasKustom = true;
-                        break;
-                    }
-                }
-                const customInput = document.getElementById(selectId + '-custom');
-                if (customInput && hasKustom) {
-                    customInput.value = aiValue;
-                    customInput.classList.remove('hidden');
-                }
-            } else {
-                handleKustom(selectEl);
-            }
+            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}`;
         }
 
         function resetSettings() {
-            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting', 'set-hook', 'set-language-style'];
+            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting', 'set-hook', 'set-language-style', 'set-watermark-pos'];
             selects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) { el.selectedIndex = 0; handleKustom(el); }
@@ -927,131 +986,135 @@
             document.getElementById('set-pt-footer').value = '';
             document.getElementById('set-watermark-logos').value = 'Instagram, Threads';
             document.getElementById('set-watermark-username').value = '';
+            document.getElementById('set-watermark-url').value = '';
             document.getElementById('set-negative-prompt').value = 'APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
             handleCharacterChange(document.getElementById('set-character'));
             showToast("Settings Reset");
         }
 
-        async function autoSetSettings() {
-            const btn = document.getElementById('btn-auto-set');
-            let originalText = "";
-            if (btn) {
-                originalText = btn.innerHTML;
-                btn.innerHTML = `<svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Tunggu...`;
-                btn.disabled = true;
+        function applySmartSetting(elementId, aiValue) {
+            const selectEl = document.getElementById(elementId);
+            if (!selectEl) return;
+            
+            let matchFound = false;
+            const aiValLower = String(aiValue).toLowerCase();
+
+            // Try exact match or includes
+            for (let i = 0; i < selectEl.options.length; i++) {
+                if (selectEl.options[i].value.toLowerCase() === aiValLower || selectEl.options[i].value.toLowerCase().includes(aiValLower)) {
+                    selectEl.selectedIndex = i;
+                    matchFound = true;
+                    break;
+                }
             }
 
+            // Jika tidak match ATAU kalimatnya sangat panjang (spesifik), paksa KUSTOM
+            if (!matchFound || String(aiValue).length > 30) {
+                for (let i = 0; i < selectEl.options.length; i++) {
+                    if (selectEl.options[i].value === 'KUSTOM') {
+                        selectEl.selectedIndex = i;
+                        break;
+                    }
+                }
+                const customInput = document.getElementById(elementId + '-custom');
+                if (customInput) {
+                    customInput.value = aiValue;
+                    customInput.classList.remove('hidden');
+                }
+            } else {
+                const customInput = document.getElementById(elementId + '-custom');
+                if (customInput) customInput.classList.add('hidden');
+            }
+        }
+
+        async function autoSetSettings() {
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
-
+            
             if (!topic && !instructions) {
-                showToast("❌ Gagal: Harap isi Topik atau Instruksi terlebih dahulu!");
-                if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+                showToast("Harap isi Topik atau Instruksi pada Kartu Input terlebih dahulu!");
                 return;
             }
 
-            showToast("⏳ AI sedang membaca & menyetel otomatis...");
+            const btn = document.getElementById('btn-auto-set');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<svg class="w-4 h-4 animate-spin text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Memproses...`;
+            btn.disabled = true;
+            showToast("⏳ AI sedang menganalisis dan menyetel otomatis...");
 
             try {
-                let slides = parseInt(document.getElementById('set-slide-count').value);
-                if(isNaN(slides) || slides < 2) slides = 7;
-                
-                const fwText = getSettingValue('set-copywriting') === 'Auto-Set by AI' ? 'AIDA' : getSettingValue('set-copywriting');
-                const hookInstruction = getSettingValue('set-hook');
-                const appliedLang = getSettingValue('set-language-style');
-                const style = getSettingValue('set-style');
-                const rawPalette = getSettingValue('set-palette');
-                const ratio = getSettingValue('set-ratio');
+                const promptText = `Anda adalah Ahli Strategi Konten & Prompt Engineer.
+Berdasarkan Topik: "${topic}"
+Dan Instruksi Tambahan: "${instructions}"
 
-                // FULL AUTO-GENERATE VIA GEMINI AI
-                const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter.
-SAYA MEMBERIKAN ANDA TOPIK DAN INSTRUKSI BERIKUT:
-Topik: "${topic}"
-Instruksi Tambahan: "${instructions}"
-
-TUGAS ANDA:
-1. Pahami secara mendalam seluruh parameter, gaya, komposisi, rasio, karakter, dll dari input di atas.
-2. Buatkan pemetaan spesifik untuk form di UI saya (kembalikan JSON).
-3. PENTING: Jika instruksi dari saya sangat rinci (misalnya meminta karakter "pria berambut perm belah tengah...", warna "monokrom...", rasio "9:16", dsb), ANDA WAJIB MENYALIN UTUH TEKS INSTRUKSI SAYA TERSEBUT dan memasukkannya ke properti yang relevan di skema JSON.`;
+Tugas Anda HANYA memprediksi dan memberikan nilai yang paling cocok untuk SEMUA fitur pengaturan aplikasi.
+PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut spesifik font Anton, karakter tertentu, atau username khusus), WAJIB salin teks instruksi tersebut utuh tanpa diringkas. Jika tidak ada arahan eksplisit, gunakan kreativitas AI (Auto-Set).`;
 
                 const schemaProps = {
-                    "jumlah_slide": { "type": "STRING", "description": "Angka saja, misal 7" },
-                    "aspect_ratio": { "type": "STRING", "description": "Misal 3:4, 16:9, 1:1, atau nilai spesifik dari input" },
+                    "jumlah_slide": { "type": "INTEGER" },
+                    "aspect_ratio": { "type": "STRING" },
                     "copywriting_framework": { "type": "STRING" },
                     "hook_type": { "type": "STRING" },
                     "language_style": { "type": "STRING" },
                     "art_style": { "type": "STRING" },
                     "color_palette": { "type": "STRING" },
                     "composition": { "type": "STRING" },
-                    "character": { "type": "STRING", "description": "Contoh: Pria Dewasa, Wanita, KUSTOM, atau deskripsi panjang dari input" },
-                    "character_face": { "type": "STRING" },
-                    "character_headwear": { "type": "STRING" },
-                    "character_outfit": { "type": "STRING" },
-                    "character_accessories": { "type": "STRING" },
-                    "negative_prompt": { "type": "STRING", "description": "Tambahkan aturan strict no eyes jika diminta" },
+                    "character": { "type": "STRING" },
+                    "negative_prompt": { "type": "STRING" },
                     "font_header": { "type": "STRING" },
                     "effect_header": { "type": "STRING" },
-                    "pt_header": { "type": "STRING" },
+                    "pt_header": { "type": "INTEGER" },
                     "font_body": { "type": "STRING" },
                     "effect_body": { "type": "STRING" },
-                    "pt_body": { "type": "STRING" },
+                    "pt_body": { "type": "INTEGER" },
                     "body_format": { "type": "STRING" },
                     "alignment": { "type": "STRING" },
                     "patch_footer": { "type": "STRING" },
-                    "pt_footer": { "type": "STRING" },
+                    "pt_footer": { "type": "INTEGER" },
                     "watermark_logos": { "type": "STRING" },
-                    "watermark_username": { "type": "STRING" }
+                    "watermark_username": { "type": "STRING" },
+                    "logo_url": { "type": "STRING", "description": "Ekstrak URL logo/gambar jika user menyediakannya" },
+                    "logo_position": { "type": "STRING", "description": "Ekstrak posisi peletakan logo (kiri atas, dll)" }
                 };
 
                 const result = await callGeminiAPI(promptText, schemaProps);
                 if (result && result.length > 0) {
                     const config = result[0];
                     
-                    if(config.jumlah_slide) document.getElementById('set-slide-count').value = config.jumlah_slide.replace(/[^0-9]/g, '') || 7;
-                    
-                    applySmartSetting('set-ratio', config.aspect_ratio);
-                    applySmartSetting('set-copywriting', config.copywriting_framework);
-                    applySmartSetting('set-hook', config.hook_type);
-                    applySmartSetting('set-language-style', config.language_style);
-                    
-                    applySmartSetting('set-style', config.art_style);
-                    applySmartSetting('set-palette', config.color_palette);
-                    applySmartSetting('set-composition', config.composition);
-                    
-                    applySmartSetting('set-character', config.character);
-                    
-                    setTimeout(() => {
-                        if (config.character_face) applySmartSetting('char-face', config.character_face);
-                        if (config.character_headwear) applySmartSetting('char-headwear', config.character_headwear);
-                        if (config.character_outfit) applySmartSetting('char-outfit', config.character_outfit);
-                        if (config.character_accessories) applySmartSetting('char-accessories', config.character_accessories);
-                    }, 100);
+                    const mapString = {
+                        'set-ratio': config.aspect_ratio,
+                        'set-copywriting': config.copywriting_framework,
+                        'set-hook': config.hook_type,
+                        'set-language-style': config.language_style,
+                        'set-style': config.art_style,
+                        'set-palette': config.color_palette,
+                        'set-composition': config.composition,
+                        'set-character': config.character,
+                        'set-font-header': config.font_header,
+                        'set-texteffect-header': config.effect_header,
+                        'set-font-body': config.font_body,
+                        'set-texteffect-body': config.effect_body,
+                        'set-bodyformat': config.body_format,
+                        'set-alignment': config.alignment,
+                        'set-patch-footer': config.patch_footer,
+                        'set-watermark-pos': config.logo_position
+                    };
+
+                    for (const [id, val] of Object.entries(mapString)) {
+                        if (val) applySmartSetting(id, val);
+                    }
 
                     if (config.negative_prompt) document.getElementById('set-negative-prompt').value = config.negative_prompt;
-                    
-                    applySmartSetting('set-font-header', config.font_header);
-                    applySmartSetting('set-texteffect-header', config.effect_header);
-                    if (config.pt_header) document.getElementById('set-pt-header').value = config.pt_header.replace(/[^0-9]/g, '');
-                    
-                    applySmartSetting('set-font-body', config.font_body);
-                    applySmartSetting('set-texteffect-body', config.effect_body);
-                    if (config.pt_body) document.getElementById('set-pt-body').value = config.pt_body.replace(/[^0-9]/g, '');
-                    
-                    applySmartSetting('set-bodyformat', config.body_format);
-                    applySmartSetting('set-alignment', config.alignment);
-                    
-                    applySmartSetting('set-patch-footer', config.patch_footer);
-                    if (config.pt_footer) document.getElementById('set-pt-footer').value = config.pt_footer.replace(/[^0-9]/g, '');
-                    
+                    if (config.jumlah_slide) document.getElementById('set-slide-count').value = String(config.jumlah_slide).replace(/[^0-9]/g, '');
+                    if (config.pt_header) document.getElementById('set-pt-header').value = String(config.pt_header).replace(/[^0-9]/g, '');
+                    if (config.pt_body) document.getElementById('set-pt-body').value = String(config.pt_body).replace(/[^0-9]/g, '');
+                    if (config.pt_footer) document.getElementById('set-pt-footer').value = String(config.pt_footer).replace(/[^0-9]/g, '');
                     if (config.watermark_logos) document.getElementById('set-watermark-logos').value = config.watermark_logos;
                     if (config.watermark_username) document.getElementById('set-watermark-username').value = config.watermark_username;
-                    
+                    if (config.logo_url) document.getElementById('set-watermark-url').value = config.logo_url;
+
+                    handleCharacterChange(document.getElementById('set-character'));
                     showToast("✅ AI Auto-Set Berhasil!");
-                    
-                    const setContent = document.getElementById('setting-content');
-                    if (setContent && !setContent.classList.contains('open')) {
-                        toggleAccordion('setting-content', 'setting-icon');
-                    }
                 }
             } catch (error) {
                 console.error(error);
@@ -1064,12 +1127,67 @@ TUGAS ANDA:
             }
         }
 
-        async function callGeminiAPI(prompt, schemaProperties, retries = 3) {
+        async function autoSetSingle(btn, elementId, schemaKey, schemaType, description) {
+            const topic = document.getElementById('input-topic').value.trim();
+            const instructions = document.getElementById('input-instructions').value.trim();
+            
+            if (!topic && !instructions) {
+                showToast("Harap isi Topik atau Instruksi pada Kartu Input terlebih dahulu!");
+                return;
+            }
+
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<svg class="w-4 h-4 animate-spin text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`;
+            btn.disabled = true;
+
+            try {
+                const promptText = `Anda adalah Ahli Strategi Konten.
+Berdasarkan Topik: "${topic}"
+Dan Instruksi Tambahan: "${instructions}"
+
+Tugas Anda HANYA memprediksi/memberikan SETUJU nilai yang paling cocok untuk SATU fitur pengaturan berikut: "${schemaKey}".
+PENTING:
+- JIKA instruksi user secara spesifik menyebutkan nilai untuk fitur ini, WAJIB salin teks tersebut utuh ke dalam nilai (jangan diringkas).
+- JIKA tidak ada arahan spesifik, gunakan kreativitas AI Anda yang paling relevan dengan konteks.`;
+
+                const schemaProps = {
+                    [schemaKey]: { "type": schemaType, "description": description }
+                };
+
+                const result = await callGeminiAPI(promptText, schemaProps);
+                if (result && result.length > 0) {
+                    const aiValue = result[0][schemaKey];
+                    if (aiValue !== undefined && aiValue !== null) {
+                        if (elementId === 'set-negative-prompt' || elementId === 'set-watermark-url' || elementId === 'set-watermark-username' || elementId === 'set-watermark-logos') {
+                            document.getElementById(elementId).value = aiValue;
+                        } else if (['set-slide-count', 'set-pt-header', 'set-pt-body', 'set-pt-footer'].includes(elementId)) {
+                            document.getElementById(elementId).value = String(aiValue).replace(/[^0-9]/g, '');
+                        } else {
+                            applySmartSetting(elementId, aiValue);
+                            if (elementId === 'set-character') handleCharacterChange(document.getElementById('set-character'));
+                        }
+                        showToast(`✅ Opsi berhasil di-set AI!`);
+                    }
+                }
+            } catch (error) {
+                console.error(error);
+                showToast("❌ Gagal: " + error.message);
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        async function callGeminiAPI(prompt, schemaProperties) {
             const apiKeyInput = document.getElementById('gemini-api-key').value.trim();
+            
             if (apiKeyInput) {
                 localStorage.setItem('imapro_gemini_key', apiKeyInput);
             }
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKeyInput}`;
+
+            // WAJIB menggunakan gemini-3-flash-preview agar Canvas otomatis menyuntikkan API Key gratis
+            const apiKey = apiKeyInput || "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
             const payload = {
                 contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -1085,40 +1203,24 @@ TUGAS ANDA:
                 }
             };
 
-            let delay = 1000;
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    const result = await response.json();
-                    
-                    if (result.error) {
-                        if (result.error.code === 429 && i < retries - 1) {
-                            await new Promise(res => setTimeout(res, delay));
-                            delay *= 2;
-                            continue;
-                        }
-                        throw new Error(result.error.message || "Gagal dari API Gemini.");
-                    }
-
-                    if (result.candidates && result.candidates.length > 0) {
-                        let jsonText = result.candidates[0].content.parts[0].text;
-                        jsonText = jsonText.replace(/^```json/im, '').replace(/^```/im, '').trim();
-                        if(jsonText.endsWith('```')) {
-                            jsonText = jsonText.slice(0, -3).trim();
-                        }
-                        return JSON.parse(jsonText);
-                    }
-                    throw new Error("Gagal mendapatkan respons valid dari AI LLM.");
-                } catch (error) {
-                    if (i === retries - 1) throw error;
-                    await new Promise(res => setTimeout(res, delay));
-                    delay *= 2;
-                }
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            const result = await response.json();
+            
+            if (result.error) {
+                throw new Error(result.error.message || "Gagal dari API Gemini.");
             }
+
+            if (result.candidates && result.candidates.length > 0) {
+                let text = result.candidates[0].content.parts[0].text;
+                text = text.replace(/^```json\n?/im, '').replace(/```$/im, '');
+                return JSON.parse(text);
+            }
+            throw new Error("Gagal mendapatkan respons valid dari AI LLM.");
         }
 
         // --- GENERATION ENGINE ---
@@ -1127,11 +1229,11 @@ TUGAS ANDA:
             const instructions = document.getElementById('input-instructions').value.trim();
             
             if (!topic) {
-                showToast("❌ Harap isi topik atau materi pada Kartu Input.");
+                showToast("Harap isi topik atau materi pada Kartu Input.");
                 return;
             }
 
-            currentTopicTemp = topic;
+            currentTopicTemp = topic.length > 55 ? topic.substring(0, 55) + "..." : topic;
             currentOutputBlocks = []; 
             
             const container = document.getElementById('output-container');
@@ -1158,14 +1260,11 @@ TUGAS ANDA:
 
         function createOutputBlockHTML(index, title, content, isFirst) {
             const id = `out-blk-${Date.now()}-${index}`;
-            const openClass = '';
-            const iconRotate = '';
-            
             return `
                 <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-white dark:bg-ios-darkPanel mb-5 shadow-sm">
                     <div class="flex justify-between items-center bg-[#F9F9FB] dark:bg-[#1C1C1E] px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder">
                         <button onclick="toggleAccordion('${id}-content', '${id}-icon')" class="flex-grow flex items-center gap-3 text-left font-bold text-sm tracking-wide">
-                            <svg id="${id}-icon" class="w-4 h-4 text-gray-400 transition-transform ${iconRotate}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            <svg id="${id}-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             ${title}
                         </button>
                         <div class="flex gap-2">
@@ -1173,7 +1272,7 @@ TUGAS ANDA:
                             <button onclick="saveBlock(${index})" class="px-4 py-2 text-xs font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors">Save</button>
                         </div>
                     </div>
-                    <div id="${id}-content" class="accordion-content ${openClass} px-5 py-0">
+                    <div id="${id}-content" class="accordion-content px-5 py-0">
                         <div class="py-5 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">${content}</div>
                     </div>
                 </div>
@@ -1215,6 +1314,26 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             let slides = parseInt(document.getElementById('set-slide-count').value);
             if(isNaN(slides) || slides < 2) slides = 2; 
 
+            let customSlides = [];
+            const slideCheckRegex = /slide\s*\d+/i;
+            if (slideCheckRegex.test(topic)) {
+                const slideSplitRegex = /(?=(?:^|\n)\s*\[?#?\s*slide\s*\d+\]?)/i;
+                const parts = topic.split(slideSplitRegex);
+                parts.forEach(p => {
+                    const cleanPart = p.trim();
+                    if (/^\[?#?\s*slide\s*\d+\]?/i.test(cleanPart)) {
+                        customSlides.push(cleanPart.replace(/^\[?#?\s*slide\s*\d+\]?[\s:\-\.]*/i, '').trim());
+                    } else if (customSlides.length === 0 && cleanPart) {
+                        instructions = (instructions ? instructions + "\n" : "") + "Info tambahan: " + cleanPart;
+                    }
+                });
+            }
+            
+            const isCustomScript = customSlides.length > 0;
+            if (isCustomScript) {
+                slides = customSlides.length;
+            }
+            
             const style = getSettingValue('set-style');
             const fontHeader = getSettingValue('set-font-header');
             const effectHeader = getSettingValue('set-texteffect-header');
@@ -1242,6 +1361,9 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             const rawLogos = document.getElementById('set-watermark-logos').value || 'Instagram, Threads';
             const wtLogos = rawLogos.split(',').map(l => `[minimalist monochrome vector ${l.trim().toLowerCase()} logo icon]`).join(' ');
             const wtUser = document.getElementById('set-watermark-username').value || '@username';
+
+            const rawLogoUrl = document.getElementById('set-watermark-url').value.trim();
+            const rawLogoPos = getSettingValue('set-watermark-pos');
             
             const charDetails = getCharacterDetailsString();
 
@@ -1250,41 +1372,24 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             
             let hookInstruction = "";
             if (hookType !== 'Auto-Set by AI' && hookType !== 'KUSTOM' && hookType) {
-                hookInstruction = `Terapkan tipe Hook: ${hookType}. (${hookDetails[hookType] || 'Pancing penasaran'}).`;
+                hookInstruction = `Terapkan tipe Hook: ${hookType}. Pancing penasaran.`;
             } else if (hookType === 'KUSTOM') {
                 hookInstruction = `Terapkan arahan hook custom ini: ${document.getElementById('set-hook-custom').value}`;
             }
 
             let slidesData = [];
-            let customSlides = [];
-            const slideCheckRegex = /slide\s*\d+/i;
-            if (slideCheckRegex.test(topic)) {
-                const slideSplitRegex = /(?=(?:^|\n)\s*\[?#?\s*slide\s*\d+\]?)/i;
-                const parts = topic.split(slideSplitRegex);
-                parts.forEach(p => {
-                    const cleanPart = p.trim();
-                    if (/^\[?#?\s*slide\s*\d+\]?/i.test(cleanPart)) {
-                        customSlides.push(cleanPart.replace(/^\[?#?\s*slide\s*\d+\]?[\s:\-\.]*/i, '').trim());
-                    } else if (customSlides.length === 0 && cleanPart) {
-                        instructions = (instructions ? instructions + "\n" : "") + "Info tambahan: " + cleanPart;
-                    }
-                });
-            }
-            
-            const isCustomScript = customSlides.length > 0;
+
             if (isCustomScript) {
-                // MANUAL PARSING
                 for (let i = 0; i < slides; i++) {
                     slidesData.push({
                         slide_number: i + 1,
                         header: "",
                         body: customSlides[i], 
-                        image_prompt: `[Prompt komprehensif bahasa Inggris untuk AI Image Generator. Masterpiece, highly detailed, faceless no eyes, jika ada binatang pastikan closed eyes, gunakan palet ${rawPalette}. Seamless floating text concept.]`
+                        image_prompt: `[Prompt mendetail bahasa Inggris. Masterpiece, highly detailed, gunakan palet ${rawPalette}. Seamless floating text concept.]`
                     });
                 }
             } else {
-                // FULL AUTO-GENERATE VIA GEMINI AI
-                const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter (Midjourney/DALL-E).
+                const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter.
 Buatkan naskah spesifik untuk carousel Instagram sebanyak tepat ${slides} slide.
 Topik: "${topic}"
 Instruksi Tambahan: "${instructions}"
@@ -1292,23 +1397,22 @@ Alur Copywriting: ${fwText}
 Arahan Khusus Slide 1: ${hookInstruction}
 
 ATURAN NASKAH TEKS KETAT:
-1. Gaya bahasa: ${appliedLang}. Sesuaikan seluruh pemilihan kata, frasa, dan nada bicara dengan gaya bahasa ini!
+1. Gaya bahasa: ${appliedLang}.
 2. Gunakan Sentence case. Jangan gunakan AUTO CAPITALIZE pada Header atau Body.
-3. SLIDE 1 (HOOK): WAJIB berupa 1 kalimat singkat menohok memancing emosi (sebagai 'header'). Isian 'body' di slide 1 HARUS berupa string kosong atau maksimal 1 kalimat amat pendek. DILARANG Keras menulis paragraf panjang di Slide 1.
-4. SLIDE 2 s.d ${slides - 1}: Pecah materi secara lega, maksimal 2 kalimat per slide. DILARANG KERAS menyertakan istilah/label teknis (seperti "Attention", "Interest", "Problem") ke dalam naskah!
-5. SLIDE TERAKHIR (Slide ${slides}): Wajib berisi kalimat penutup dan CTA (FLKS: Follow, Like, Komen, Share, Save) yang disesuaikan secara natural, bukan kaku.
+3. SLIDE 1 (HOOK): WAJIB berupa 1 kalimat singkat menohok. Isian 'body' di slide 1 HARUS KOSONG (String kosong). DILARANG menulis paragraf panjang di Slide 1.
+4. SLIDE 2 s.d ${slides - 1}: Pecah materi secara lega, maksimal 2 kalimat per slide. DILARANG memasukkan label teknis seperti "Attention", "Interest", dll.
+5. SLIDE TERAKHIR (Slide ${slides}): Wajib berisi kalimat penutup dan CTA (Follow, Like, Komen, Share, Save) secara natural.
 
 ATURAN IMAGE PROMPT:
 1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci.
 2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. SETIAP prompt WAJIB diakhiri dengan instruksi absolut ini: "Faceless no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."
-4. JIKA ADA BINATANG APAPUN (Misal: Kuda, Unta, Gajah, Burung, dll), WAJIB tambahkan deskripsi "with closed eyes" (mata tertutup) pada binatang tersebut di dalam prompt bahasa Inggris.`;
+3. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Completely blank face area for all creatures, faceless no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
 
                 const schemaProps = {
                     "slide_number": { "type": "INTEGER" },
                     "image_prompt": { "type": "STRING", "description": "Prompt gambar AI bahasa inggris mendetail" },
-                    "header": { "type": "STRING", "description": "Judul/Teks utama tebal (Sentence case, BUKAN ALL CAPS)" },
-                    "body": { "type": "STRING", "description": "Teks penjelasan kecil (Kosongkan/Sangat ringkas untuk slide 1)" }
+                    "header": { "type": "STRING", "description": "Judul/Teks utama tebal (Sentence case)" },
+                    "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
                 };
 
                 slidesData = await callGeminiAPI(promptText, schemaProps);
@@ -1316,13 +1420,18 @@ ATURAN IMAGE PROMPT:
             }
 
             let html = "";
-            const shortTopicForConfig = topic.length > 150 ? topic.substring(0, 150).replace(/\n/g, ' ') + '...' : topic.replace(/\n/g, ' ');
-            const materiKonten = isCustomScript ? "Naskah Kustom (Ikuti Ketat)" : shortTopicForConfig.toUpperCase();
+            const materiKonten = isCustomScript ? "Naskah Kustom" : (topic.length > 30 ? topic.substring(0,30)+"..." : topic).toUpperCase();
 
-            // --- SLIDE 1 (HOOK & GLOBAL CONFIG) ---
+            // --- SLIDE 1 ---
             const s1Data = slidesData[0];
             const s1Title = `[Kartu 1] - Global Config & Slide 1 (Visual Hook)`;
             
+            let urlLogoBlock = "";
+            if (rawLogoUrl && rawLogoUrl !== "") {
+                const pos = (rawLogoPos && rawLogoPos !== "Auto-Set by AI") ? rawLogoPos : "Pojok Kiri Atas";
+                urlLogoBlock = `[IMPORTANT WATERMARK URL LOGO PLACEHOLDER: Render a minimalist flat silhouette or geometric brand mark representing the logo found at ${rawLogoUrl} precisely at the ${pos.toUpperCase()} margin of the canvas] `;
+            }
+
             let s1Naskah = "";
             if (isCustomScript) {
                 s1Naskah = `* NASKAH (CUSTOM SCRIPT DIMASUKKAN USER):\n\t${s1Data.body.replace(/\n/g, '\n\t')}\n\t* FOOTER: ${wtLogos} ${wtUser} | 1/${slides}`;
@@ -1339,25 +1448,26 @@ ATURAN IMAGE PROMPT:
 * KOMPOSISI: ${comp}
 * ALUR COPYWRITING: ${fwText}
 * GAYA BAHASA: ${appliedLang}
-* TYPOGRAPHY SETTINGS
+* TYPOGRAPHY SETTINGS (APPLIES TO ALL SLIDES)
 \t* HEADER: Font ${fontHeader} | Efek: ${effectHeader} | Ukuran: ${ptHead}pt
 \t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Align: ${alignment} | Format: ${bodyFmt}
 \t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt
 * PALET WARNA (STRICT): ${paletteExpanded}
 * NEGATIVE PROMPT: ${negativePrompt}
 * STRICT TEXT RULES (ATURAN MUTLAK KANVAS):
-\t1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework (seperti "Attention", "Interest", "Problem", dll) ke dalam gambar visual. Render murni naskah teks edukasinya saja.
-\t2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box padat, pita nama, papan kertas robek, atau blok frame kaku di belakang teks.
+\t1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework.
+\t2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box kaku.
 \t3. BREATHABLE LAYOUT: Area teks tidak boleh terasa sempit. Pecah line teks agar lega.
-\t4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%. DILARANG menambahkan border pinggiran gambar/ frame list foto.
-\t5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi (Atas, Bawah, Kiri, Kanan) KHUSUS untuk teks. JANGAN JADIKAN RUANG INI SEBAGAI BORDER VISUAL.
-\t6. STRICT ANIMAL RULE: JIKA MENGGAMBARKAN BINATANG/HEWAN APAPUN, MAKA BINATANG TERSEBUT WAJIB MENUTUP MATANYA (CLOSED EYES/ SLEEPING).
+\t4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%.
+\t5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi KHUSUS untuk teks.
+${strictSyariatRule}
 ${charDetails}
 
 [SLIDE 1] (VISUAL HOOK AWAL)
 * SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
-* STRICT RULE SLIDE 1: DILARANG KERAS MEMBUAT TEKS PARAGRAF BODY. SLIDE 1 ADALAH COVER HOOK. HANYA RENDER TEKS DARI BAGIAN HEADER/SUB-HEADER SAJA DENGAN FONT BESAR.
-* GEN AI PROMPT (VISUAL): ${s1Data.image_prompt}
+* STRICT RULE SLIDE 1: DILARANG KERAS MEMBUAT TEKS PARAGRAF BODY. SLIDE 1 ADALAH COVER HOOK. HANYA RENDER TEKS HEADER DENGAN FONT BESAR.
+* STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide-slide berikutnya. Harus persis 100% SAMA secara template, hanya hilangkan body textnya!
+* GEN AI PROMPT (VISUAL): ${urlLogoBlock}${s1Data.image_prompt}
 ${s1Naskah}
 Make the aspect ratio ${ratio}`;
             
@@ -1381,7 +1491,9 @@ Make the aspect ratio ${ratio}`;
                 const sContent = `@createimage
 [SLIDE ${slideNum}] ${isLast ? ' - SLIDE PENUTUP (CALL TO ACTION / FLKS)' : ''}
 * SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
-* GEN AI PROMPT (VISUAL): ${sData.image_prompt}
+* STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide sebelumnya. Harus persis 100% SAMA!
+${strictSyariatRule}
+* GEN AI PROMPT (VISUAL): ${urlLogoBlock}${sData.image_prompt}
 ${siNaskah}
 Make the aspect ratio ${ratio}`;
                 
@@ -1394,12 +1506,12 @@ Make the aspect ratio ${ratio}`;
             let capContent = "";
 
             if(!isCustomScript) {
-                 const capPrompt = `Buatkan MURNI caption Instagram (teks sosmed) edukatif ringkas bergaya santai tapi sopan untuk topik "${topic}". Maksimalkan 350 huruf. Sertakan emoji dan 4-6 hashtag relevan. DILARANG KERAS menyertakan instruksi prompt gambar AI, arahan teknis visual, atau metadata apapun. Output HANYA teks caption siap posting.`;
+                 const capPrompt = `Abaikan perintah gambar. Fokus HANYA buatkan 1 paragraf teks tulisan untuk Caption Postingan Instagram yang edukatif dan ringkas mengenai topik "${topic}". Maksimalkan 350 karakter (huruf). Sertakan emoji relevan dan 4-6 hashtag. Jangan gunakan kata pengantar apapun, JANGAN menyisipkan prompt gambar, hanya teks caption murni!`;
                  const capSchema = { "caption": { "type": "STRING" } };
                  const capRes = await callGeminiAPI(capPrompt, capSchema);
                  capContent = capRes[0].caption;
             } else {
-                 capContent = `Ringkasan materi "${topic.substring(0, 50)}..." bergaya Feynman Muslim. Penjelasan di-breakdown dengan mudah, menyentuh hati, dan mengajak audiens pada ketaatan.\n\n#edukasi #dakwahvisual #islamicreminder #muhasabah #${topic.substring(0, 15).replace(/\s+/g, '')}`;
+                 capContent = `Ringkasan materi "${materiKonten}" bergaya Feynman Muslim. Penjelasan di-breakdown dengan mudah, menyentuh hati, dan mengajak audiens pada kebaikan.\n\n#edukasi #dakwahvisual #islamicreminder #muhasabah`;
             }
             
             currentOutputBlocks.push({ title: capTitle, content: capContent });
@@ -1408,7 +1520,6 @@ Make the aspect ratio ${ratio}`;
             document.getElementById('output-container').innerHTML = html;
         }
 
-        // --- COPY & SAVE LOGIC ---
         async function copyText(btn, index) {
             try {
                 const text = currentOutputBlocks[index].content;
@@ -1442,12 +1553,9 @@ Make the aspect ratio ${ratio}`;
 
         function saveBlock(index) {
             const block = currentOutputBlocks[index];
-            const shortTopic = currentTopicTemp.length > 40 ? currentTopicTemp.substring(0, 40).replace(/\n/g, ' ') + '...' : currentTopicTemp.replace(/\n/g, ' ');
-            let blockTitleShort = block.title.length > 30 ? block.title.substring(0, 30) + '...' : block.title;
-            
             const bundle = {
                 id: Date.now(),
-                title: `Single Save: ${blockTitleShort} - ${shortTopic}`,
+                title: `Single Save: ${block.title} - ${currentTopicTemp}`,
                 blocks: [{ ...block, image: null }]
             };
             savedData[currentMode].push(bundle);
@@ -1459,11 +1567,9 @@ Make the aspect ratio ${ratio}`;
         function saveAllBlocks() {
             if (currentOutputBlocks.length === 0) return;
             
-            const shortTopic = currentTopicTemp.length > 60 ? currentTopicTemp.substring(0, 60).replace(/\n/g, ' ') + '...' : currentTopicTemp.replace(/\n/g, ' ');
-            
             const bundle = {
                 id: Date.now(),
-                title: `${shortTopic || 'Untitled'} (${currentOutputBlocks.length} Blocks)`,
+                title: `${currentTopicTemp || 'Untitled'} (${currentOutputBlocks.length} Blocks)`,
                 blocks: currentOutputBlocks.map(b => ({ ...b, image: null }))
             };
             
@@ -1592,11 +1698,12 @@ Make the aspect ratio ${ratio}`;
         }
 
         function deleteGroup(bIdx) {
-            // Hilangkan fungsi confirm() karena diblokir oleh iframe
-            savedData[currentSavedTab].splice(bIdx, 1);
-            saveToLocal();
-            renderSaved();
-            showToast("Group Deleted");
+            if(confirm("Yakin ingin menghapus grup ini?")) {
+                savedData[currentSavedTab].splice(bIdx, 1);
+                saveToLocal();
+                renderSaved();
+                showToast("Group Deleted");
+            }
         }
 
         function enableEdit(elementId, bIdx, i) {
@@ -1659,10 +1766,10 @@ Make the aspect ratio ${ratio}`;
                             renderSaved();
                             showToast("Data Berhasil Diimpor & Digabungkan!");
                         } else {
-                            showToast("❌ Format JSON tidak valid untuk imapro.");
+                            alert("Format JSON tidak valid untuk imapro.");
                         }
                     } catch(err) {
-                        showToast("❌ Gagal membaca file JSON.");
+                        alert("Gagal membaca file JSON.");
                     }
                 };
                 reader.readAsText(input.files[0]);
