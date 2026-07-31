@@ -190,7 +190,7 @@
                 <div class="py-6">
                     <!-- Actions -->
                     <div class="flex justify-between items-center mb-2">
-                        <button onclick="window.open('https://share.gemini.google/pnFLDEtAGbpz', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/kp51obrFDbtY', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
@@ -207,8 +207,24 @@
                         </div>
                     </div>
                     
-                    <!-- SECTION 1: PENGATURAN UMUM -->
-                    <div class="setting-section-title">I. Pengaturan Umum & Copywriting</div>
+                    <!-- SECTION 1: ART STYLE (ANCHOR VISUAL) -->
+                    <div class="setting-section-title text-[#007AFF]">I. Gaya Seni (Wajib Dipilih Pertama)</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Nama File Logo (Upload di ChatGPT)</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-logo-filename', 'logo_filename', 'STRING', 'Nama file logo, misal: logo.png')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="set-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
+                                <input type="text" id="set-style-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik gaya...">
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Tentukan gaya seni terlebih dahulu atau gunakan ⚡(Auto-Set Individu) agar Global Auto-Set dapat meracik font & warna yang harmonis.</p>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: PENGATURAN UMUM -->
+                    <div class="setting-section-title">II. Pengaturan Umum & Copywriting</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
                         <div>
                             <div class="flex justify-between items-center mb-2">
@@ -297,19 +313,9 @@
                         </div>
                     </div>
 
-                    <!-- SECTION 2: VISUAL & ART STYLE -->
-                    <div class="setting-section-title">II. Visual & Art Style</div>
+                    <!-- SECTION 3: VISUAL LAINNYA & KARAKTER -->
+                    <div class="setting-section-title">III. Elemen Visual & Karakter</div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Seni / Art Style</label>
-                                <button type="button" onclick="autoSetSingle(this, 'set-style', 'art_style', 'STRING', 'Gaya visual spesifik')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
-                            </div>
-                            <div class="flex gap-2">
-                                <select id="set-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
-                                <input type="text" id="set-style-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik gaya...">
-                            </div>
-                        </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Palet Warna (Color DNA)</label>
@@ -372,14 +378,14 @@
                                 <button type="button" onclick="autoSetSingle(this, 'set-negative-prompt', 'negative_prompt', 'STRING', 'Hal yang dihindari di gambar')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                             </div>
                             <div class="relative">
-                                <textarea id="set-negative-prompt" rows="3" class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
+                                <textarea id="set-negative-prompt" rows="3" class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">SEMUA BENTUK MATA, HIDUNG, MULUT PADA MANUSIA MAUPUN HEWAN/BINATANG/BONEKA. DILARANG ADA TITIK MATA, GARIS MATA, ATAU MATA TERPEJAM PADA HEWAN (ANJING, KUDA, KUCING, BURUNG DLL). RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
                                 <button onclick="document.getElementById('set-negative-prompt').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- SECTION 3: TIPOGRAFI HEADER -->
-                    <div class="setting-section-title">III. Tipografi Header (Judul)</div>
+                    <!-- SECTION 4: TIPOGRAFI HEADER -->
+                    <div class="setting-section-title">IV. Tipografi Header (Judul)</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
                         <div>
                             <div class="flex justify-between items-center mb-2">
@@ -420,8 +426,8 @@
                         </div>
                     </div>
 
-                    <!-- SECTION 4: TIPOGRAFI BODY -->
-                    <div class="setting-section-title">IV. Tipografi Body (Teks Utama)</div>
+                    <!-- SECTION 5: TIPOGRAFI BODY -->
+                    <div class="setting-section-title">V. Tipografi Body (Teks Utama)</div>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
                         <div>
                             <div class="flex justify-between items-center mb-2">
@@ -489,9 +495,9 @@
                         </div>
                     </div>
 
-                    <!-- SECTION 5: FOOTER & WATERMARK -->
-                    <div class="setting-section-title">V. Footer & Watermark</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                    <!-- SECTION 6: FOOTER & WATERMARK -->
+                    <div class="setting-section-title">VI. Footer, Watermark & Logo</div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Bentuk Patch Footer</label>
@@ -517,8 +523,25 @@
                             </div>
                             <input type="number" id="set-pt-footer" placeholder="Auto-Set atau angka (cth: 20)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                         </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Posisi Footer</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-footer-position', 'footer_position', 'STRING', 'Posisi letak footer di kanvas')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="set-footer-position" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="Tengah Bawah (Bottom Center)" selected>Tengah Bawah (Bottom Center)</option>
+                                    <option value="Kiri Bawah (Bottom Left)">Kiri Bawah (Bottom Left)</option>
+                                    <option value="Kanan Bawah (Bottom Right)">Kanan Bawah (Bottom Right)</option>
+                                    <option value="Tengah Atas (Top Center)">Tengah Atas (Top Center)</option>
+                                </select>
+                                <input type="text" id="set-footer-position-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi footer...">
+                            </div>
+                        </div>
                         
-                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                             <div>
                                 <div class="flex justify-between items-center mb-2">
                                     <label class="block text-gray-700 dark:text-gray-300 font-bold">Logo (Teks/ Sosmed)</label>
@@ -788,8 +811,8 @@
         const strictSyariatRule = `
 * STRICT SYARIAT RULES (WAJIB DIIKUTI KETAT):
   1. WANITA: DILARANG KERAS menampakkan aurat. Yang boleh terlihat HANYA wajah dan telapak tangan. WAJIB menggunakan khimar (hijab lebar menutupi seluruh kepala, dada, hingga lutut) dan menutupi seluruh lengan. Dilarang keras menampakkan leher, rambut, atau betis. Dada wanita WAJIB tertutup rapat oleh khimar.
-  2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, hewan (kuda, unta, gajah, burung, ikan dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS.
-  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam (NO EYE LINES, NO EYE CURVES). Wajah harus "completely blank face area" (rata tanpa elemen mata sama sekali).`;
+  2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, hewan (kuda, unta, gajah, burung, anjing, kucing, dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS (BLANK FACE, TANPA MATA, TANPA HIDUNG, TANPA MULUT).
+  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam (NO EYE LINES, NO EYE CURVES) PADA MANUSIA MAUPUN HEWAN. Wajah harus "completely blank face area" (rata tanpa elemen wajah sama sekali).`;
 
         let currentMode = 'B'; 
         let currentSavedTab = 'B'; 
@@ -978,7 +1001,7 @@
         }
 
         function resetSettings() {
-            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-copywriting', 'set-hook', 'set-language-style'];
+            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-footer-position', 'set-copywriting', 'set-hook', 'set-language-style', 'set-logo-position'];
             selects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) { el.selectedIndex = 0; handleKustom(el); }
@@ -991,10 +1014,8 @@
             document.getElementById('set-watermark-logos').value = 'Instagram, Threads';
             document.getElementById('set-watermark-username').value = '';
             document.getElementById('set-logo-filename').value = '';
-            const logoPos = document.getElementById('set-logo-position');
-            if(logoPos) { logoPos.value = 'Tanpa File Logo'; handleKustom(logoPos); }
             
-            document.getElementById('set-negative-prompt').value = 'APA SAJA YANG BERKAITAN DENGAN MATA, BAIK ITU TITIK MATA, GARIS MATA, EKSPRESI MATA, BAIK ITU PADA MANUSIA, PADA HEWAN, PADA BINATANG, PADA BURUNG, PADA GAJAH, PADA UNTA, PADA BONEKA, PADA BONEKA BERUANG, PADA PATUNG, DLL. RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
+            document.getElementById('set-negative-prompt').value = 'SEMUA BENTUK MATA, HIDUNG, MULUT PADA MANUSIA MAUPUN HEWAN/BINATANG/BONEKA. DILARANG ADA TITIK MATA, GARIS MATA, ATAU MATA TERPEJAM PADA HEWAN (ANJING, KUDA, KUCING, BURUNG DLL). RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
             handleCharacterChange(document.getElementById('set-character'));
             showToast("Settings Reset");
         }
@@ -1043,19 +1064,47 @@
                 return;
             }
 
+            const currentArtStyle = getSettingValue('set-style');
+            if (currentArtStyle === 'Auto-Set by AI' || !currentArtStyle) {
+                showToast("❌ Silakan pilih atau Auto-Set 'Gaya Seni / Art Style' terlebih dahulu di Bagian I!");
+                
+                const styleSection = document.getElementById('set-style');
+                if(styleSection) styleSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
             const btn = document.getElementById('btn-auto-set');
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="w-4 h-4 animate-spin text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Memproses...`;
             btn.disabled = true;
-            showToast("⏳ AI sedang menganalisis dan menyetel otomatis...");
+            showToast("⏳ AI sedang meracik harmoni visual...");
 
             try {
-                const promptText = `Anda adalah Ahli Strategi Konten & Prompt Engineer.
+                const promptText = `Anda adalah Ahli Strategi Konten, Desainer Visual Senior, & Prompt Engineer.
 Berdasarkan Topik: "${topic}"
 Dan Instruksi Tambahan: "${instructions}"
 
-Tugas Anda HANYA memprediksi dan memberikan nilai yang paling cocok untuk SEMUA fitur pengaturan aplikasi.
-PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut spesifik font Anton, karakter tertentu, atau username khusus), WAJIB salin teks instruksi tersebut utuh tanpa diringkas. Jika tidak ada arahan eksplisit, gunakan kreativitas AI (Auto-Set).`;
+PERHATIAN UTAMA (ANCHOR VISUAL):
+User telah menetapkan dan mengunci Gaya Seni (Art Style) berikut: "${currentArtStyle}".
+
+Tugas Anda memprediksi dan memberikan nilai yang paling cocok untuk SEMUA fitur pengaturan aplikasi (KECUALI Art Style dan Pengaturan Identitas/Branding/Logo).
+ATURAN MUTLAK (MIX & MATCH ESTETIKA):
+1. HARMONI VISUAL: Semua pilihan (Font Header/Body, Efek Teks, Palet Warna, Patch Footer, Komposisi, dll) WAJIB matching, selaras, dan saling melengkapi dengan Art Style "${currentArtStyle}". Misalnya: Jika Art Style retro/vintage, pilih font dan palet vintage; jika 3D Papercraft, pilih font tebal/embossed; jika minimalis, pilih font clean/sans-serif.
+2. OVERRIDE INPUT USER: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal font Anton, karakter tertentu), WAJIB ikuti utuh tanpa diringkas. Jika tidak ada arahan spesifik, gunakan insting desain visual Anda untuk meracik setelan yang paling indah dan menyatu dengan Art Style tersebut.
+3. PRIORITAS KETAT OPSI BAWAAN: Anda WAJIB memprioritaskan penggunaan opsi-opsi yang sudah ada di sistem (berdasarkan referensi di bawah). HANYA JIKA opsi bawaan benar-benar tidak ada yang cocok dengan konteks topik dan Art Style, barulah Anda boleh menghasilkan nilai KUSTOM yang sama sekali baru.
+
+REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
+- Aspect Ratio: 1:1, 3:4, 4:5, 9:16, 16:9
+- Copywriting Framework: AIDA (Attention, Interest, Desire, Action), PAS (Problem, Agitate, Solve), BAB (Before, After, Bridge), 4P (Picture, Promise, Prove, Push), FAB (Features, Advantages, Benefits), Tanpa Framework
+- Tipe Hook (Slide 1): Shocking Statistic Hook, Emotional Story Hook, Provocative Question Hook, Curiosity-Inducing Hook, Solution-Oriented Hook, Controversial Opinion Hook, Exclusive Access Hook, How-To Guide Hook, Curated List Hook
+- Gaya Bahasa: Feynman Muslim (Edukasi Sederhana), Gen Z / Jaksel (Gaul, Santai, Kekinian), Formal & Akademis, Profesional & Bisnis, Storytelling Emosional, To the Point / Lugas
+- Komposisi: SEIMBANG (50:50), TEKS DOMINAN (60/40), VISUAL DOMINAN (40/60), MINIMALIS TEKS (30/70)
+- Karakter: Pria Dewasa, Wanita, Pasutri, Anak Laki-laki, Anak Perempuan, Tanpa Karakter
+- Efek Font Header/Body: FLAT (BAWAAN FONT), 3D EMBOSSED (TIMBUL), DEBOSSED (TENGGELAM), NEON GLOW (MENYALA), METALLIC FOIL (EMAS/ PERAK), CHALK/ TEXTURAL (KAPUR/ KASAR), WATERCOLOR BLEND (MENYATU AIR)
+- Format Body: DENGAN POINT-POINT, TANPA POINT-POINT
+- Alignment: RATA KIRI, RATA TENGAH, RATA KANAN
+- Patch Footer: Tanpa Patch (Teks Transparan), Pill Hollow Capsule, Kotak Minimalis, Rounded Rectangle, Pita/ Ribbon
+- Posisi Footer: Tengah Bawah (Bottom Center), Kiri Bawah (Bottom Left), Kanan Bawah (Bottom Right), Tengah Atas (Top Center)`;
 
                 const schemaProps = {
                     "jumlah_slide": { "type": "INTEGER" },
@@ -1063,11 +1112,10 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                     "copywriting_framework": { "type": "STRING" },
                     "hook_type": { "type": "STRING" },
                     "language_style": { "type": "STRING" },
-                    "art_style": { "type": "STRING" },
                     "color_palette": { "type": "STRING" },
                     "composition": { "type": "STRING" },
                     "character": { "type": "STRING" },
-                    "negative_prompt": { "type": "STRING" },
+                    "negative_prompt": { "type": "STRING", "description": "HANYA berikan kata-kata tambahan (seperti teks, watermark, lowres). DILARANG menulis ulang aturan wajah/mata." },
                     "font_header": { "type": "STRING" },
                     "effect_header": { "type": "STRING" },
                     "pt_header": { "type": "INTEGER" },
@@ -1077,11 +1125,8 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                     "body_format": { "type": "STRING" },
                     "alignment": { "type": "STRING" },
                     "patch_footer": { "type": "STRING" },
-                    "pt_footer": { "type": "INTEGER" },
-                    "watermark_logos": { "type": "STRING" },
-                    "watermark_username": { "type": "STRING" },
-                    "logo_filename": { "type": "STRING" },
-                    "logo_position": { "type": "STRING" }
+                    "footer_position": { "type": "STRING" },
+                    "pt_footer": { "type": "INTEGER" }
                 };
 
                 const result = await callGeminiAPI(promptText, schemaProps);
@@ -1093,7 +1138,6 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                         'set-copywriting': config.copywriting_framework,
                         'set-hook': config.hook_type,
                         'set-language-style': config.language_style,
-                        'set-style': config.art_style,
                         'set-palette': config.color_palette,
                         'set-composition': config.composition,
                         'set-character': config.character,
@@ -1104,21 +1148,23 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
                         'set-bodyformat': config.body_format,
                         'set-alignment': config.alignment,
                         'set-patch-footer': config.patch_footer,
-                        'set-logo-position': config.logo_position
+                        'set-footer-position': config.footer_position
                     };
 
                     for (const [id, val] of Object.entries(mapString)) {
                         if (val) applySmartSetting(id, val);
                     }
 
-                    if (config.negative_prompt) document.getElementById('set-negative-prompt').value = config.negative_prompt;
+                    if (config.negative_prompt) {
+                        const currentNeg = document.getElementById('set-negative-prompt').value;
+                        if (!currentNeg.toLowerCase().includes(config.negative_prompt.toLowerCase())) {
+                            document.getElementById('set-negative-prompt').value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + config.negative_prompt;
+                        }
+                    }
                     if (config.jumlah_slide) document.getElementById('set-slide-count').value = String(config.jumlah_slide).replace(/[^0-9]/g, '');
                     if (config.pt_header) document.getElementById('set-pt-header').value = String(config.pt_header).replace(/[^0-9]/g, '');
                     if (config.pt_body) document.getElementById('set-pt-body').value = String(config.pt_body).replace(/[^0-9]/g, '');
                     if (config.pt_footer) document.getElementById('set-pt-footer').value = String(config.pt_footer).replace(/[^0-9]/g, '');
-                    if (config.watermark_logos) document.getElementById('set-watermark-logos').value = config.watermark_logos;
-                    if (config.watermark_username) document.getElementById('set-watermark-username').value = config.watermark_username;
-                    if (config.logo_filename) document.getElementById('set-logo-filename').value = config.logo_filename;
 
                     handleCharacterChange(document.getElementById('set-character'));
                     showToast("✅ AI Auto-Set Berhasil!");
@@ -1144,18 +1190,33 @@ PENTING: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal menyebut 
             }
 
             const originalHtml = btn.innerHTML;
-            btn.innerHTML = `<svg class="w-4 h-4 animate-spin text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`;
+            btn.innerHTML = `<svg class="w-3 h-3 animate-spin text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`;
             btn.disabled = true;
 
             try {
-                const promptText = `Anda adalah Ahli Strategi Konten.
+                const currentArtStyle = document.getElementById('set-style') ? document.getElementById('set-style').value : 'Auto-Set by AI';
+                
+                let optionsListText = "";
+                const selectEl = document.getElementById(elementId);
+                if (selectEl && selectEl.options) {
+                    const opts = Array.from(selectEl.options)
+                                    .map(o => o.value)
+                                    .filter(v => v !== 'Auto-Set by AI' && v !== 'KUSTOM');
+                    if(opts.length > 0) {
+                        optionsListText = `\n\nREFERENSI OPSI BAWAAN SISTEM UNTUK FITUR INI:\n[ ${opts.join(' | ')} ]\n\nATURAN PRIORITAS KETAT: Anda WAJIB memprioritaskan untuk memilih persis salah satu dari opsi di atas yang paling MATCHING dengan Art Style / Topik. JIKA DAN HANYA JIKA tidak ada opsi yang cocok sama sekali, barulah Anda diizinkan melakukan override dengan menjawab nilai KUSTOM buatan Anda sendiri.`;
+                    }
+                }
+
+                const promptText = `Anda adalah Ahli Strategi Konten & Desainer Visual.
 Berdasarkan Topik: "${topic}"
 Dan Instruksi Tambahan: "${instructions}"
+(Sebagai informasi, "Gaya Seni / Art Style" yang saat ini aktif di sistem adalah: "${currentArtStyle}")
 
-Tugas Anda HANYA memprediksi/memberikan SETUJU nilai yang paling cocok untuk SATU fitur pengaturan berikut: "${schemaKey}".
+Tugas Anda HANYA memprediksi/memberikan nilai yang paling cocok untuk SATU fitur pengaturan berikut: "${schemaKey}".
 PENTING:
-- JIKA instruksi user secara spesifik menyebutkan nilai untuk fitur ini, WAJIB salin teks tersebut utuh ke dalam nilai (jangan diringkas).
-- JIKA tidak ada arahan spesifik, gunakan kreativitas AI Anda yang paling relevan dengan konteks.`;
+1. MIX & MATCH VISUAL: Nilai yang Anda hasilkan WAJIB selaras secara estetika (matching) dengan "Art Style" yang sedang aktif dan topik bahasan.
+2. JIKA instruksi user secara spesifik menyebutkan nilai untuk fitur ini, WAJIB salin teks tersebut utuh ke dalam nilai (jangan diringkas).
+3. KHUSUS NEGATIVE PROMPT: HANYA berikan kata kunci tambahan (misal: text, watermark, bad anatomy), JANGAN menyalin atau menghapus aturan default yang sudah ada.${optionsListText}`;
 
                 const schemaProps = {
                     [schemaKey]: { "type": schemaType, "description": description }
@@ -1165,7 +1226,12 @@ PENTING:
                 if (result && result.length > 0) {
                     const aiValue = result[0][schemaKey];
                     if (aiValue !== undefined && aiValue !== null) {
-                        if (elementId === 'set-negative-prompt' || elementId === 'set-watermark-username' || elementId === 'set-watermark-logos' || elementId === 'set-logo-filename') {
+                        if (elementId === 'set-negative-prompt') {
+                            const currentNeg = document.getElementById(elementId).value;
+                            if (!currentNeg.toLowerCase().includes(aiValue.toLowerCase())) {
+                                document.getElementById(elementId).value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + aiValue;
+                            }
+                        } else if (elementId === 'set-watermark-username' || elementId === 'set-watermark-logos' || elementId === 'set-logo-filename') {
                             document.getElementById(elementId).value = aiValue;
                         } else if (['set-slide-count', 'set-pt-header', 'set-pt-body', 'set-pt-footer'].includes(elementId)) {
                             document.getElementById(elementId).value = String(aiValue).replace(/[^0-9]/g, '');
@@ -1248,16 +1314,19 @@ PENTING:
                 <p class="text-sm font-bold text-gray-600 dark:text-gray-400 animate-pulse text-center">AI sedang meracik Copywriting & Visual Prompt secara spesifik...<br><span class="text-xs font-normal text-gray-400">Mohon tunggu beberapa detik.</span></p>
             </div>`;
             
+            const outContent = document.getElementById('output-wrapper');
+            if(outContent && !outContent.classList.contains('open')) {
+                toggleAccordion('output-wrapper', 'output-icon');
+                setTimeout(() => {
+                    outContent.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+            
             try {
                 if (currentMode === 'A') {
                     await generateModeA(topic, instructions);
                 } else {
                     await generateModeB(topic, instructions);
-                }
-                
-                const outContent = document.getElementById('output-wrapper');
-                if(outContent && !outContent.classList.contains('open')) {
-                    toggleAccordion('output-wrapper', 'output-icon');
                 }
             } catch(error) {
                 container.innerHTML = `<div class="p-8 text-center text-red-500 font-bold bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/30">Terjadi Kesalahan:<br><span class="font-normal text-sm">${error.message}</span></div>`;
@@ -1355,6 +1424,7 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             const paletteExpanded = getFullPaletteDetails(rawPalette);
             
             const patchFooter = getSettingValue('set-patch-footer');
+            const posFooter = getSettingValue('set-footer-position');
             const copyfw = getSettingValue('set-copywriting');
             const hookType = getSettingValue('set-hook');
             const langStyle = getSettingValue('set-language-style');
@@ -1417,7 +1487,8 @@ ATURAN NASKAH TEKS KETAT:
 ATURAN IMAGE PROMPT:
 1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci.
 2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Completely blank face area for all creatures, faceless no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang (anjing, kuda, unta, burung, kucing dll) atau boneka, Anda WAJIB mendeskripsikan secara eksplisit di dalam prompt bahasa Inggris bahwa hewan tersebut "faceless", "completely blank face", "no eyes and no facial features".
+4. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
 
                 const schemaProps = {
                     "slide_number": { "type": "INTEGER" },
@@ -1456,7 +1527,7 @@ ATURAN IMAGE PROMPT:
 * TYPOGRAPHY SETTINGS (APPLIES TO ALL SLIDES)
 \t* HEADER: Font ${fontHeader} | Efek: ${effectHeader} | Ukuran: ${ptHead}pt
 \t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Align: ${alignment} | Format: ${bodyFmt}
-\t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt
+\t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt | Posisi: ${posFooter}
 * PALET WARNA (STRICT): ${paletteExpanded}
 * NEGATIVE PROMPT: ${negativePrompt}${fileLogoInstruction}
 * STRICT TEXT RULES (ATURAN MUTLAK KANVAS):
