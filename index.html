@@ -247,14 +247,34 @@
             </button>
             <div id="input-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <!-- Using full width grids that expand on larger screens -->
-                <div class="py-6 grid grid-cols-1 xl:grid-cols-2 gap-4">
-                    <div class="relative w-full">
-                        <textarea id="input-topic" rows="5" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik topik, ide, atau paste naskah (Slide 1..., Slide 2...) di sini..."></textarea>
-                        <button onclick="document.getElementById('input-topic').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <div class="py-6 flex flex-col gap-4">
+                    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                        <div class="relative w-full">
+                            <textarea id="input-topic" rows="4" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik topik, ide, atau paste naskah (Slide 1..., Slide 2...) di sini..."></textarea>
+                            <button onclick="document.getElementById('input-topic').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
+                        <div class="relative w-full">
+                            <textarea id="input-instructions" rows="4" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik instruksi tambahan (opsional)..."></textarea>
+                            <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                        </div>
                     </div>
-                    <div class="relative w-full">
-                        <textarea id="input-instructions" rows="5" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik instruksi tambahan (opsional)..."></textarea>
-                        <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="relative w-full">
+                            <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1.5 ml-1">Niche / Topik Spesifik</label>
+                            <input type="text" id="input-niche" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none placeholder-gray-400 dark:text-white text-sm" placeholder="cth: Keuangan Syariah, dll">
+                        </div>
+                        <div class="relative w-full">
+                            <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1.5 ml-1">Target Audience</label>
+                            <input type="text" id="input-audience" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none placeholder-gray-400 dark:text-white text-sm" placeholder="cth: Ibu muda usia 25-35 thn">
+                        </div>
+                        <div class="relative w-full">
+                            <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1.5 ml-1">Jml. Ide (Khusus Mode A)</label>
+                            <input type="number" id="input-ide-count" min="1" max="20" value="5" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none placeholder-gray-400 dark:text-white text-sm">
+                        </div>
+                    </div>
+                    <div class="relative w-full mt-4">
+                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-1.5 ml-1">Pantangan Kata (Negative Words)</label>
+                        <input type="text" id="input-negative-words" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none placeholder-gray-400 dark:text-white text-sm" placeholder="Kata yang dilarang muncul di naskah/caption (Pisahkan dengan koma)...">
                     </div>
                 </div>
             </div>
@@ -269,7 +289,7 @@
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6 w-full">
                     <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
-                        <button onclick="window.open('https://share.gemini.google/c5py5uOLDxyn', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/BIfZiRVDKyMj', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">Reset</button>
@@ -1113,6 +1133,10 @@
             const instVal = document.getElementById('input-instructions').value;
             localStorage.setItem('imapro_input_topic', topicVal);
             localStorage.setItem('imapro_input_inst', instVal);
+            localStorage.setItem('imapro_input_niche', document.getElementById('input-niche').value);
+            localStorage.setItem('imapro_input_audience', document.getElementById('input-audience').value);
+            localStorage.setItem('imapro_input_ide_count', document.getElementById('input-ide-count').value);
+            localStorage.setItem('imapro_input_neg_words', document.getElementById('input-negative-words').value);
         }
 
         function renderGemsGrid() {
@@ -1169,6 +1193,15 @@
             const savedInst = localStorage.getItem('imapro_input_inst');
             if(savedTopic) document.getElementById('input-topic').value = savedTopic;
             if(savedInst) document.getElementById('input-instructions').value = savedInst;
+
+            const savedNiche = localStorage.getItem('imapro_input_niche');
+            const savedAud = localStorage.getItem('imapro_input_audience');
+            const savedIdeCnt = localStorage.getItem('imapro_input_ide_count');
+            const savedNegWords = localStorage.getItem('imapro_input_neg_words');
+            if(savedNiche) document.getElementById('input-niche').value = savedNiche;
+            if(savedAud) document.getElementById('input-audience').value = savedAud;
+            if(savedIdeCnt) document.getElementById('input-ide-count').value = savedIdeCnt;
+            if(savedNegWords) document.getElementById('input-negative-words').value = savedNegWords;
 
             const activeOut = JSON.parse(localStorage.getItem('imapro_active_output'));
             if(activeOut && activeOut.blocks && activeOut.blocks.length > 0) {
@@ -1540,6 +1573,7 @@
             document.getElementById('set-watermark-logos').value = 'Instagram, Threads';
             document.getElementById('set-watermark-username').value = '';
             document.getElementById('set-logo-filename').value = '';
+            document.getElementById('input-negative-words').value = '';
             
             document.getElementById('set-negative-prompt').value = 'SEMUA BENTUK MATA, HIDUNG, MULUT PADA MANUSIA MAUPUN HEWAN/BINATANG/BONEKA. DILARANG ADA TITIK MATA, GARIS MATA, ATAU MATA TERPEJAM PADA HEWAN (ANJING, KUDA, KUCING, BURUNG DLL). RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.';
             handleCharacterChange(document.getElementById('set-character'));
@@ -1582,6 +1616,9 @@
         async function autoSetSettings() {
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
+            const niche = document.getElementById('input-niche').value.trim();
+            const audience = document.getElementById('input-audience').value.trim();
+            const negWordsContent = document.getElementById('input-negative-words').value.trim();
             
             if (!topic && !instructions) {
                 showToast("Harap isi Topik atau Instruksi pada Kartu Input terlebih dahulu!");
@@ -1603,9 +1640,14 @@
             btn.disabled = true;
             showToast("⏳ AI sedang membaca instruksi dan meracik harmoni visual...");
 
+            let extraContext = "";
+            if (niche) extraContext += `\nNiche/Fokus: "${niche}"`;
+            if (audience) extraContext += `\nTarget Audience: "${audience}"`;
+            if (negWordsContent) extraContext += `\nPantangan Kata Naskah: "${negWordsContent}"`;
+
             try {
                 const promptText = `Anda adalah Ahli Strategi Konten, Desainer Visual Senior, & Prompt Engineer.
-Berdasarkan Topik: "${topic}"
+Berdasarkan Topik: "${topic}"${extraContext}
 Dan Instruksi Tambahan: "${instructions}"
 
 PERHATIAN UTAMA (ANCHOR VISUAL):
@@ -1729,6 +1771,9 @@ REFERENSI OPSI BAWAAN SISTEM:
         async function autoSetSingle(btn, elementId, schemaKey, schemaType, description) {
             const topic = document.getElementById('input-topic').value.trim();
             const instructions = document.getElementById('input-instructions').value.trim();
+            const niche = document.getElementById('input-niche').value.trim();
+            const audience = document.getElementById('input-audience').value.trim();
+            const negWordsContent = document.getElementById('input-negative-words').value.trim();
             
             if (!topic && !instructions) {
                 showToast("Harap isi Topik atau Instruksi pada Kartu Input terlebih dahulu!");
@@ -1738,6 +1783,11 @@ REFERENSI OPSI BAWAAN SISTEM:
             const originalHtml = btn.innerHTML;
             btn.innerHTML = `<svg class="w-3 h-3 animate-spin text-[#007AFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>`;
             btn.disabled = true;
+
+            let extraContext = "";
+            if (niche) extraContext += `\nNiche/Fokus: "${niche}"`;
+            if (audience) extraContext += `\nTarget Audience: "${audience}"`;
+            if (negWordsContent) extraContext += `\nPantangan Kata Naskah: "${negWordsContent}"`;
 
             try {
                 const currentArtStyle = document.getElementById('set-style') ? document.getElementById('set-style').value : 'Auto-Set by AI';
@@ -1754,7 +1804,7 @@ REFERENSI OPSI BAWAAN SISTEM:
                 }
 
                 const promptText = `Anda adalah Ahli Strategi Konten & Desainer Visual.
-Berdasarkan Topik: "${topic}"
+Berdasarkan Topik: "${topic}"${extraContext}
 Dan Instruksi Tambahan: "${instructions}"
 (Sebagai informasi, "Gaya Seni / Art Style" yang saat ini aktif di sistem adalah: "${currentArtStyle}")
 
@@ -1887,6 +1937,8 @@ PENTING:
 
         function createOutputBlockHTML(index, title, content, isFirst) {
             const id = `out-blk-${Date.now()}-${index}`;
+            const textareaId = `output-textarea-${index}`;
+            const rowCount = Math.min(25, Math.max(5, content.split('\n').length));
             return `
                 <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-white dark:bg-ios-darkPanel mb-5 shadow-sm w-full">
                     <div class="flex justify-between items-center bg-[#F9F9FB] dark:bg-[#1C1C1E] px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder flex-wrap gap-2">
@@ -1895,22 +1947,63 @@ PENTING:
                             ${title}
                         </button>
                         <div class="flex gap-2">
+                            <button onclick="enableOutputEdit(${index})" class="px-4 py-2 text-xs font-bold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 rounded-xl hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors">Edit</button>
                             <button onclick="copyText(this, ${index})" class="px-4 py-2 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">Copy</button>
                             <button onclick="saveBlock(${index})" class="px-4 py-2 text-xs font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors">Save</button>
                         </div>
                     </div>
                     <div id="${id}-content" class="accordion-content px-5 py-0">
-                        <div class="py-5 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed w-full break-words">${content}</div>
+                        <div class="py-5 w-full">
+                            <textarea id="${textareaId}" class="w-full p-4 text-sm font-mono border border-transparent hover:border-gray-200 dark:hover:border-[#3A3A3C] rounded-xl bg-transparent outline-none focus:ring-2 focus:ring-[#007AFF] focus:bg-[#F9F9FB] dark:focus:bg-[#1C1C1E] focus:border-gray-200 dark:focus:border-[#3A3A3C] resize-y transition-colors leading-relaxed text-gray-700 dark:text-gray-300 hide-scrollbar" rows="${rowCount}" readonly onblur="saveEditedOutput(${index}, this.value)">${content}</textarea>
+                        </div>
                     </div>
                 </div>
             `;
         }
 
+        function enableOutputEdit(index) {
+            const textarea = document.getElementById(`output-textarea-${index}`);
+            if (!textarea) return;
+            
+            const contentDiv = textarea.closest('.accordion-content');
+            if (contentDiv && !contentDiv.classList.contains('open')) {
+                contentDiv.classList.add('open');
+                const iconId = contentDiv.id.replace('-content', '-icon');
+                const icon = document.getElementById(iconId);
+                if(icon) icon.classList.add('rotate-180');
+            }
+
+            textarea.removeAttribute('readonly');
+            textarea.focus();
+            showToast("Mode Edit Aktif (Klik di luar kotak untuk simpan)");
+        }
+
+        function saveEditedOutput(index, newVal) {
+            if (currentOutputBlocks[index]) {
+                currentOutputBlocks[index].content = newVal;
+                saveActiveOutput();
+                showToast("Output Diperbarui!");
+                const textarea = document.getElementById(`output-textarea-${index}`);
+                if (textarea) textarea.setAttribute('readonly', true);
+            }
+        }
+
         async function generateModeA(topic, instructions) {
+            const niche = document.getElementById('input-niche').value.trim();
+            const audience = document.getElementById('input-audience').value.trim();
+            const negWordsContent = document.getElementById('input-negative-words').value.trim();
+            let ideCount = parseInt(document.getElementById('input-ide-count').value);
+            if (isNaN(ideCount) || ideCount < 1) ideCount = 5;
+
             const langStyle = getSettingValue('set-language-style');
             const appliedLang = langStyle === 'Auto-Set by AI' ? 'Feynman Muslim (edukatif, solutif, gaya membumi)' : langStyle;
 
-            const promptText = `Anda adalah Content Strategist Islami. Berikan 5 ide konten unik (beragam angle yang edukatif, solutif) untuk audiens awam dengan topik: "${topic}".
+            let extraContext = "";
+            if(niche) extraContext += `\nNiche/Fokus: "${niche}"`;
+            if(audience) extraContext += `\nTarget Audience: "${audience}"`;
+            if(negWordsContent) extraContext += `\nWARNING - PANTANGAN KATA: DILARANG KERAS menggunakan kata-kata berikut dalam hasil tulisan/naskah: "${negWordsContent}"`;
+
+            const promptText = `Anda adalah Content Strategist Islami. Berikan ${ideCount} ide konten unik (beragam angle yang edukatif, solutif) untuk target audiens dengan topik: "${topic}".${extraContext}
 Instruksi Tambahan (jika ada): "${instructions}"
 Gunakan gaya bahasa: ${appliedLang}
 Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
@@ -1987,6 +2080,10 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             const langStyle = getSettingValue('set-language-style');
             const negativePrompt = document.getElementById('set-negative-prompt').value.trim();
             
+            const niche = document.getElementById('input-niche').value.trim();
+            const audience = document.getElementById('input-audience').value.trim();
+            const negWordsContent = document.getElementById('input-negative-words').value.trim();
+
             const ptHead = document.getElementById('set-pt-header').value || '60';
             const ptBody = document.getElementById('set-pt-body').value || '40';
             const ptFoot = document.getElementById('set-pt-footer').value || '20';
@@ -2029,6 +2126,11 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
                 "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
             };
 
+            let extraContext = "";
+            if(niche) extraContext += `\nNiche/Fokus: "${niche}"`;
+            if(audience) extraContext += `\nTarget Audience: "${audience}"`;
+            if(negWordsContent) extraContext += `\nWARNING - PANTANGAN KATA NASKAH: DILARANG KERAS menggunakan kata-kata berikut dalam hasil tulisan/teks: "${negWordsContent}"`;
+
             const commonPromptRules = `ATURAN PEMBUATAN 'image_prompt' (SANGAT PENTING):
 1. DESKRIPSI KAYA & SPESIFIK: JANGAN gunakan template generik. Jelaskan elemen adegan, tindakan karakter, objek utama, pencahayaan, dan latar belakang (background) secara sangat kaya dan mendetail sesuai dengan narasi pada slide tersebut.
 2. Art Style & Konsep: ${style}. Deskripsi Konsep Visual: ${styleConcept}. (WAJIB sertakan seluruh deskripsi konsep visual ini secara eksplisit di awal kalimat 'image_prompt' pada SETIAP slide agar AI pembuat gambar tidak lupa. Misal: "A highly detailed [Deskripsi Konsep Visual], ...")
@@ -2042,7 +2144,8 @@ ${charDetails}
 
             if (isCustomScript) {
                 const promptTextCustom = `Anda adalah Master AI Image Prompter & Desainer Visual.
-User telah membuat naskah copywriting sendiri untuk ${slides} slide. Berikut naskahnya:
+User telah membuat naskah copywriting sendiri untuk ${slides} slide.${extraContext}
+Berikut naskahnya:
 
 ${customSlides.map((txt, idx) => `[SLIDE ${idx + 1}]\n${txt}`).join('\n\n')}
 
@@ -2064,7 +2167,7 @@ ${commonPromptRules}`;
             } else {
                 const promptText = `Anda adalah Copywriter Edukasi Islam kelas dunia & Master AI Image Prompter.
 Buatkan naskah spesifik untuk carousel Instagram sebanyak tepat ${slides} slide.
-Topik: "${topic}"
+Topik: "${topic}"${extraContext}
 Instruksi Tambahan: "${instructions}"
 Alur Copywriting: ${fwText}
 Arahan Khusus Slide 1: ${hookInstruction}
@@ -2157,7 +2260,8 @@ Make the aspect ratio ${ratio}`;
             let capContent = "";
 
             if(!isCustomScript) {
-                 const capPrompt = `Abaikan perintah gambar. Fokus HANYA buatkan 1 paragraf teks tulisan untuk Caption Postingan Instagram yang edukatif dan ringkas mengenai topik "${topic}". Maksimalkan 350 karakter (huruf). Sertakan emoji relevan dan 4-6 hashtag. Jangan gunakan kata pengantar apapun, JANGAN menyisipkan prompt gambar, hanya teks caption murni!`;
+                 let capNegWarning = negWordsContent ? `\n\nWARNING - DILARANG KERAS menggunakan kata-kata berikut dalam caption: "${negWordsContent}"` : "";
+                 const capPrompt = `Abaikan perintah gambar. Fokus HANYA buatkan 1 paragraf teks tulisan untuk Caption Postingan Instagram yang edukatif dan ringkas mengenai topik "${topic}". Maksimalkan 350 karakter (huruf). Sertakan emoji relevan dan 4-6 hashtag. Jangan gunakan kata pengantar apapun, JANGAN menyisipkan prompt gambar, hanya teks caption murni!${capNegWarning}`;
                  const capSchema = { "caption": { "type": "STRING" } };
                  const capRes = await callGeminiAPI(capPrompt, capSchema);
                  capContent = `CAPTION & HASHTAGS:\n\n${capRes[0].caption}`;
