@@ -2,20 +2,16 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>imapro - Islamic Content Studio</title>
     
-    <!-- Favicon imapro -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23007AFF'/><circle cx='50' cy='30' r='9' fill='%23ffffff'/><rect x='41' y='47' width='18' height='33' rx='5' fill='%23ffffff'/></svg>">
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Space Grotesk -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Fontshare: Clash Display for Header -->
     <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
 
     <script>
@@ -52,9 +48,9 @@
             font-family: 'Space Grotesk', sans-serif;
             -webkit-font-smoothing: antialiased;
             transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
         
-        /* Akordion halus */
         .accordion-content { 
             transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out, padding 0.3s ease; 
             max-height: 0; 
@@ -68,12 +64,12 @@
         }
         .rotate-180 { transform: rotate(180deg); }
         
-        /* Kartu Kaca (Glass/Clean Panel) */
         .glass-panel { 
             border-radius: 1.5rem; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.02); 
             overflow: hidden; 
             transition: all 0.3s ease;
+            width: 100%; /* Ensure full width */
         }
         .dark .glass-panel {
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -121,58 +117,142 @@
             color: #98989D;
             border-bottom-color: #38383A;
         }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center py-10 px-4 relative pb-24 bg-ios-bg dark:bg-ios-darkBg text-ios-text dark:text-ios-darkText">
+<body class="min-h-screen flex flex-col py-6 px-4 md:px-6 lg:px-8 xl:px-10 relative pb-24 bg-ios-bg dark:bg-ios-darkBg text-ios-text dark:text-ios-darkText w-full items-stretch">
     
-    <div id="toast" class="fixed top-6 right-4 text-white px-5 py-3 shadow-lg opacity-0 translate-y-[-20px] transition-all duration-300 z-50 pointer-events-none flex items-center gap-3">
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed top-6 right-4 text-white px-5 py-3 shadow-lg opacity-0 translate-y-[-20px] transition-all duration-300 z-[150] pointer-events-none flex items-center gap-3">
         <svg class="w-5 h-5 text-[#34C759]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
         <span id="toast-msg" class="font-medium text-sm font-sans">Success</span>
     </div>
 
+    <!-- CUSTOM CONFIRM MODAL -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl shadow-xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300">
+            <h3 class="font-bold text-lg mb-2 text-black dark:text-white">Konfirmasi</h3>
+            <p id="confirm-msg" class="text-sm text-gray-600 dark:text-gray-400 mb-6">Apakah Anda yakin?</p>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeConfirmModal()" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-colors">Batal</button>
+                <button id="confirm-btn" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold text-sm transition-colors">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM PROMPT MODAL -->
+    <div id="prompt-modal" class="fixed inset-0 bg-black/50 z-[100] hidden flex items-center justify-center backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white dark:bg-[#1C1C1E] p-6 rounded-2xl shadow-xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300">
+            <h3 class="font-bold text-lg mb-2 text-black dark:text-white">Simpan Profil Setting</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Masukkan nama untuk Profil Setting ini:</p>
+            <input type="text" id="prompt-input" class="w-full p-3 mb-6 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none focus:ring-2 focus:ring-[#007AFF] transition-all" placeholder="Nama Profil (cth: Preset A)">
+            <div class="flex justify-end gap-3">
+                <button onclick="closePromptModal()" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-sm transition-colors">Batal</button>
+                <button id="prompt-confirm-btn" class="px-4 py-2 bg-[#007AFF] hover:bg-blue-600 text-white rounded-xl font-bold text-sm transition-colors shadow-sm">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GEMS WINDOW MODAL -->
+    <div id="gems-modal" class="fixed inset-0 bg-black/60 z-[110] hidden flex flex-col items-center justify-center backdrop-blur-md transition-opacity opacity-0 pt-6 pb-6 px-4">
+        <div class="bg-ios-bg dark:bg-ios-darkBg w-full lg:w-[98%] xl:w-[98%] h-full max-h-[95vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden transform scale-95 transition-transform duration-300">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center px-6 py-5 border-b border-gray-200 dark:border-ios-darkBorder bg-white dark:bg-ios-darkPanel z-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold font-clash">Gems Directory</h2>
+                        <p class="text-xs text-gray-500">Tautan cepat menuju aset & tools</p>
+                    </div>
+                </div>
+                <button onclick="closeGemsModal()" class="p-2.5 bg-gray-100 dark:bg-[#2C2C2E] rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body (Search & Compact List/Grid) -->
+            <div class="flex-1 flex flex-col overflow-hidden">
+                <!-- Search Bar -->
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-ios-darkBorder bg-white/50 dark:bg-[#141414]/50 z-10">
+                    <div class="relative max-w-3xl mx-auto w-full">
+                        <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" id="search-gems" onkeyup="filterGems()" placeholder="Cari gems (aset, tools, referensi)..." class="w-full pl-10 pr-4 py-3 bg-gray-100 dark:bg-[#1C1C1E] border border-transparent focus:border-purple-500 dark:focus:border-purple-500 rounded-xl text-sm outline-none transition-colors dark:text-white placeholder-gray-500">
+                    </div>
+                </div>
+                
+                <!-- Scrollable List/Grid -->
+                <div class="flex-1 overflow-y-auto p-4 md:p-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 md:gap-4" id="gems-grid">
+                        <!-- Buttons dynamically generated by JS -->
+                    </div>
+                    
+                    <!-- Empty State for Search -->
+                    <div id="gems-empty" class="hidden flex-col items-center justify-center py-10 opacity-50">
+                        <span class="text-4xl mb-3">🔍</span>
+                        <p class="text-sm font-bold dark:text-white">Tidak ada Gem yang cocok</p>
+                        <p class="text-xs mt-1">Coba kata kunci pencarian lain.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- HEADER -->
-    <div class="w-full max-w-4xl text-center mb-8">
-        <h1 class="text-4xl md:text-5xl font-bold tracking-wide font-clash text-gray-900 dark:text-white mb-2">imapro</h1>
-        <p class="text-xs md:text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Islamic Content Studio</p>
+    <div class="w-full flex justify-center items-center mb-4 mt-2 px-2 overflow-hidden">
+        <!-- Logo dipangkas atas dan bawah 18% menggunakan clip-path, margin disesuaikan agar ruang kosong tertutup -->
+        <img src="https://ik.imagekit.io/ikmalogic/imapro.png" alt="imapro logo" class="w-full h-auto max-w-full sm:max-w-xl md:max-w-2xl lg:max-w-4xl object-contain drop-shadow-sm transition-all duration-300 dark:brightness-0 dark:invert" style="clip-path: inset(18% 0 18% 0); margin-top: -6%; margin-bottom: -6%;">
     </div>
 
     <!-- TAB BUTTONS -->
-    <div class="w-full max-w-4xl grid grid-cols-3 gap-2 mb-8 bg-[#E3E3E8] dark:bg-[#1C1C1E] p-1.5 rounded-2xl shadow-inner border border-transparent dark:border-[#2C2C2E]">
-        <button onclick="toggleTheme()" class="w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">
-            <svg id="theme-icon-light" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            <svg id="theme-icon-dark" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            <span class="hidden sm:inline">Gelap / Terang</span>
-            <span class="sm:hidden">Tema</span>
+    <div class="w-full flex gap-1 sm:gap-2 mb-8 bg-[#E3E3E8] dark:bg-[#1C1C1E] p-1.5 rounded-2xl shadow-inner border border-transparent dark:border-[#2C2C2E] overflow-x-auto hide-scrollbar">
+        <!-- THEME BUTTON (ICON ONLY) -->
+        <button onclick="toggleTheme()" class="flex items-center justify-center px-3 sm:px-4 py-3 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300 flex-shrink-0" title="Ubah Tema">
+            <svg class="w-5 h-5 hidden dark:block text-yellow-400" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg class="w-5 h-5 block dark:hidden text-gray-800" fill="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
         </button>
-        
-        <button id="btn-mode-a" onclick="switchMode('A')" class="w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+
+        <!-- MODE A -->
+        <button id="btn-mode-a" onclick="switchMode('A')" class="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-3 py-3 text-[11px] sm:text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300 whitespace-nowrap">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
             <span class="hidden sm:inline">Mode A (Ide)</span>
             <span class="sm:hidden">Ide</span>
         </button>
 
-        <button id="btn-mode-b" onclick="switchMode('B')" class="w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-bold rounded-xl bg-white dark:bg-ios-darkPanel shadow-sm text-black dark:text-white transition-all duration-300">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+        <!-- MODE B -->
+        <button id="btn-mode-b" onclick="switchMode('B')" class="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-3 py-3 text-[11px] sm:text-sm font-bold rounded-xl bg-white dark:bg-ios-darkPanel shadow-sm text-black dark:text-white transition-all duration-300 whitespace-nowrap">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
             <span class="hidden sm:inline">Mode B (Carousel)</span>
             <span class="sm:hidden">Carousel</span>
         </button>
+        
+        <!-- GEMS -->
+        <button id="btn-mode-gems" onclick="openGemsModal()" class="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-3 py-3 text-[11px] sm:text-sm font-semibold rounded-xl text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-300 whitespace-nowrap">
+            <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            <span class="hidden sm:inline">Gems (Aset)</span>
+            <span class="sm:hidden">Gems</span>
+        </button>
     </div>
 
-    <div class="w-full max-w-4xl space-y-4">
+    <div class="w-full space-y-4 flex-1">
         
         <!-- KARTU 1: INPUT -->
-        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+        <div class="glass-panel w-full bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
             <button onclick="toggleAccordion('input-content', 'input-icon')" class="w-full px-6 py-5 flex justify-between items-center hover:bg-gray-50/50 dark:hover:bg-[#1C1C1E]/50 transition-colors">
                 <span class="font-bold tracking-wide">1. KARTU INPUT</span>
-                <svg id="input-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg id="input-icon" class="w-5 h-5 text-gray-400 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
-            <div id="input-content" class="accordion-content px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
-                <div class="py-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="relative">
-                        <textarea id="input-topic" rows="5" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik topik, ide, atau paste artikel materi di sini..."></textarea>
+            <div id="input-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
+                <!-- Using full width grids that expand on larger screens -->
+                <div class="py-6 grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div class="relative w-full">
+                        <textarea id="input-topic" rows="5" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik topik, ide, atau paste naskah (Slide 1..., Slide 2...) di sini..."></textarea>
                         <button onclick="document.getElementById('input-topic').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                     </div>
-                    <div class="relative">
+                    <div class="relative w-full">
                         <textarea id="input-instructions" rows="5" class="w-full p-4 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y placeholder-gray-400 dark:text-white" placeholder="Ketik instruksi tambahan (opsional)..."></textarea>
                         <button onclick="document.getElementById('input-instructions').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                     </div>
@@ -181,35 +261,58 @@
         </div>
 
         <!-- KARTU 2: SETTING -->
-        <div id="setting-card" class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder" style="display: block;">
+        <div id="setting-card" class="glass-panel w-full bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder" style="display: block;">
             <button onclick="toggleAccordion('setting-content', 'setting-icon')" class="w-full px-6 py-5 flex justify-between items-center hover:bg-gray-50/50 dark:hover:bg-[#1C1C1E]/50 transition-colors">
                 <span class="font-bold tracking-wide">2. KARTU SETTING</span>
                 <svg id="setting-icon" class="w-5 h-5 text-gray-400 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
-                <div class="py-6">
-                    <!-- Actions -->
-                    <div class="flex justify-between items-center mb-2">
-                        <button onclick="window.open('https://share.gemini.google/ojtOuv7T4BlA', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                <div class="py-6 w-full">
+                    <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
+                        <button onclick="window.open('https://share.gemini.google/c5py5uOLDxyn', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
-                            <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Reset</button>
-                            <button id="btn-auto-set" onclick="autoSetSettings()" class="px-4 py-2 text-xs font-bold text-white bg-[#007AFF] rounded-xl hover:bg-[#0056b3] transition-colors flex items-center gap-1 shadow-sm"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Global Auto-Set AI</button>
+                            <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">Reset</button>
+                            <button id="btn-auto-set" onclick="autoSetSettings()" class="px-4 py-2 text-xs font-bold text-white bg-[#007AFF] rounded-xl hover:bg-[#0056b3] transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Global Auto-Set AI</button>
+                        </div>
+                    </div>
+
+                    <!-- PENGELOLAAN PROFIL SETTING -->
+                    <div class="mt-4 mb-6 p-4 bg-gray-50 dark:bg-[#1A1A1C] rounded-2xl border border-gray-200 dark:border-ios-darkBorder flex flex-col gap-3 w-full">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Profil Setting (Preset)</span>
+                            <div class="flex gap-2">
+                                <label class="cursor-pointer px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors whitespace-nowrap">
+                                    Import JSON
+                                    <input type="file" accept=".json" class="hidden" onchange="importSettingsProfile(this)">
+                                </label>
+                                <button onclick="exportSettingsProfile()" class="px-3 py-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors whitespace-nowrap">Export JSON</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap sm:flex-nowrap gap-2 items-center">
+                            <select id="saved-settings-dropdown" class="flex-1 min-w-[150px] p-2.5 ios-input border border-ios-border dark:border-ios-darkBorder bg-white dark:bg-ios-darkInput dark:text-white outline-none text-sm">
+                                <option value="">-- Pilih Profil Setting --</option>
+                            </select>
+                            <button onclick="loadSettingsProfile()" class="px-4 py-2.5 text-xs font-bold text-white bg-blue-500 hover:bg-blue-600 rounded-xl transition-colors shadow-sm whitespace-nowrap">Load</button>
+                            <button onclick="saveSettingsProfile()" class="px-4 py-2.5 text-xs font-bold text-white bg-[#34C759] hover:bg-green-600 rounded-xl transition-colors shadow-sm whitespace-nowrap">Save</button>
+                            <button onclick="deleteSettingsProfile()" class="px-3 py-2.5 text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl transition-colors shadow-sm flex-shrink-0" title="Hapus Profil">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         </div>
                     </div>
 
                     <!-- API KEY SECTION -->
                     <div class="setting-section-title mt-4 text-blue-500 dark:text-blue-400">0. API Key (Wajib untuk AI Generate)</div>
-                    <div class="grid grid-cols-1 gap-5 text-sm mb-8">
+                    <div class="w-full text-sm mb-8">
                         <div>
                             <input type="password" id="gemini-api-key" placeholder="Masukkan Gemini API Key dari Google AI Studio..." class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Dapatkan API Key gratis di <a href="https://aistudio.google.com/" target="_blank" class="text-blue-500 hover:underline">Google AI Studio</a>. Key hanya disimpan lokal di browser Anda.</p>
                         </div>
                     </div>
                     
-                    <!-- SECTION 1: ART STYLE (ANCHOR VISUAL) -->
+                    <!-- SECTION 1: ART STYLE -->
                     <div class="setting-section-title text-[#007AFF]">I. Gaya Seni (Wajib Dipilih Pertama)</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
+                    <div class="w-full mt-4 mb-8">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Seni (Art Style)</label>
@@ -225,7 +328,8 @@
 
                     <!-- SECTION 2: PENGATURAN UMUM -->
                     <div class="setting-section-title">II. Pengaturan Umum & Copywriting</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
+                    <!-- Optimized grid for full screen: 1 col on mobile, 2 on tablet, 4 on ultrawide -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 text-sm mb-8 w-full">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Jumlah Slide</label>
@@ -292,12 +396,12 @@
                                 <input type="text" id="set-hook-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik tipe hook custom...">
                             </div>
                         </div>
-                        <div>
+                        <div class="md:col-span-2 xl:col-span-4">
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Gaya Bahasa</label>
                                 <button type="button" onclick="autoSetSingle(this, 'set-language-style', 'language_style', 'STRING', 'Tone and voice tulisan')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 w-full">
                                 <select id="set-language-style" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
                                     <option value="KUSTOM">KUSTOM</option>
@@ -315,7 +419,7 @@
 
                     <!-- SECTION 3: VISUAL LAINNYA & KARAKTER -->
                     <div class="setting-section-title">III. Elemen Visual & Karakter</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5 text-sm mb-8 w-full">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Palet Warna (Color DNA)</label>
@@ -365,19 +469,19 @@
                             </div>
                         </div>
                         
-                        <div id="character-details-container" class="md:col-span-2 hidden bg-gray-50 dark:bg-[#1C1C1E] p-5 rounded-2xl border border-gray-100 dark:border-ios-darkBorder shadow-sm">
+                        <div id="character-details-container" class="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 hidden bg-gray-50 dark:bg-[#1C1C1E] p-5 rounded-2xl border border-gray-100 dark:border-ios-darkBorder shadow-sm w-full">
                             <p class="text-xs text-red-500 dark:text-red-400 font-bold mb-4 tracking-wide">*ATURAN FACELESS & NO EYES MUTLAK BERLAKU UNTUK SYARIAT.</p>
-                            <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                                 <!-- Injected dynamically -->
                             </div>
                         </div>
                         
-                        <div class="md:col-span-2">
+                        <div class="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3">
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Negative Prompt (Objek Haram/Dihindari)</label>
                                 <button type="button" onclick="autoSetSingle(this, 'set-negative-prompt', 'negative_prompt', 'STRING', 'Hal yang dihindari di gambar')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                             </div>
-                            <div class="relative">
+                            <div class="relative w-full">
                                 <textarea id="set-negative-prompt" rows="3" class="w-full p-4 pr-10 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput outline-none resize-y dark:text-white">SEMUA BENTUK MATA, HIDUNG, MULUT PADA MANUSIA MAUPUN HEWAN/BINATANG/BONEKA. DILARANG ADA TITIK MATA, GARIS MATA, ATAU MATA TERPEJAM PADA HEWAN (ANJING, KUDA, KUCING, BURUNG DLL). RAMBUT WANITA, LEHER WANITA, LENGAN WANITA, BETIS WANITA.</textarea>
                                 <button onclick="document.getElementById('set-negative-prompt').value=''" class="absolute top-3 right-3 text-gray-400 hover:text-red-500 p-1" title="Clear All"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
                             </div>
@@ -386,7 +490,7 @@
 
                     <!-- SECTION 4: TIPOGRAFI HEADER -->
                     <div class="setting-section-title">IV. Tipografi Header (Judul)</div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8 w-full">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Font Header</label>
@@ -428,7 +532,7 @@
 
                     <!-- SECTION 5: TIPOGRAFI BODY -->
                     <div class="setting-section-title">V. Tipografi Body (Teks Utama)</div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 text-sm mb-8 w-full">
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Font Body</label>
@@ -498,7 +602,33 @@
 
                     <!-- SECTION 6: FOOTER & WATERMARK -->
                     <div class="setting-section-title">VI. Footer, Watermark & Logo</div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 text-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 text-sm w-full">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Font Footer</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-font-footer', 'font_footer', 'STRING', 'Pilih nama font footer yang relevan dengan art style')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="set-font-footer" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none"></select>
+                                <input type="text" id="set-font-footer-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik font...">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block text-gray-700 dark:text-gray-300 font-bold">Efek Font Footer</label>
+                                <button type="button" onclick="autoSetSingle(this, 'set-texteffect-footer', 'effect_footer', 'STRING', 'Contoh: Flat, Deboss, dll')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                            </div>
+                            <div class="flex gap-2">
+                                <select id="set-texteffect-footer" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
+                                    <option value="KUSTOM">KUSTOM</option>
+                                    <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+                                    <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
+                                    <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+                                </select>
+                                <input type="text" id="set-texteffect-footer-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik efek...">
+                            </div>
+                        </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Bentuk Patch Footer</label>
@@ -517,6 +647,7 @@
                                 <input type="text" id="set-patch-footer-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik patch footer custom...">
                             </div>
                         </div>
+                        
                         <div>
                             <div class="flex justify-between items-center mb-2">
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Ukuran Footer (PT)</label>
@@ -542,7 +673,7 @@
                             </div>
                         </div>
                         
-                        <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
+                        <div class="col-span-1 md:col-span-2 xl:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-5 mt-2">
                             <div>
                                 <div class="flex justify-between items-center mb-2">
                                     <label class="block text-gray-700 dark:text-gray-300 font-bold">Logo (Teks/ Sosmed)</label>
@@ -559,14 +690,13 @@
                             </div>
                         </div>
 
-                        <!-- TAMBAHAN BARU UNTUK UPLOAD FILE LOGO DI CHATGPT -->
-                        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
+                        <div class="col-span-1 md:col-span-2 xl:col-span-4 grid grid-cols-1 md:grid-cols-2 gap-5 mt-4 border-t border-dashed border-gray-200 dark:border-ios-darkBorder pt-6">
                             <div>
                                 <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Nama File Logo (Upload di ChatGPT)</label>
-                                    <button type="button" onclick="autoSetSingle(this, 'set-logo-filename', 'logo_filename', 'STRING', 'Nama file logo, misal: logo.png')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                                    <label class="block text-gray-700 dark:text-gray-300 font-bold">Nama File Logo (Bisa >1, Pisah Koma)</label>
+                                    <button type="button" onclick="autoSetSingle(this, 'set-logo-filename', 'logo_filename', 'STRING', 'Nama file logo, misal: logo.png, sponsor.png')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                                 </div>
-                                <input type="text" id="set-logo-filename" placeholder="Kosongkan atau ketik misal: logo.png" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
+                                <input type="text" id="set-logo-filename" placeholder="Kosongkan atau ketik misal: logo1.png, logo2.png" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                             </div>
                             <div>
                                 <div class="flex justify-between items-center mb-2">
@@ -584,7 +714,7 @@
                                         <option value="Pojok Kanan Bawah">Pojok Kanan Bawah</option>
                                         <option value="Tengah Atas">Tengah Atas</option>
                                     </select>
-                                    <input type="text" id="set-logo-position-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi...">
+                                    <input type="text" id="set-logo-position-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik posisi (cth: logo1 di kiri atas, logo2 di kanan atas)">
                                 </div>
                             </div>
                         </div>
@@ -601,18 +731,18 @@
         </button>
 
         <!-- KARTU 3: OUTPUT -->
-        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+        <div class="glass-panel w-full bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
             <button onclick="toggleAccordion('output-wrapper', 'output-icon')" class="w-full px-6 py-5 flex justify-between items-center hover:bg-gray-50/50 dark:hover:bg-[#1C1C1E]/50 transition-colors">
                 <span class="font-bold tracking-wide">3. KARTU OUTPUT</span>
                 <svg id="output-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div id="output-wrapper" class="accordion-content px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6">
-                    <div class="flex justify-end gap-3 mb-4">
+                    <div class="flex justify-end gap-3 mb-4 w-full">
                         <button onclick="copyAllBlocks()" class="px-4 py-2 text-xs font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">Copy All</button>
-                        <button onclick="saveAllBlocks()" class="px-4 py-2 text-xs font-bold text-white bg-[#34C759] rounded-xl hover:bg-green-600 transition-colors">Save All Group</button>
+                        <button onclick="saveAllBlocks()" class="px-4 py-2 text-xs font-bold text-white bg-[#34C759] hover:bg-green-600 rounded-xl transition-colors">Save All Group</button>
                     </div>
-                    <div id="output-container" class="space-y-4">
+                    <div id="output-container" class="space-y-4 w-full">
                         <p class="text-sm text-gray-400 text-center py-8 font-medium">Hasil generate akan muncul di sini.</p>
                     </div>
                 </div>
@@ -620,31 +750,31 @@
         </div>
 
         <!-- KARTU 4: SAVED -->
-        <div class="glass-panel bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
+        <div class="glass-panel w-full bg-ios-panel dark:bg-ios-darkPanel border border-transparent dark:border-ios-darkBorder">
             <button onclick="toggleAccordion('saved-wrapper', 'saved-icon')" class="w-full px-6 py-5 flex justify-between items-center hover:bg-gray-50/50 dark:hover:bg-[#1C1C1E]/50 transition-colors">
                 <span class="font-bold tracking-wide">4. KARTU SAVED</span>
                 <svg id="saved-icon" class="w-5 h-5 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </button>
             <div id="saved-wrapper" class="accordion-content px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
-                <div class="py-6">
+                <div class="py-6 w-full">
                     <div class="flex border-b border-gray-100 dark:border-ios-darkBorder mb-6">
                         <button id="tab-saved-a" onclick="switchSavedTab('A')" class="px-6 py-3 text-sm font-bold border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Mode A (Ideas)</button>
                         <button id="tab-saved-b" onclick="switchSavedTab('B')" class="px-6 py-3 text-sm font-bold border-b-2 border-[#007AFF] text-[#007AFF] transition-colors">Mode B (Carousel)</button>
                     </div>
                     
-                    <div id="saved-container" class="space-y-5"></div>
+                    <div id="saved-container" class="space-y-5 w-full"></div>
 
-                    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-ios-darkBorder flex justify-between items-center bg-gray-50/50 dark:bg-[#1A1A1C] -mx-6 -mb-6 px-6 py-5 rounded-b-3xl">
+                    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-ios-darkBorder flex flex-col md:flex-row gap-4 justify-between items-center bg-gray-50/50 dark:bg-[#1A1A1C] -mx-6 -mb-6 px-6 py-5 rounded-b-3xl">
                         <div>
                             <h4 class="text-sm font-bold">Data Management</h4>
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Ekspor atau impor data tersimpan (JSON).</p>
                         </div>
                         <div class="flex gap-2">
-                            <label class="cursor-pointer px-4 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-xl shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors">
+                            <label class="cursor-pointer px-4 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-xl shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors whitespace-nowrap">
                                 Import JSON
                                 <input type="file" accept=".json" class="hidden" onchange="importData(this)">
                             </label>
-                            <button onclick="exportData()" class="px-4 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-xl shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors">Export JSON</button>
+                            <button onclick="exportData()" class="px-4 py-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 bg-white dark:bg-[#2C2C2E] border border-gray-200 dark:border-[#3A3A3C] rounded-xl shadow-sm hover:bg-gray-50 dark:hover:bg-[#3A3A3C] transition-colors whitespace-nowrap">Export JSON</button>
                         </div>
                     </div>
                 </div>
@@ -652,10 +782,11 @@
         </div>
     </div>
 
-    <!-- MAIN JAVASCRIPT LOGIC -->
     <script>
         const styleArtsList = [
-            "Auto-Set by AI", "KUSTOM", 
+            "Auto-Set by AI", "KUSTOM",
+            
+            "--- 🧵 3D FABRIC & YARN CRAFTS ---",
             "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D",
             "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D",
             "3. GAYA 3/ ImaQupa / Premium Quilted Patchwork 3D",
@@ -667,59 +798,77 @@
             "9. GAYA 9/ ImaMacra / Premium Handcrafted Macrame Fiber Art",
             "10. GAYA 10/ ImaWeave / Premium Woven Tapestry Art",
             "11. GAYA 11/ ImaTile / Premium 3D Textile Storybook Art",
-            "12. GAYA 12/ ImaWhimsi / Ink & Watercolor Whimsical Doodle",
-            "13. GAYA 13/ ImaStudy / Studygram Digital Journaling & Scrapbook",
-            "14. GAYA 14/ ImaWaco / Watercolor & Ink Illustration",
-            "15. GAYA 15/ ImaGeru / Grunge Streetwear Photocopy Collage",
-            "16. GAYA 16/ ImaDenim / Hand-Drawn Sketchnote & Visual Journaling",
-            "17. GAYA 17/ ImaFlato / Modern Flat Vector Illustration",
-            "18. GAYA 18/ ImaNoto / Notion Minimal Monochrome Illustration",
-            "19. GAYA 19/ ImaGraf / Risograph Vintage Graphic Print",
-            "20. GAYA 20/ ImaGraff / Urban Street Graffiti Art",
-            "21. GAYA 21/ ImaSketch / Doodle Journal Notebook Illustration",
-            "22. GAYA 22/ ImaKomi / Comic Studio (High-Fidelity Islamic Comic)",
-            "23. GAYA 23/ ImaWebo / Premium Webtoon Comic Illustration",
+
+            "--- ✂️ 3D PAPER & CARDBOARD CRAFTS ---",
+            "12. GAYA 12/ ImaSand / Premium Sand Sculpture & Art Diorama 3D",
+            "13. GAYA 13/ ImaShadow / Premium Paper Shadow Box 3D",
+            "14. GAYA 14/ ImaCraft / Premium 3D Papercraft Diorama",
+            "15. GAYA 15/ ImaPaper / Premium Layered Papercut 3D Diorama",
+            "16. GAYA 16/ ImaOri / 3D Origami Paper Art Diorama",
+            "17. GAYA 17/ ImaPaper / Premium 3D Paper Diorama Art",
+            "18. GAYA 18/ ImaQuill / Premium 3D Paper Quilling Art Diorama",
+            "19. GAYA 19/ ImaKiri / Premium 3D Kirigami Paper Cut Art",
+            "20. GAYA 20/ ImaCut / Premium Handmade Cut Paper Collage",
+            "21. GAYA 21/ ImaCard / Premium Handmade Cardboard Craft 3D",
+            "22. GAYA 22/ ImaSculpt / Premium 3D Paper Sculpture Art",
+
+            "--- 📖 STORYBOOK & TALES ---",
+            "23. GAYA 23/ ImaWhimsi / Ink & Watercolor Whimsical Doodle",
             "24. GAYA 24/ ImaWimmel / Wimmelbilderbuch (Teeming Picture Book)",
-            "25. GAYA 25/ ImaPixar / Pixar Inspired 3D Animation",
-            "26. GAYA 26/ ImaGame / Stylized Game Art Illustration",
-            "27. GAYA 27/ ImaVoxel / Isometric 3D Voxel Art Diorama",
-            "28. GAYA 28/ ImaSand / Premium Sand Sculpture & Art Diorama 3D",
-            "29. GAYA 29/ ImaChalk / Vintage Chalkboard Typography & Sketch",
-            "30. GAYA 30/ ImaShadow / Premium Paper Shadow Box 3D",
-            "31. GAYA 31/ ImaMix / Mixed Media Experimental Collage",
-            "32. GAYA 32/ ImaCraft / Premium 3D Papercraft Diorama",
-            "33. GAYA 33/ ImaPaper / Premium Layered Papercut 3D Diorama",
-            "34. GAYA 34/ ImaOri / 3D Origami Paper Art Diorama",
-            "35. GAYA 35/ ImaPaper / Premium 3D Paper Diorama Art",
-            "36. GAYA 36/ ImaQuill / Premium 3D Paper Quilling Art Diorama",
-            "37. GAYA 37/ ImaKiri / Premium 3D Kirigami Paper Cut Art",
-            "38. GAYA 38/ ImaCut / Premium Handmade Cut Paper Collage",
-            "39. GAYA 39/ ImaCard / Premium Handmade Cardboard Craft 3D",
-            "40. GAYA 40/ ImaSculpt / Premium 3D Paper Sculpture Art",
-            "41. GAYA 41/ ImaCozy / Premium Cozy Storybook Illustration",
-            "42. GAYA 42/ ImaVinta / Premium Vintage Storybook Illustration",
-            "43. GAYA 43/ ImaAqua / Premium Watercolor Storybook Illustration",
-            "44. GAYA 44/ ImaScandi / Premium Scandinavian Folk Storybook Art",
-            "45. GAYA 45/ ImaWhim / Premium Whimsical Storybook Illustration",
-            "46. GAYA 46/ ImaTale / Premium Enchanted Fairytale Storybook Art",
-            "47. GAYA 47/ ImaEdito / Premium Editorial Storybook Illustration",
-            "48. GAYA 48/ ImaPencil / Premium Soft Pencil Storybook Illustration",
-            "49. GAYA 49/ ImaCottage / Premium Cottagecore Storybook Illustration",
-            "50. GAYA 50/ ImaKids / Premium Children's Book Illustration",
-            "51. GAYA 51/ ImaGouache / Premium Opaque Gouache Painting",
-            "52. GAYA 52/ ImaOil / Premium Impasto Oil Painting",
-            "53. GAYA 53/ ImaAcryl / Premium Expressive Acrylic Painting",
-            "54. GAYA 54/ ImaColor / Premium Colored Pencil Illustration",
-            "55. GAYA 55/ ImaWood / Minimalist Vintage Japanese Woodcut Print",
-            "56. GAYA 56/ ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi",
-            "57. GAYA 57/ ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration",
-            "58. GAYA 58/ ImaStory / Whimsical Watercolor Storybook Illustration",
-            "59. GAYA 59/ ImaLine / Intricate Black & White Line Art Illustration",
-            "60. GAYA 60/ ImaPop / Bold Pop Art Illustration",
-            "61. GAYA 61/ ImaAvantAsian / Avant-Garde Geometric Asian Illustration",
-            "62. GAYA 62/ ImaDecora / Retro Psychedelic Anime Pop Illustration"
+            "25. GAYA 25/ ImaCozy / Premium Cozy Storybook Illustration",
+            "26. GAYA 26/ ImaVinta / Premium Vintage Storybook Illustration",
+            "27. GAYA 27/ ImaAqua / Premium Watercolor Storybook Illustration",
+            "28. GAYA 28/ ImaScandi / Premium Scandinavian Folk Storybook Art",
+            "29. GAYA 29/ ImaWhim / Premium Whimsical Storybook Illustration",
+            "30. GAYA 30/ ImaTale / Premium Enchanted Fairytale Storybook Art",
+            "31. GAYA 31/ ImaEdito / Premium Editorial Storybook Illustration",
+            "32. GAYA 32/ ImaPencil / Premium Soft Pencil Storybook Illustration",
+            "33. GAYA 33/ ImaCottage / Premium Cottagecore Storybook Illustration",
+            "34. GAYA 34/ ImaKids / Premium Children's Book Illustration",
+            "35. GAYA 35/ ImaStory / Whimsical Watercolor Storybook Illustration",
+
+            "--- 🎨 TRADITIONAL PAINTINGS ---",
+            "36. GAYA 36/ ImaWaco / Watercolor & Ink Illustration",
+            "37. GAYA 37/ ImaGouache / Premium Opaque Gouache Painting",
+            "38. GAYA 38/ ImaOil / Premium Impasto Oil Painting",
+            "39. GAYA 39/ ImaAcryl / Premium Expressive Acrylic Painting",
+            "40. GAYA 40/ ImaColor / Premium Colored Pencil Illustration",
+
+            "--- 📝 JOURNALING & MIXED MEDIA ---",
+            "41. GAYA 41/ ImaStudy / Studygram Digital Journaling & Scrapbook",
+            "42. GAYA 42/ ImaDenim / Hand-Drawn Sketchnote & Visual Journaling",
+            "43. GAYA 43/ ImaSketch / Doodle Journal Notebook Illustration",
+            "44. GAYA 44/ ImaMix / Mixed Media Experimental Collage",
+
+            "--- ✒️ GRAPHIC, POP & VECTOR ---",
+            "45. GAYA 45/ ImaFlato / Modern Flat Vector Illustration",
+            "46. GAYA 46/ ImaNoto / Notion Minimal Monochrome Illustration",
+            "47. GAYA 47/ ImaLine / Intricate Black & White Line Art Illustration",
+            "48. GAYA 48/ ImaPop / Bold Pop Art Illustration",
+            "49. GAYA 49/ ImaAvantAsian / Avant-Garde Geometric Asian Illustration",
+
+            "--- 🛹 RETRO & STREET ART ---",
+            "50. GAYA 50/ ImaGeru / Grunge Streetwear Photocopy Collage",
+            "51. GAYA 51/ ImaGraf / Risograph Vintage Graphic Print",
+            "52. GAYA 52/ ImaGraff / Urban Street Graffiti Art",
+            "53. GAYA 53/ ImaChalk / Vintage Chalkboard Typography & Sketch",
+
+            "--- ⛩️ JAPANESE & CLASSIC SCI-FI ---",
+            "54. GAYA 54/ ImaWood / Minimalist Vintage Japanese Woodcut Print",
+            "55. GAYA 55/ ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi",
+            "56. GAYA 56/ ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration",
+
+            "--- 🌸 ANIME & WEBTOON ---",
+            "57. GAYA 57/ ImaKomi / Comic Studio (High-Fidelity Islamic Comic)",
+            "58. GAYA 58/ ImaWebo / Premium Webtoon Comic Illustration",
+            "59. GAYA 59/ ImaDecora / Retro Psychedelic Anime Pop Illustration",
+
+            "--- 🎮 3D ANIMATION & GAMING ---",
+            "60. GAYA 60/ ImaPixar / Pixar Inspired 3D Animation",
+            "61. GAYA 61/ ImaGame / Stylized Game Art Illustration",
+            "62. GAYA 62/ ImaVoxel / Isometric 3D Voxel Art Diorama"
         ];
-        
+
         const fontDNAList = [
             "Auto-Set by AI", "KUSTOM", "FONT 1. Friendly Rounded Handwritten", "FONT 2. Soft Brush Handwriting", "FONT 3. Modern Editorial Serif",
             "FONT 4. Humanist Sans", "FONT 5. Geometric Sans", "FONT 6. Rounded Sans", "FONT 7. Storybook Typography", "FONT 8. Notebook Handwriting",
@@ -809,22 +958,199 @@
             "[SUZUME]": "DNA: Orange, Blue, Gold"
         };
 
+        const styleArtsConcepts = {
+            "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D": "Realistic 3D knitted wool diorama in isometric miniature style, premium Cinema 4D (C4D) render. Featuring highly detailed wool fiber textures, visible woven stitches, and a soft matte fabric surface that provides a warm, cozy, and highly artistic atmosphere.",
+            "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D": "3D needle felting craft illustration of an organic miniature sculpture. Featuring a dense, fuzzy wool texture with fine fibers naturally sticking out along its contours, creating an aesthetic and warm handmade decor vibe.",
+            "3. GAYA 3/ ImaQupa / Premium Quilted Patchwork 3D": "Quilted patchwork diorama neatly stitched with soft wool padding inside for an embossed volume effect. Featuring a combination of checkered, floral, and solid fabric patterns with detailed embroidered stitch lines and realistic fabric folds.",
+            "4. GAYA 4/ ImaFlannel / Premium Stuffed Felt Art Diorama": "Isometric 3D stuffed flannel craft diorama filled with soft cotton for an embossed voluminous effect. Featuring neat handmade blanket stitches along the fabric edges and a soft fuzzy matte fabric texture. A blend of bright pastel colors creates a sweet, warm, and highly artistic visual atmosphere.",
+            "5. GAYA 5/ ImaStitch / Premium 3D Hand Embroidery Art": "3D hand embroidery art illustration with high texture on a rough canvas or linen surface. Featuring highly precise embossed cotton thread stitches, gradient color blends from stacked threads, and macro photography lighting effects that enhance the volume and sheen of each strand. Creating a warm, tactile, and highly artistic handmade craft atmosphere.",
+            "6. GAYA 6/ ImaFab / Premium Mixed Fabric Collage Art": "Tactile mixed fabric collage art made from overlapping cutouts of various fabrics. Featuring naturally frayed cut edges, a blend of textures from materials like cotton and linen, and expressive stitching elements that bind each layer. Bathed in soft lighting that enhances physical depth, creating an organic, warm, and handmade-rich visual atmosphere.",
+            "7. GAYA 7/ ImaWool / Premium 3D Wool Sculpture Art": "3D wool sculpture diorama with thick textures, tightly twisted yarn, and dense fiber clumps. Featuring a minimalist character with a blank faceless expression in a soft matte fibrous environment. Bathed in warm lighting that highlights the fuzzy effect on all surfaces, creating a cozy, tactile, and highly artistic visual atmosphere.",
+            "8. GAYA 8/ ImaPlush / Premium 3D Plush Toy Diorama": "3D miniature plush toy diorama, soft and voluminous. Featuring detailed fuzzy minky or fleece fabric textures, neat edge stitching, and rounded proportions like a real stuffed toy. Illuminated by soft directional studio lighting to emphasize the tactile fabric surface, creating a warm, adorable, and aesthetic visual atmosphere.",
+            "9. GAYA 9/ ImaMacra / Premium Handcrafted Macrame Fiber Art": "3D bohemian macrame cotton cord knot craft diorama, highly precise and thickly textured. Featuring intricate knot weaves, naturally falling frayed fringes, and natural wood supports highlighted by soft directional lighting. Creating an organic, tactile, warm, and highly artistic handmade craft atmosphere.",
+            "10. GAYA 10/ ImaWeave / Premium Woven Tapestry Art": "Traditional woven tapestry illustration with dense yarn weaves and realistic fabric textures. Featuring a slightly faded classic color palette, intricate decorative border stitches, and thick woven yarn elements that provide a tactile feel. Bathed in soft lighting that highlights the woven curves on the fabric surface, creating a majestic, historical, and highly artistic visual atmosphere.",
+            "11. GAYA 11/ ImaTile / Premium 3D Textile Storybook Art": "3D textile storybook illustration made from a blend of textile crafts, patchwork, and embroidery with realistic physical depth. Featuring a blank faceless character formed from cotton and felt cutouts, combined with embossed stitches and a rough textured canvas background. Highlighted by warm lighting to emphasize the fibers of each material, creating a tactile, nostalgic, and highly artistic handmade fairytale atmosphere.",
+            "12. GAYA 12/ ImaSand / Premium Sand Sculpture & Art Diorama 3D": "Premium 3D sand sculpture art diorama with precise micro-grain details. Featuring a dense granular sand surface texture with a warm golden-cream color gradient, and natural sunlight effects that accentuate the carved depths. Creating an organic, artistic, and aesthetic beach-vibe visual atmosphere.",
+            "13. GAYA 13/ ImaShadow / Premium Paper Shadow Box 3D": "3D paper shadow box diorama focusing on profound shadow play. Featuring highly precise object silhouettes, softly gradated matte paper textures, and hidden lighting effects from behind the paper layers that accentuate visual contours. Creating a dramatic, poetic, and highly artistic atmosphere.",
+            "14. GAYA 14/ ImaCraft / Premium 3D Papercraft Diorama": "3D papercraft diorama with precise layered depth effects. Featuring a fine-grained matte paper texture with sharp fold lines and cut angles, as well as soft interplay of shadows between layers. Creating a creative, aesthetic, and highly artistic visual atmosphere.",
+            "15. GAYA 15/ ImaPaper / Premium Layered Papercut 3D Diorama": "3D layered papercut diorama with precise depth. Featuring stacked layers of matte paper creating a natural shadow box effect between the cut gaps, sharp and clean paper edges, and dramatic lighting to highlight the fine paper fiber texture, producing an aesthetic, poetic, and highly artistic visual atmosphere.",
+            "16. GAYA 16/ ImaOri / 3D Origami Paper Art Diorama": "3D origami paper art diorama with high precision, featuring sharp and symmetrical geometric structures. Showcasing a fine-grained matte paper surface texture, crisp fold angles, and realistic drop shadows from soft directional lighting. Creating a clean, minimalist, elegant, and highly artistic visual atmosphere.",
+            "17. GAYA 17/ ImaPaper / Premium 3D Paper Diorama Art": "3D layered papercraft diorama miniature, highly detailed and precise. Featuring a fine-grained matte paper texture with physical depth between layers producing natural drop shadows. Bathed in soft directional lighting with a macro photography perspective, creating an aesthetic, artistic, and highly artistic visual.",
+            "18. GAYA 18/ ImaQuill / Premium 3D Paper Quilling Art Diorama": "3D paper quilling art diorama with intricate and precise layered details. Featuring an arrangement of colorful paper strips rolled, curved, and neatly shaped, complete with matte paper fiber textures and crisp folded edges. Bathed in soft lighting that casts drop shadows between the rolled gaps, creating an elegant, dynamic, and highly artistic physical depth effect.",
+            "19. GAYA 19/ ImaKiri / Premium 3D Kirigami Paper Cut Art": "3D kirigami paper cut and fold diorama with precise layered depth. Featuring intricate paper carving details with a backlight shadow box effect, creating a subtle play of shadows on the matte paper texture that provides a poetic, elegant, and highly artistic vibe.",
+            "20. GAYA 20/ ImaCut / Premium Handmade Cut Paper Collage": "Premium handmade cut paper collage art featuring stacked colored paper with visible matte fiber textures. Each layer has crisp cut edges with natural drop shadows in between, producing a 3D physical depth effect. Creating an organic, artistic visual atmosphere rich with a handmade touch.",
+            "21. GAYA 21/ ImaCard / Premium Handmade Cardboard Craft 3D": "3D miniature diorama made from precisely layered corrugated cardboard and kraft paper cutouts. Featuring natural brown paper fiber textures with exposed inner cardboard ridges along the cut edges, and soft lighting that produces natural drop shadows. Creating an eco-friendly, artistic, and highly artistic handmade craft visual atmosphere.",
+            "22. GAYA 22/ ImaSculpt / Premium 3D Paper Sculpture Art": "3D paper sculpture diorama, precisely carved and shaped with stunning volumetric depth. Featuring a smooth matte paper fiber texture, gentle curves and folds, and sharp cut edges. Bathed in soft lighting that casts gradated shadows among hollows and folds, creating an elegant, artistic, and highly artistic visual atmosphere.",
+            "23. GAYA 23/ ImaWhimsi / Ink & Watercolor Whimsical Doodle": "Traditional analog ink and watercolor doodle illustration in a children's storybook style. Characters are drawn with super thin (0.05pt) black ink that is intentionally imperfect, combined with transparent watercolor strokes that aesthetically bleed outside the lines on rough textured paper.",
+            "24. GAYA 24/ ImaWimmel / Wimmelbilderbuch (Teeming Picture Book)": "Teeming Wimmelbilderbuch children's hidden-object book illustration, highly dense and crowded. Using a bird's-eye or isometric perspective, featuring a super busy miniature world with hundreds of characters and objects interconnected in witty little stories.",
+            "25. GAYA 25/ ImaCozy / Premium Cozy Storybook Illustration": "Classic 2D digital children's book illustration drawn using textured pastel brush strokes and traditional colored pencils. Featuring a warm color palette with a soft magical glowing illumination on a grainy paper texture surface. Creating a highly cozy, calming, nostalgic, and imaginative fairytale atmosphere.",
+            "26. GAYA 26/ ImaVinta / Premium Vintage Storybook Illustration": "Classic golden age 2D children's book illustration with a retro touch. Featuring organic pen ink line details blended with faded pastel (muted colors) watercolor strokes on a yellowing, rough textured paper surface. Creating a nostalgic, warm, and historically rich fairytale atmosphere.",
+            "27. GAYA 27/ ImaAqua / Premium Watercolor Storybook Illustration": "Classic 2D children's book illustration painted with soft and transparent watercolor strokes. Featuring a blend of organic pastel color gradients, natural pigment effects from wet-on-wet techniques, and fine pencil sketch details on a rough cold-pressed paper surface. Creating a warm, calming, nostalgic, and visually imaginative fairytale atmosphere.",
+            "28. GAYA 28/ ImaScandi / Premium Scandinavian Folk Storybook Art": "2D digital Scandinavian Nordic folk art storybook illustration embracing a minimalist aesthetic with geometric flora and fauna ornaments. Featuring a muted earth tones palette using flat coloring techniques with fine grain textures and characterful organic brush strokes. Creating a highly calming, warm hygge-vibe, aesthetic, and modern fairytale atmosphere.",
+            "29. GAYA 29/ ImaWhim / Premium Whimsical Storybook Illustration": "2D digital whimsical children's book illustration full of magic and fantasy. Featuring soft pastel brush strokes, dynamic fluid organic shapes, and magical glowing light effects on a smooth textured paper surface. Creating an enchanting, cheerful, slightly eccentric, and wildly imaginative fairytale atmosphere.",
+            "30. GAYA 30/ ImaTale / Premium Enchanted Fairytale Storybook Art": "Digital illustration in a classic enchanted fairytale storybook style with a premium touch. Featuring soft oil paint and pastel textured brush strokes on a fine-grained paper surface. Combined with magical volumetric lighting and a warm pastel color palette that creates an enchanting, nostalgic, and magical atmosphere.",
+            "31. GAYA 31/ ImaEdito / Premium Editorial Storybook Illustration": "2D digital illustration blending modern editorial magazine design aesthetics with children's storybook narrative charm. Featuring a smart use of negative space, lineless characters with crisp geometric shapes, and a contrasting color palette coated in a fine grain texture. Creating a poetic, conceptual, aesthetic, and contemporary visual atmosphere.",
+            "32. GAYA 32/ ImaPencil / Premium Soft Pencil Storybook Illustration": "Classic 2D digital children's book illustration drawn using highly soft and layered pastel colored pencil hatching techniques. Featuring a smooth graphite or pencil stroke grain texture on thick sketch paper, naturally blending contour lines, and a muted warm color palette. Creating a calming, nostalgic, and tender fairytale atmosphere.",
+            "33. GAYA 33/ ImaCottage / Premium Cottagecore Storybook Illustration": "2D children's book illustration embracing a romantic and peaceful cottagecore aesthetic. Featuring a blend of pastel watercolor strokes and colored pencil hatching on a rough paper surface, highlighting organic elements like wildflowers, mushrooms, and wooden cottages in warm earth tones. Creating a highly calming, nostalgic, cozy, and nature-harmonious fairytale atmosphere.",
+            "34. GAYA 34/ ImaKids / Premium Children's Book Illustration": "2D digital children's book illustration blending soft watercolor strokes and detailed colored pencil hatching on a rough textured paper surface. Featuring organically designed characters with blank faceless features integrated into a warm pastel color palette environment, creating a nostalgic, cozy, and imaginative fairytale atmosphere.",
+            "35. GAYA 35/ ImaStory / Whimsical Watercolor Storybook Illustration": "Traditional whimsical watercolor storybook illustration full of warmth and imagination. Using soft wet-on-wet color strokes combined with thin pencil sketches on a richly textured cold-pressed paper surface. Featuring expressively proportioned characters with a muted earthy pastel color palette, creating a nostalgic, sweet, and storytelling atmosphere.",
+            "36. GAYA 36/ ImaWaco / Watercolor & Ink Illustration": "Premium traditional watercolor painting with expressive freehand black ink contour lines. Utilizing wet-on-wet techniques to produce luminous transparent color gradients, lively brush textures, and natural pigment grains on a realistic cold-pressed paper surface.",
+            "37. GAYA 37/ ImaGouache / Premium Opaque Gouache Painting": "2D traditional opaque gouache painting illustration on a rough textured paper surface. Featuring expressive brush strokes, dense pigmented overlapping colors with a matte shine-free finish, and organic handmade painting details. Creating a warm, aesthetic, characterful visual atmosphere rich in tactile texture.",
+            "38. GAYA 38/ ImaOil / Premium Impasto Oil Painting": "2D traditional impasto oil painting illustration on a rough canvas surface. Featuring expressive impasto brush strokes with voluminous color pigment build-up, realistic oil sheen effects, and a thick blend of organically unified colors. Creating an elegant, classic, expressive, and highly artistic visual atmosphere.",
+            "39. GAYA 39/ ImaAcryl / Premium Expressive Acrylic Painting": "2D traditional expressive acrylic painting illustration on a rough canvas surface. Featuring thick, bold, and decisive brush strokes with highly pigmented, fast-drying overlapping colors. Highlighting a satin semi-gloss finish with light impasto texture details, creating a dynamic, energetic, expressive, and contemporary visual atmosphere.",
+            "40. GAYA 40/ ImaColor / Premium Colored Pencil Illustration": "Traditional 2D colored pencil illustration drawn using layered hatching techniques on a thick textured sketch paper surface. Featuring rich color pigment strokes, organic color blending through varied hand pressure, and precise line details that retain the original paper grain. Creating a warm, nostalgic, expressive visual atmosphere that strongly emphasizes an authentic hand-drawn touch.",
+            "41. GAYA 41/ ImaStudy / Studygram Digital Journaling & Scrapbook": "Modern digital journaling Studygram aesthetic like GoodNotes or Notion apps. Set against a white grid or graph paper background, decorated with a collage of torn paper scraps, decorative stickers, pastel washi tape, highlighter marks, paper clips, and neat minimal line illustration notes.",
+            "42. GAYA 42/ ImaDenim / Hand-Drawn Sketchnote & Visual Journaling": "Creative analog hand-drawn sketchnote journaling doodles using black ink pens and Copic marker coloring. Featuring faint pencil construction lines, connecting arrows, visual thinking diagrams, and slight coffee stains that provide a casual yet informative study note impression.",
+            "43. GAYA 43/ ImaSketch / Doodle Journal Notebook Illustration": "Teenage school notebook sketch drawn using a blue gel or ballpoint pen on lined paper. Featuring cross-hatching techniques, marker circles, annotation arrows, and bright neon highlighter scribbles that create a relaxed study atmosphere.",
+            "44. GAYA 44/ ImaMix / Mixed Media Experimental Collage": "Experimental mixed media collage artwork harmoniously combining analog painting techniques and digital collages. Featuring a unique blend of thickly textured paint strokes, expressive black ink sketches, and stacked paper cutouts with a grainy texture. Creating a visually rich, detailed, artistic, and highly energetic creative display.",
+            "45. GAYA 45/ ImaFlato / Modern Flat Vector Illustration": "Modern flat vector 2D minimal graphic art with a clean lineless aesthetic. Featuring crisp geometric shapes, solid color blocking in pastel or pop themes, and flat lighting without complex gradients to create a neat, elegant, and user-friendly look.",
+            "46. GAYA 46/ ImaNoto / Notion Minimal Monochrome Illustration": "Pure minimal monochrome black and white Notion-style illustration. Set against a clean white background with vast negative space, featuring solid black hair silhouettes and a highly elegant, neat infographic or mind map structure.",
+            "47. GAYA 47/ ImaLine / Intricate Black & White Line Art Illustration": "Monochrome black & white line art illustration in a highly dense and detailed coloring book style. Using clean and thick black contour lines, combined with intricate cross-hatching techniques to provide texture and shading on retro-vibe interiors. Featuring a linear composition without color, rich in visual elements, creating a nostalgic, calm, and aesthetic atmosphere.",
+            "48. GAYA 48/ ImaPop / Bold Pop Art Illustration": "Modern pop art poster digital illustration with thick, bold black outlines. Featuring a blend of highly saturated and bold contrasting colors, combined with a fine vintage comic print halftone texture to create an iconic, energetic, and highly expressive visual impression.",
+            "49. GAYA 49/ ImaAvantAsian / Avant-Garde Geometric Asian Illustration": "Premium flat vector digital illustration deconstructed into abstract geometric shapes. Featuring an Asian female character (STRICTLY profile or completely featureless silhouette) adorned with traditional patterns (flowers, clouds, ornaments) and complex headpieces broken down into sharp shapes. Set against an abstract collage of geometric shapes in a bright, contrasting color palette, creating an avant-garde, fashionable, and contemporary atmosphere.",
+            "50. GAYA 50/ ImaGeru / Grunge Streetwear Photocopy Collage": "Raw and bold grunge streetwear poster mixed media collage. Using a worn-out xerography photocopy textured monochrome foundation, combined with torn paper, black duct tape, neon spray paint splatters, and stencil-style typography.",
+            "51. GAYA 51/ ImaGraf / Risograph Vintage Graphic Print": "Retro risograph vintage graphic print blending indie zine and classic analog poster aesthetics. Featuring a limited dual-tone color blend overlaid with halftone dot patterns, distinctive print misregistration effects, and grainy ink textures on a crispy recycled paper surface. Creating an artistic, nostalgic visual atmosphere rich in analog textures.",
+            "52. GAYA 52/ ImaGraff / Urban Street Graffiti Art": "Urban street graffiti mural art drawn on a rough textured brick wall using a combination of spray paint and thick markers. Featuring paint drips, sharp contour lines, striking neon color gradients, and expressive paint splatters. Creating a bold, energetic impression rich in modern street culture aesthetics.",
+            "53. GAYA 53/ ImaChalk / Vintage Chalkboard Typography & Sketch": "Classic vintage chalkboard typography and sketch illustration set against a rough textured blackboard background. Featuring dusty chalk strokes with a crispy texture, fine hatching lines, and realistic erased chalk smudge effects. Combined with artistic hand-lettering typography and detailed line sketches, creating a friendly, warm, and authentic cafe or classroom retro atmosphere.",
+            "54. GAYA 54/ ImaWood / Minimalist Vintage Japanese Woodcut Print": "Modern traditional Japanese Ukiyo-e minimalist vintage woodcut print. Featuring a minimalist composition with clean, sharp, and precise black contour lines on rough textured washi paper. Using a limited, muted vintage color palette, utilizing vast negative space to create a calm, elegant, and authentic atmosphere.",
+            "55. GAYA 55/ ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi": "2D digital painting blending classic Edo-era Ukiyo-e woodblock print aesthetics with sci-fi elements. Featuring bold, dynamic black ink outlines inspired by Hokusai, a traditional muted color palette (indigo, vermilion, ochre), and worn-out ancient washi paper textures. Temporal anomalies are visualized through calligraphic swirling clouds and waves bending space-time, creating a dramatic and historic surreal atmosphere.",
+            "56. GAYA 56/ ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration": "Classic black and white vintage sci-fi pulp magazine ink illustration from the 1940s using highly intricate and precise stippling and cross-hatching techniques. Combining extreme chiaroscuro contrast to showcase retro mechanical details, leather textures, and dramatic cinematic lighting. Set against a pitch-black space background, delivering a mysterious, profound, and authentic retro-futuristic cosmic atmosphere.",
+            "57. GAYA 57/ ImaKomi / Comic Studio (High-Fidelity Islamic Comic)": "Premium high-fidelity Islamic comic studio and professional webtoon style with cel-shaded 2D/2.5D coloring. Using clean, bold black ink lines, dramatic lighting effects, and screentone/halftone textures for a modern and energetic comic narrative visualization.",
+            "58. GAYA 58/ ImaWebo / Premium Webtoon Comic Illustration": "Modern Korean webtoon/manhwa digital illustration with extremely clean and smooth line art. Using dynamic diagonal panel layouts, glowing environmental rim lighting, and professionally integrated narrative boxes and speech bubbles.",
+            "59. GAYA 59/ ImaDecora / Retro Psychedelic Anime Pop Illustration": "2D digital retro psychedelic anime pop illustration with Harajuku Decora aesthetics and highly vibrant elements. Featuring clean black contour lines, cel-shaded coloring with highly saturated rainbow colors, halftone hatching textures, floral ornaments, and star sparkle effects. Set against a soft cream plain background, creating a cheerful, energetic, nostalgic, and expressive atmosphere.",
+            "60. GAYA 60/ ImaPixar / Pixar Inspired 3D Animation": "High-end cinematic 3D animation inspired by Pixar feature films. Characters are designed with adorable and expressive proportions, featuring realistic cloth simulations, subsurface scattering skin, and dramatic, emotional volumetric lighting.",
+            "61. GAYA 61/ ImaGame / Stylized Game Art Illustration": "Stylized 3D game art illustration concept with a clean isometric perspective. Object surfaces are colored using hand-painted digital brush texture rendering typical of popular casual RPGs, featuring a bright, colorful, and characterful layered environment.",
+            "62. GAYA 62/ ImaVoxel / Isometric 3D Voxel Art Diorama": "Isometric 3D voxel art diorama built from precise retro-modern pixel cubes rendered in premium MagicaVoxel. Featuring a neat grid block texture with a matte surface, an enchanting color blend, and natural lighting that produces soft yet distinct shadows. Creating an aesthetic, nostalgic, and visually charming geometric miniature world atmosphere."
+        };
+
+        const gemsData = [
+            // --- 🧵 3D FABRIC & YARN CRAFTS ---
+            { title: "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D", url: "https://gemini.google.com/gem/1wydjr_DFrGN_q70XNjnhYovpasUFtGvA?usp=sharing", desc: "Referensi Visual & Aset" },
+            { title: "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "3. GAYA 3/ ImaQupa / Premium Quilted Patchwork 3D", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "4. GAYA 4/ ImaFlannel / Premium Stuffed Felt Art Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "5. GAYA 5/ ImaStitch / Premium 3D Hand Embroidery Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "6. GAYA 6/ ImaFab / Premium Mixed Fabric Collage Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "7. GAYA 7/ ImaWool / Premium 3D Wool Sculpture Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "8. GAYA 8/ ImaPlush / Premium 3D Plush Toy Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "9. GAYA 9/ ImaMacra / Premium Handcrafted Macrame Fiber Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "10. GAYA 10/ ImaWeave / Premium Woven Tapestry Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "11. GAYA 11/ ImaTile / Premium 3D Textile Storybook Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "12. GAYA 12/ ImaSand / Premium Sand Sculpture & Art Diorama 3D", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "13. GAYA 13/ ImaShadow / Premium Paper Shadow Box 3D", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "14. GAYA 14/ ImaCraft / Premium 3D Papercraft Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "15. GAYA 15/ ImaPaper / Premium Layered Papercut 3D Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "16. GAYA 16/ ImaOri / 3D Origami Paper Art Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "17. GAYA 17/ ImaPaper / Premium 3D Paper Diorama Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "18. GAYA 18/ ImaQuill / Premium 3D Paper Quilling Art Diorama", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "19. GAYA 19/ ImaKiri / Premium 3D Kirigami Paper Cut Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "20. GAYA 20/ ImaCut / Premium Handmade Cut Paper Collage", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "21. GAYA 21/ ImaCard / Premium Handmade Cardboard Craft 3D", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "22. GAYA 22/ ImaSculpt / Premium 3D Paper Sculpture Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "23. GAYA 23/ ImaWhimsi / Ink & Watercolor Whimsical Doodle", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "24. GAYA 24/ ImaWimmel / Wimmelbilderbuch (Teeming Picture Book)", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "25. GAYA 25/ ImaCozy / Premium Cozy Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "26. GAYA 26/ ImaVinta / Premium Vintage Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "27. GAYA 27/ ImaAqua / Premium Watercolor Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "28. GAYA 28/ ImaScandi / Premium Scandinavian Folk Storybook Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "29. GAYA 29/ ImaWhim / Premium Whimsical Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "30. GAYA 30/ ImaTale / Premium Enchanted Fairytale Storybook Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "31. GAYA 31/ ImaEdito / Premium Editorial Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "32. GAYA 32/ ImaPencil / Premium Soft Pencil Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "33. GAYA 33/ ImaCottage / Premium Cottagecore Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "34. GAYA 34/ ImaKids / Premium Children's Book Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "35. GAYA 35/ ImaStory / Whimsical Watercolor Storybook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "36. GAYA 36/ ImaWaco / Watercolor & Ink Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "37. GAYA 37/ ImaGouache / Premium Opaque Gouache Painting", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "38. GAYA 38/ ImaOil / Premium Impasto Oil Painting", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "39. GAYA 39/ ImaAcryl / Premium Expressive Acrylic Painting", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "40. GAYA 40/ ImaColor / Premium Colored Pencil Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "41. GAYA 41/ ImaStudy / Studygram Digital Journaling & Scrapbook", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "42. GAYA 42/ ImaDenim / Hand-Drawn Sketchnote & Visual Journaling", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "43. GAYA 43/ ImaSketch / Doodle Journal Notebook Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "44. GAYA 44/ ImaMix / Mixed Media Experimental Collage", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "45. GAYA 45/ ImaFlato / Modern Flat Vector Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "46. GAYA 46/ ImaNoto / Notion Minimal Monochrome Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "47. GAYA 47/ ImaLine / Intricate Black & White Line Art Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "48. GAYA 48/ ImaPop / Bold Pop Art Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "49. GAYA 49/ ImaAvantAsian / Avant-Garde Geometric Asian Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "50. GAYA 50/ ImaGeru / Grunge Streetwear Photocopy Collage", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "51. GAYA 51/ ImaGraf / Risograph Vintage Graphic Print", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "52. GAYA 52/ ImaGraff / Urban Street Graffiti Art", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "53. GAYA 53/ ImaChalk / Vintage Chalkboard Typography & Sketch", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "54. GAYA 54/ ImaWood / Minimalist Vintage Japanese Woodcut Print", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "55. GAYA 55/ ImaHoku / Hokusai-inspired Ukiyo-e Sci-Fi", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "56. GAYA 56/ ImaFinlay / Vintage Sci-Fi Stipple Ink Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "57. GAYA 57/ ImaKomi / Comic Studio (High-Fidelity Islamic Comic)", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "58. GAYA 58/ ImaWebo / Premium Webtoon Comic Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "59. GAYA 59/ ImaDecora / Retro Psychedelic Anime Pop Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "60. GAYA 60/ ImaPixar / Pixar Inspired 3D Animation", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "61. GAYA 61/ ImaGame / Stylized Game Art Illustration", url: "#", desc: "Referensi Visual & Aset" },
+            { title: "62. GAYA 62/ ImaVoxel / Isometric 3D Voxel Art Diorama", url: "#", desc: "Referensi Visual & Aset" }
+        ];
+
         const strictSyariatRule = `
-* STRICT SYARIAT RULES (WAJIB DIIKUTI KETAT):
+* STRICT SYARIAT RULES (WAJIB DIIKUTI KETAT UNTUK MANUSIA & HEWAN):
   1. WANITA: DILARANG KERAS menampakkan aurat. Yang boleh terlihat HANYA wajah dan telapak tangan. WAJIB menggunakan khimar (hijab lebar menutupi seluruh kepala, dada, hingga lutut) dan menutupi seluruh lengan. Dilarang keras menampakkan leher, rambut, atau betis. Dada wanita WAJIB tertutup rapat oleh khimar.
-  2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, hewan (kuda, unta, gajah, burung, anjing, kucing, dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS (BLANK FACE, TANPA MATA, TANPA HIDUNG, TANPA MULUT).
-  3. LARANGAN MENGGAMBAR MATA: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam (NO EYE LINES, NO EYE CURVES) PADA MANUSIA MAUPUN HEWAN. Wajah harus "completely blank face area" (rata tanpa elemen wajah sama sekali).`;
+  2. FACELESS/NO EYES UNTUK SEMUA MAKHLUK: Semua manusia, HEWAN (unta, kuda, gajah, burung, anjing, kucing, dll), dan benda menyerupai makhluk (boneka, mainan teddy, patung) WAJIB FACELESS (BLANK FACE, TANPA MATA, TANPA HIDUNG, TANPA MULUT).
+  3. LARANGAN MENGGAMBAR MATA HEWAN: DILARANG KERAS menggambar garis mata, lengkungan mata, bulu mata, titik mata, atau indikasi mata terpejam (NO EYE LINES, NO EYE CURVES) PADA HEWAN APAPUN. Wajah hewan harus "completely blank featureless flat skin" (kulit rata tanpa elemen wajah sama sekali).`;
 
         let currentMode = 'B'; 
         let currentSavedTab = 'B'; 
-        let savedData = JSON.parse(localStorage.getItem('imapro_saved')) || { A: [], B: [] };
+        let savedData = JSON.parse(localStorage.getItem('imapro_saved_no_img')) || { A: [], B: [] };
+        let savedSettingsProfiles = JSON.parse(localStorage.getItem('imapro_settings_profiles')) || {};
         let currentOutputBlocks = []; 
         let currentTopicTemp = ""; 
+        let confirmCallback = null;
+        let promptCallback = null;
+
+        function saveActiveOutput() {
+            localStorage.setItem('imapro_active_output', JSON.stringify({
+                topicTemp: currentTopicTemp,
+                blocks: currentOutputBlocks
+            }));
+            const topicVal = document.getElementById('input-topic').value;
+            const instVal = document.getElementById('input-instructions').value;
+            localStorage.setItem('imapro_input_topic', topicVal);
+            localStorage.setItem('imapro_input_inst', instVal);
+        }
+
+        function renderGemsGrid() {
+            const grid = document.getElementById('gems-grid');
+            
+            const styleSets = [
+                { bg: "bg-purple-50 dark:bg-purple-900/20", border: "hover:border-purple-500 dark:hover:border-purple-500", text: "group-hover:text-purple-500", emoji: "🎨" },
+                { bg: "bg-blue-50 dark:bg-blue-900/20", border: "hover:border-blue-500 dark:hover:border-blue-500", text: "group-hover:text-blue-500", emoji: "🖼️" },
+                { bg: "bg-green-50 dark:bg-green-900/20", border: "hover:border-green-500 dark:hover:border-green-500", text: "group-hover:text-green-500", emoji: "✨" },
+                { bg: "bg-orange-50 dark:bg-orange-900/20", border: "hover:border-orange-500 dark:hover:border-orange-500", text: "group-hover:text-orange-500", emoji: "💎" },
+                { bg: "bg-pink-50 dark:bg-pink-900/20", border: "hover:border-pink-500 dark:hover:border-pink-500", text: "group-hover:text-pink-500", emoji: "💡" },
+                { bg: "bg-teal-50 dark:bg-teal-900/20", border: "hover:border-teal-500 dark:hover:border-teal-500", text: "group-hover:text-teal-500", emoji: "🖌️" }
+            ];
+
+            let html = '';
+            gemsData.forEach((gem, index) => {
+                const style = styleSets[index % styleSets.length];
+                html += `
+                <a href="${gem.url}" target="_blank" class="gem-item p-4 bg-white dark:bg-[#1C1C1E] border border-gray-100 dark:border-ios-darkBorder shadow-sm hover:shadow-md rounded-2xl ${style.border} transition-all flex items-center gap-4 group h-full">
+                    <div class="w-12 h-12 flex-shrink-0 ${style.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span class="text-xl">${style.emoji}</span>
+                    </div>
+                    <div class="flex-1 min-w-0 text-left">
+                        <h4 class="font-bold text-sm text-gray-800 dark:text-white truncate gem-title" title="${gem.title}">${gem.title}</h4>
+                        <p class="text-xs text-gray-500 mt-0.5 truncate gem-desc">${gem.desc}</p>
+                    </div>
+                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 ${style.text} transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </a>
+                `;
+            });
+            grid.innerHTML = html;
+        }
 
         window.onload = () => {
             populateSelect('set-style', styleArtsList);
             populateSelect('set-font-header', fontDNAList);
             populateSelect('set-font-body', fontDNAList);
+            populateSelect('set-font-footer', fontDNAList);
             
             const palSelect = document.getElementById('set-palette');
             for(const p in colorPalettesDetails) {
@@ -839,13 +1165,31 @@
                 document.getElementById('gemini-api-key').value = savedKey;
             }
             
+            const savedTopic = localStorage.getItem('imapro_input_topic');
+            const savedInst = localStorage.getItem('imapro_input_inst');
+            if(savedTopic) document.getElementById('input-topic').value = savedTopic;
+            if(savedInst) document.getElementById('input-instructions').value = savedInst;
+
+            const activeOut = JSON.parse(localStorage.getItem('imapro_active_output'));
+            if(activeOut && activeOut.blocks && activeOut.blocks.length > 0) {
+                currentTopicTemp = activeOut.topicTemp;
+                currentOutputBlocks = activeOut.blocks;
+                let html = "";
+                currentOutputBlocks.forEach((blk, i) => {
+                    html += createOutputBlockHTML(i, blk.title, blk.content, false);
+                });
+                document.getElementById('output-container').innerHTML = html;
+            }
+
             if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');
             }
 
+            renderGemsGrid();
             renderSaved();
+            renderSavedSettingsDropdown();
             switchMode('B');
         };
 
@@ -858,11 +1202,68 @@
                 localStorage.theme = 'dark';
             }
         }
+        
+        function openGemsModal() {
+            const modal = document.getElementById('gems-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('.transform').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeGemsModal() {
+            const modal = document.getElementById('gems-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                const searchInput = document.getElementById('search-gems');
+                if (searchInput) {
+                    searchInput.value = '';
+                    filterGems();
+                }
+            }, 300);
+        }
+
+        function filterGems() {
+            const input = document.getElementById('search-gems').value.toLowerCase();
+            const items = document.querySelectorAll('.gem-item');
+            let hasVisible = false;
+            
+            items.forEach(item => {
+                const title = item.querySelector('.gem-title').textContent.toLowerCase();
+                const desc = item.querySelector('.gem-desc').textContent.toLowerCase();
+                if (title.includes(input) || desc.includes(input)) {
+                    item.style.display = 'flex';
+                    hasVisible = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            const emptyState = document.getElementById('gems-empty');
+            if (emptyState) {
+                emptyState.style.display = hasVisible ? 'none' : 'flex';
+            }
+        }
 
         function populateSelect(id, list) {
             const el = document.getElementById(id);
             if (!el) return;
-            el.innerHTML = list.map(item => `<option value="${item}">${item}</option>`).join('');
+            let html = '';
+            let inOptGroup = false;
+            list.forEach(item => {
+                if (item.startsWith('--- ')) {
+                    if (inOptGroup) html += '</optgroup>';
+                    html += `<optgroup label="${item.replace(/---/g, '').trim()}">`;
+                    inOptGroup = true;
+                } else {
+                    html += `<option value="${item}">${item}</option>`;
+                }
+            });
+            if (inOptGroup) html += '</optgroup>';
+            el.innerHTML = html;
         }
 
         function switchMode(mode) {
@@ -871,16 +1272,16 @@
             const btnB = document.getElementById('btn-mode-b');
             const settingCard = document.getElementById('setting-card');
 
-            if(!btnA || !btnB) return; // Safeguard if DOM is missing elements
+            if(!btnA || !btnB) return; 
 
-            const activeClass = 'w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-bold rounded-xl bg-white dark:bg-ios-darkPanel shadow-sm text-black dark:text-white transition-all duration-300';
-            const inactiveClass = 'w-full flex items-center justify-center gap-2 px-3 py-3 text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300';
+            const activeClass = 'flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-3 py-3 text-[11px] sm:text-sm font-bold rounded-xl bg-white dark:bg-ios-darkPanel shadow-sm text-black dark:text-white transition-all duration-300 whitespace-nowrap';
+            const inactiveClass = 'flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-1 sm:px-3 py-3 text-[11px] sm:text-sm font-semibold rounded-xl text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all duration-300 whitespace-nowrap';
 
             if (mode === 'A') {
                 btnA.className = activeClass;
                 btnB.className = inactiveClass;
                 if (settingCard) settingCard.style.display = 'none';
-            } else {
+            } else if (mode === 'B') {
                 btnA.className = inactiveClass;
                 btnB.className = activeClass;
                 if (settingCard) settingCard.style.display = 'block';
@@ -911,6 +1312,66 @@
             }, 3000);
         }
 
+        function showConfirmModal(msg, callback) {
+            document.getElementById('confirm-msg').innerText = msg;
+            confirmCallback = callback;
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                confirmCallback = null;
+            }, 300);
+        }
+
+        document.getElementById('confirm-btn').addEventListener('click', () => {
+            if(confirmCallback) confirmCallback();
+            closeConfirmModal();
+        });
+
+        function showPromptModal(callback) {
+            document.getElementById('prompt-input').value = '';
+            promptCallback = callback;
+            const modal = document.getElementById('prompt-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+                document.getElementById('prompt-input').focus();
+            }, 10);
+        }
+
+        function closePromptModal() {
+            const modal = document.getElementById('prompt-modal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                promptCallback = null;
+            }, 300);
+        }
+
+        document.getElementById('prompt-confirm-btn').addEventListener('click', () => {
+            const val = document.getElementById('prompt-input').value;
+            if(promptCallback) promptCallback(val);
+            closePromptModal();
+        });
+
+        document.getElementById('prompt-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                document.getElementById('prompt-confirm-btn').click();
+            }
+        });
+
         function handleKustom(selectEl) {
             const customInput = document.getElementById(selectEl.id + '-custom');
             if (!customInput) return;
@@ -929,37 +1390,91 @@
             const fields = document.getElementById('dynamic-char-fields');
             if (!container || !fields) return;
 
-            if (val === 'Auto-Set by AI' || val === 'KUSTOM' || val === 'Tanpa Karakter') {
+            if (val === 'Auto-Set by AI' || val === 'KUSTOM' || val === 'Tanpa Karakter' || val === "") {
                 container.classList.add('hidden');
                 return;
             }
 
             container.classList.remove('hidden');
-            let html = `
-                <div><label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2">A. Wajah</label>
-                <select id="char-face" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)"><option value="Normal (Proporsional)">Normal (Proporsional)</option><option value="Chibi (Cute)">Chibi (Cute)</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-face-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik wajah..."></div>
-            `;
+            
+            const isFemale = (val === 'Wanita' || val === 'Anak Perempuan');
+            const isMale = (val === 'Pria Dewasa' || val === 'Anak Laki-laki');
+            const isCouple = (val === 'Pasutri');
 
-            if (val === 'Wanita' || val === 'Anak Perempuan') {
-                html += `
-                    <div><label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2">B. Penutup Kepala</label>
-                    <select id="char-headwear" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)"><option value="Khimar Panjang Menutup Dada">Khimar Panjang Menutup Dada</option><option value="Khimar & Cadar/Niqab">Khimar & Cadar/Niqab</option><option value="Bergo Anak">Bergo Anak</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik detail..."></div>
-                `;
+            let html = "";
+
+            if (isCouple) {
+                // LAYOUT PASUTRI: 2 KOLOM
+                html = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                    <!-- SUAMI -->
+                    <div class="space-y-4 bg-white dark:bg-[#2C2C2E] p-4 rounded-xl shadow-sm border border-gray-100 dark:border-ios-darkBorder">
+                        <h5 class="font-bold text-sm text-blue-600 dark:text-blue-400">DATA SUAMI</h5>
+                        ${generateCharFields('suami', true, false)}
+                    </div>
+                    <!-- ISTRI -->
+                    <div class="space-y-4 bg-white dark:bg-[#2C2C2E] p-4 rounded-xl shadow-sm border border-gray-100 dark:border-ios-darkBorder">
+                        <h5 class="font-bold text-sm text-pink-600 dark:text-pink-400">DATA ISTRI</h5>
+                        ${generateCharFields('istri', false, true)}
+                    </div>
+                </div>`;
             } else {
-                html += `
-                    <div><label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2">B. Haircut/ Penutup Kepala</label>
-                    <select id="char-headwear" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)"><option value="Peci/ Kopiah Hitam">Peci/ Kopiah Hitam</option><option value="Rapi Standar">Rapi Standar</option><option value="Messy Curly">Messy Curly</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-headwear-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik detail..."></div>
-                `;
+                // LAYOUT TUNGGAL
+                html = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">${generateCharFields('char', isMale, isFemale)}</div>`;
             }
 
-            html += `
-                <div><label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2">C. Outfit/ Pakaian</label>
-                <select id="char-outfit" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)"><option value="Gamis Longgar (Modest)">Gamis Longgar (Modest)</option><option value="Kemeja Koko">Kemeja Koko</option><option value="Casual Sopan">Casual Sopan</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-outfit-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik outfit..."></div>
-                
-                <div><label class="block text-xs font-bold text-gray-600 dark:text-gray-400 mb-2">D. Aksesoris</label>
-                <select id="char-accessories" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)"><option value="Tanpa Aksesoris">Tanpa Aksesoris</option><option value="Kacamata Bulat">Kacamata Bulat</option><option value="Membawa Buku">Membawa Buku</option><option value="KUSTOM">KUSTOM</option></select><input type="text" id="char-accessories-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik aksesoris..."></div>
-            `;
             fields.innerHTML = html;
+        }
+
+        // Helper untuk generate field karakter
+        function generateCharFields(prefix, isMale, isFemale) {
+            let fieldsHtml = "";
+            
+            const optFace = ['Normal (Proporsional)', 'Chibi (Cute)', 'KUSTOM'];
+            const optHairM = ['Rapi Standar', 'Messy Curly', 'None', 'Buzzcut', 'Induction Cut', 'Burr Cut', 'Crew Cut', 'Ivy League', 'Butch Cut', 'High and Tight', 'Caesar Cut', 'French Crop', 'Textured Crop', 'Side Part', 'Classic Side Part', 'Comb Over', 'Business Cut', 'Taper Cut', 'Low Taper', 'Mid Taper', 'High Taper', 'Scissor Cut', 'Medium Layer Cut', 'Curtains', 'Middle Part', 'Two Block', 'Korean Two Block', 'Korean Perm', 'Comma Hair', 'Down Perm', 'Wolfcut', 'Bro Flow', 'Slick Back', 'Pompadour', 'Quiff', 'Brush Up', 'Spiky Hair', 'Messy Fringe', 'Shag Cut', 'Mullet', 'Long Straight', 'Long Wavy', 'Curly Medium', 'Wavy Medium', 'Broccoli Hair', 'Afro', 'Man Bun', 'Top Knot', 'Samurai Bun', 'Clean Shaved', 'KUSTOM'];
+            const optHeadM = ['Tanpa Penutup Kepala', 'Peci/ Kopiah Hitam', 'Peci Putih', 'Kopiah', 'Songkok', 'Kufi', 'Imamah', 'Sorban', 'White Turban', 'Black Turban', 'Ghutrah', 'Saudi Ghutrah', 'Shemagh', 'Red Shemagh', 'Keffiyeh', 'Agal', 'Omani Kuma', 'Fez', 'Beanie', 'Baseball Cap', 'Snapback', 'Dad Cap', 'Trucker Cap', 'Bucket Hat', 'Fedora', 'Panama Hat', 'Boater Hat', 'Flat Cap', 'Newsboy Cap', 'Cowboy Hat', 'Beret', 'Headband', 'Bandana', 'KUSTOM'];
+            const optHeadF = ['Khimar Panjang Menutup Dada', 'Khimar & Cadar/Niqab', 'Bergo Anak', 'None', 'Long Khimar', 'Extra Long Khimar', 'Maxi Khimar', 'XXL Khimar', 'Butterfly Khimar', 'Diamond Khimar', 'Layered Khimar', 'One Layer Khimar', 'Two Layer Khimar', 'Three Layer Khimar', 'Instant Khimar', 'Tie Back Khimar', 'Overhead Khimar', 'Closed Khimar', 'Front Closed Khimar', 'Saudi Khimar', 'Yemeni Khimar', 'Turkish Khimar', 'Moroccan Khimar', 'Niqab', 'Saudi Niqab', 'Yemeni Niqab', 'Double Layer Niqab', 'Triple Layer Niqab', 'Eye Veil Niqab', 'Full Face Niqab', 'Cadar', 'Long Cadar', 'Khimar with Niqab', 'Khimar with Cadar', 'Jilbab Syar\'i', 'Long Jilbab Syar\'i', 'Extra Long Jilbab Syar\'i', 'Shayla with Khimar Style', 'Al Amira Syar\'i', 'Prayer Mukena Hood', 'Telekung Hood', 'Chador', 'Iranian Chador', 'Afghan Chador', 'Burqa', 'KUSTOM'];
+            const optOutM = ['Kemeja Koko', 'Casual Sopan', 'None', 'Koko Shirt', 'Long Sleeve Koko', 'Short Sleeve Koko', 'Saudi Thobe', 'Emirati Kandura', 'Omani Dishdasha', 'Qatari Thobe', 'Moroccan Djellaba', 'Jubba', 'Long Jubbah', 'Abaya for Men', 'Bisht', 'Kurta', 'Kurta Pajama', 'Pathani Suit', 'Baju Melayu', 'Teluk Belanga', 'Cekak Musang', 'Baju Kurung Lelaki', 'Jalabiya', 'Kaftan for Men', 'Modern Hanfu', 'Traditional Hanfu', 'Tang Suit', 'Samue', 'Kimono Style Robe', 'Long Sleeve Shirt', 'Oxford Shirt', 'Linen Shirt', 'Flannel Shirt', 'Polo Shirt', 'Henley Shirt', 'Sweater', 'Cardigan', 'Hoodie', 'Zip Hoodie', 'Crewneck Sweatshirt', 'Bomber Jacket', 'Varsity Jacket', 'Denim Jacket', 'Field Jacket', 'Utility Jacket', 'Windbreaker', 'Puffer Jacket', 'Blazer', 'Suit', 'Vest', 'Waistcoat', 'Casual T-Shirt', 'Long Sleeve T-Shirt', 'Plain T-Shirt', 'Cargo Pants', 'Chinos', 'Dress Pants', 'Jeans', 'Linen Pants', 'Jogger Pants', 'Straight Fit Pants', 'Loose Fit Pants', 'Sarong', 'Izar', 'KUSTOM'];
+            const optOutF = ['Gamis Longgar (Modest)', 'None', 'Loose Abaya', 'Saudi Abaya', 'Emirati Abaya', 'Nadwa Abaya', 'Classic Abaya', 'Umbrella Abaya', 'A-Line Abaya', 'Flared Abaya', 'Butterfly Abaya', 'Open Front Abaya', 'Closed Front Abaya', 'Jilbab Syar\'i Dress', 'Loose Gamis', 'Maxi Gamis', 'Straight Cut Gamis', 'A-Line Gamis', 'Flared Gamis', 'Umbrella Gamis', 'Layered Gamis', 'Princess Cut Gamis', 'Loose Kaftan', 'Moroccan Jellaba', 'Turkish Ferace', 'Iranian Manteau', 'Loose Baju Kurung', 'Loose Baju Kurung Modern', 'Loose Hanfu Muslimah', 'Loose Kimono Muslimah', 'Loose Cardigan Set', 'Long Outer Set', 'Loose Tunic and Skirt', 'Loose Tunic and Palazzo', 'Loose Blouse and Maxi Skirt', 'Loose Blouse and Wide Leg Pants', 'Loose Coat Dress', 'Prayer Mukena', 'Telekung', 'Travel Prayer Set', 'KUSTOM'];
+            
+            let optAcc = ['Tanpa Aksesoris', 'Kacamata Bulat', 'None', 'Round Glasses', 'Square Glasses', 'Rectangle Glasses', 'Oval Glasses', 'Aviator Glasses', 'Browline Glasses', 'Wayfarer Glasses', 'Rimless Glasses', 'Half Rim Glasses', 'Thick Round Glasses', 'Thick Frame Glasses', 'Thin Frame Glasses', 'Black Frame Glasses', 'Gold Frame Glasses', 'Silver Frame Glasses', 'Transparent Frame Glasses', 'Blue Light Glasses', 'Reading Glasses', 'Sunglasses', 'Aviator Sunglasses', 'Wayfarer Sunglasses', 'Round Sunglasses', 'Sport Sunglasses', 'Eyepatch', 'Medical Eye Patch', 'Earbuds', 'Wireless Earbuds', 'Bluetooth Earpiece', 'Headset', 'Gaming Headset', 'Over Ear Headphones', 'On Ear Headphones', 'Bluetooth Headphones', 'Microphone Headset', 'Face Mask', 'Medical Mask', 'Respirator Mask', 'Neck Gaiter', 'Face Shield', 'Hearing Aid', 'Oxygen Cannula', 'Membawa Buku', 'KUSTOM'];
+            
+            if (isMale) {
+                optAcc.splice(optAcc.length - 3, 0, 'Beard', 'Short Beard', 'Full Beard', 'Goatee', 'Mustache', 'Light Stubble', 'Medium Stubble', 'Heavy Stubble', 'Sideburns');
+            }
+
+            // Wajah
+            fieldsHtml += renderField(prefix + '-face', 'A. Wajah', optFace, 'Proporsi wajah');
+
+            // Rambut / Penutup Kepala
+            if (isMale) {
+                fieldsHtml += renderField(prefix + '-haircut', 'B. Gaya Rambut', optHairM, 'Gaya rambut pria');
+                fieldsHtml += renderField(prefix + '-headwear', 'C. Penutup Kepala', optHeadM, 'Topi/Peci');
+            } else {
+                fieldsHtml += renderField(prefix + '-headwear', 'B. Penutup Kepala', optHeadF, 'Model Khimar/Niqab');
+            }
+
+            // Outfit
+            fieldsHtml += renderField(prefix + '-outfit', isMale ? 'D. Outfit' : 'C. Outfit', isMale ? optOutM : optOutF, 'Jenis pakaian');
+
+            // Aksesoris
+            fieldsHtml += renderField(prefix + '-accessories', isMale ? 'E. Aksesoris' : 'D. Aksesoris', optAcc, 'Aksesoris pelengkap');
+
+            return fieldsHtml;
+        }
+
+        function renderField(id, label, options, desc) {
+            let opts = options.map(o => `<option value="${o}">${o}</option>`).join('');
+            return `
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-xs font-bold text-gray-600 dark:text-gray-400">${label}</label>
+                        <button type="button" onclick="autoSetSingle(this, '${id}', '${id.replace(/-/g, '_')}', 'STRING', '${desc}')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
+                    </div>
+                    <select id="${id}" class="w-full p-2 text-sm border border-gray-200 dark:border-ios-darkBorder ios-input dark:bg-ios-darkInput dark:text-white outline-none" onchange="checkCharCustom(this)">${opts}</select>
+                    <input type="text" id="${id}-custom" class="hidden w-full p-2 text-sm ios-input border border-gray-200 dark:border-ios-darkBorder dark:bg-ios-darkInput dark:text-white mt-2 outline-none" placeholder="Ketik manual...">
+                </div>
+            `;
         }
 
         window.checkCharCustom = function(selectEl) {
@@ -992,17 +1507,27 @@
 
         function getCharacterDetailsString() {
             const charType = getSettingValue('set-character');
+            
             if (charType === 'Auto-Set by AI' || charType === 'KUSTOM' || charType === 'Tanpa Karakter' || charType === "") {
-                return `* KARAKTER UTAMA:\n\t* GENDER: Dinamis\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES LINES, NO EYE CURVES\n\t* HAIRCUT/ PENUTUP KEPALA: Dinamis\n\t* OUTFIT: Dinamis\n\t* AKSESORIS: Dinamis`;
+                return `KARAKTER UTAMA: Dinamis (Tanpa karakter spesifik, ikuti instruksi utama). PASTIKAN FACELESS.`;
+            }
+
+            if (charType === 'Pasutri') {
+                return `KARAKTER PASUTRI (Keduanya Wajib Faceless/Tanpa Mata):\n- SUAMI:\n  * Wajah: ${getSettingValue('suami-face')}\n  * Rambut: ${getSettingValue('suami-haircut')}\n  * Penutup Kepala: ${getSettingValue('suami-headwear')}\n  * Outfit: ${getSettingValue('suami-outfit')}\n  * Aksesoris: ${getSettingValue('suami-accessories')}\n- ISTRI:\n  * Wajah: ${getSettingValue('istri-face')}\n  * Penutup Kepala: ${getSettingValue('istri-headwear')}\n  * Outfit: ${getSettingValue('istri-outfit')}\n  * Aksesoris: ${getSettingValue('istri-accessories')}`;
+            }
+
+            let charData = "";
+            if (charType === 'Wanita' || charType === 'Anak Perempuan') {
+                charData = `\n- Penutup Kepala: ${getSettingValue('char-headwear')}`;
+            } else {
+                charData = `\n- Gaya Rambut: ${getSettingValue('char-haircut')}\n- Penutup Kepala: ${getSettingValue('char-headwear')}`;
             }
             
-            let headLbl = (charType === 'Wanita' || charType === 'Anak Perempuan') ? 'KHIMAR LEBAR MENUTUP DADA & LENGAN' : 'HAIRCUT/ PENUTUP KEPALA';
-            
-            return `* KARAKTER UTAMA:\n\t* GENDER: ${charType}\n\t* WAJAH: COMPLETELY BLANK FACE AREA, FACELESS, NO EYES LINES, NO EYE CURVES (${getSettingValue('char-face')})\n\t* ${headLbl}: ${getSettingValue('char-headwear')}\n\t* OUTFIT: ${getSettingValue('char-outfit')}\n\t* AKSESORIS: ${getSettingValue('char-accessories')}`;
+            return `KARAKTER UTAMA (${charType} - Wajib Faceless/Tanpa Mata):\n- Wajah: ${getSettingValue('char-face')}${charData}\n- Outfit: ${getSettingValue('char-outfit')}\n- Aksesoris: ${getSettingValue('char-accessories')}`;
         }
 
         function resetSettings() {
-            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-texteffect-header', 'set-texteffect-body', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-footer-position', 'set-copywriting', 'set-hook', 'set-language-style', 'set-logo-position'];
+            const selects = ['set-style', 'set-font-header', 'set-font-body', 'set-font-footer', 'set-texteffect-header', 'set-texteffect-body', 'set-texteffect-footer', 'set-alignment', 'set-ratio', 'set-composition', 'set-bodyformat', 'set-palette', 'set-character', 'set-patch-footer', 'set-footer-position', 'set-copywriting', 'set-hook', 'set-language-style', 'set-logo-position'];
             selects.forEach(id => {
                 const el = document.getElementById(id);
                 if(el) { el.selectedIndex = 0; handleKustom(el); }
@@ -1028,7 +1553,6 @@
             let matchFound = false;
             const aiValLower = String(aiValue).toLowerCase();
 
-            // Try exact match or includes
             for (let i = 0; i < selectEl.options.length; i++) {
                 if (selectEl.options[i].value.toLowerCase() === aiValLower || selectEl.options[i].value.toLowerCase().includes(aiValLower)) {
                     selectEl.selectedIndex = i;
@@ -1037,7 +1561,6 @@
                 }
             }
 
-            // Force KUSTOM if long/specific text or no match
             if (!matchFound || String(aiValue).length > 30) {
                 for (let i = 0; i < selectEl.options.length; i++) {
                     if (selectEl.options[i].value === 'KUSTOM') {
@@ -1078,7 +1601,7 @@
             const originalText = btn.innerHTML;
             btn.innerHTML = `<svg class="w-4 h-4 animate-spin text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Memproses...`;
             btn.disabled = true;
-            showToast("⏳ AI sedang meracik harmoni visual...");
+            showToast("⏳ AI sedang membaca instruksi dan meracik harmoni visual...");
 
             try {
                 const promptText = `Anda adalah Ahli Strategi Konten, Desainer Visual Senior, & Prompt Engineer.
@@ -1086,48 +1609,61 @@ Berdasarkan Topik: "${topic}"
 Dan Instruksi Tambahan: "${instructions}"
 
 PERHATIAN UTAMA (ANCHOR VISUAL):
-User telah menetapkan dan mengunci Gaya Seni (Art Style) berikut: "${currentArtStyle}".
+User telah menetapkan Gaya Seni (Art Style): "${currentArtStyle}".
 
-Tugas Anda memprediksi dan memberikan nilai yang paling cocok untuk SEMUA fitur pengaturan aplikasi (KECUALI Art Style dan Pengaturan Identitas/Branding/Logo).
-ATURAN MUTLAK (MIX & MATCH ESTETIKA):
-1. HARMONI VISUAL: Semua pilihan (Font Header/Body, Efek Teks, Palet Warna, Patch Footer, Komposisi, dll) WAJIB matching, selaras, dan saling melengkapi dengan Art Style "${currentArtStyle}". Misalnya: Jika Art Style retro/vintage, pilih font dan palet vintage; jika 3D Papercraft, pilih font tebal/embossed; jika minimalis, pilih font clean/sans-serif.
-2. OVERRIDE INPUT USER: JIKA instruksi user sangat eksplisit menyebutkan nilai (misal font Anton, karakter tertentu), WAJIB ikuti utuh tanpa diringkas. Jika tidak ada arahan spesifik, gunakan insting desain visual Anda untuk meracik setelan yang paling indah dan menyatu dengan Art Style tersebut.
-3. PRIORITAS KETAT OPSI BAWAAN: Anda WAJIB memprioritaskan penggunaan opsi-opsi yang sudah ada di sistem (berdasarkan referensi di bawah). HANYA JIKA opsi bawaan benar-benar tidak ada yang cocok dengan konteks topik dan Art Style, barulah Anda boleh menghasilkan nilai KUSTOM yang sama sekali baru.
+Tugas Anda memprediksi dan memberikan nilai untuk SEMUA pengaturan aplikasi secara cerdas.
+ATURAN MUTLAK KETAT (WAJIB DIPATUHI):
+1. EKSTRAKSI INPUT USER (PRIORITAS TERTINGGI): Jika user spesifik menyebutkan permintaan nilai di inputnya (misal: "username @imapro", "logo Tiktok", "file logo sponsor.png di kanan atas", "jumlah slide 8", "karakter wanita", "ratio 16:9", dll), Anda WAJIB EKSTRAK DAN MENGIKUTI ARAHAN USER TERSEBUT TANPA KECUALI.
+2. ADAPTASI FONT, EFEK & PATCH DENGAN ART STYLE (SANGAT PENTING - WAJIB BACA!):
+   Anda WAJIB MENCIPTAKAN KESELARASAN 100% antara Tipografi, Efek, dan Patch dengan Gaya Seni (Art Style) yang sedang aktif ("${currentArtStyle}").
+   - FONT & EFEK HEADER: Wajib paling relevan dan matching dengan Style Art. Misalnya Style Art Knit, maka carikan Font Header yang cocok dengan Style Art Knit, lalu carikan Efek Font Header yang cocok untuk Knit (misalnya efeknya "3D Knitted Wool Texture").
+   - FONT & EFEK BODY: Wajib paling relevan dan matching dengan Style Art. Misalnya Style Art Flat Minimalist, maka carikan Font Body yang cocok dengan Flat Minimalist, lalu carikan Efek Font Body yang cocok untuk Flat (misalnya "Flat Clean").
+   - FONT & EFEK FOOTER: Wajib paling relevan dan matching dengan Style Art. Misalnya Style Art Papercut, maka carikan Font yang cocok dengan Papercut, lalu carikan Efek Font Footer yang cocok untuk Papercut (misalnya "Debossed Cutout Paper").
+   - BENTUK PATCH FOOTER: Wajib relevan dan matching dengan Style Art. Misalnya Style Art Storybook Textile, maka pilihkan Patch Footer yang memang relevan dengan style ini (misalnya "Stitched Cloth Patch").
+   *ATURAN KUSTOM MUTLAK*: JANGAN RAGU menghasilkan teks nilai CUSTOM/KARANGAN ANDA SENDIRI (jangan terpaku pada opsi bawaan sistem) agar tekstur Font, Efek, dan Patch benar-benar menyatu harmonis dengan Art Style tersebut!
+3. PRIORITAS OPSI BAWAAN (HANYA JIKA COCOK): Usahakan pilih dari referensi sistem di bawah ini jika memang cocok. Jika kurang cocok, WAJIB gunakan kreatifitas kustom Anda seperti arahan di atas.
 
-REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
+REFERENSI OPSI BAWAAN SISTEM:
 - Aspect Ratio: 1:1, 3:4, 4:5, 9:16, 16:9
 - Copywriting Framework: AIDA (Attention, Interest, Desire, Action), PAS (Problem, Agitate, Solve), BAB (Before, After, Bridge), 4P (Picture, Promise, Prove, Push), FAB (Features, Advantages, Benefits), Tanpa Framework
 - Tipe Hook (Slide 1): Shocking Statistic Hook, Emotional Story Hook, Provocative Question Hook, Curiosity-Inducing Hook, Solution-Oriented Hook, Controversial Opinion Hook, Exclusive Access Hook, How-To Guide Hook, Curated List Hook
 - Gaya Bahasa: Feynman Muslim (Edukasi Sederhana), Gen Z / Jaksel (Gaul, Santai, Kekinian), Formal & Akademis, Profesional & Bisnis, Storytelling Emosional, To the Point / Lugas
 - Komposisi: SEIMBANG (50:50), TEKS DOMINAN (60/40), VISUAL DOMINAN (40/60), MINIMALIS TEKS (30/70)
 - Karakter: Pria Dewasa, Wanita, Pasutri, Anak Laki-laki, Anak Perempuan, Tanpa Karakter
-- Efek Font Header/Body: FLAT (BAWAAN FONT), 3D EMBOSSED (TIMBUL), DEBOSSED (TENGGELAM), NEON GLOW (MENYALA), METALLIC FOIL (EMAS/ PERAK), CHALK/ TEXTURAL (KAPUR/ KASAR), WATERCOLOR BLEND (MENYATU AIR)
+- Efek Font Header/Body/Footer: FLAT (BAWAAN FONT), 3D EMBOSSED (TIMBUL), DEBOSSED (TENGGELAM), NEON GLOW (MENYALA), METALLIC FOIL (EMAS/ PERAK), CHALK/ TEXTURAL (KAPUR/ KASAR), WATERCOLOR BLEND (MENYATU AIR)
 - Format Body: DENGAN POINT-POINT, DENGAN POINT-POINT (IKON REPRESENTATIF), TANPA POINT-POINT
 - Alignment: RATA KIRI, RATA TENGAH, RATA KANAN
 - Patch Footer: Tanpa Patch (Teks Transparan), Pill Hollow Capsule, Kotak Minimalis, Rounded Rectangle, Pita/ Ribbon
-- Posisi Footer: Tengah Bawah (Bottom Center), Kiri Bawah (Bottom Left), Kanan Bawah (Bottom Right), Tengah Atas (Top Center)`;
+- Posisi Footer: Tengah Bawah (Bottom Center), Kiri Bawah (Bottom Left), Kanan Bawah (Bottom Right), Tengah Atas (Top Center)
+- Posisi File Logo: Tanpa File Logo, Pojok Kiri Atas, Pojok Kanan Atas, Pojok Kiri Bawah, Pojok Kanan Bawah, Tengah Atas`;
 
                 const schemaProps = {
-                    "jumlah_slide": { "type": "INTEGER" },
-                    "aspect_ratio": { "type": "STRING" },
+                    "jumlah_slide": { "type": "INTEGER", "description": "Ekstrak jumlah slide jika disebutkan" },
+                    "aspect_ratio": { "type": "STRING", "description": "Ekstrak aspect ratio jika disebutkan" },
                     "copywriting_framework": { "type": "STRING" },
                     "hook_type": { "type": "STRING" },
                     "language_style": { "type": "STRING" },
                     "color_palette": { "type": "STRING" },
                     "composition": { "type": "STRING" },
-                    "character": { "type": "STRING" },
-                    "negative_prompt": { "type": "STRING", "description": "HANYA berikan kata-kata tambahan (seperti teks, watermark, lowres). DILARANG menulis ulang aturan wajah/mata." },
+                    "character": { "type": "STRING", "description": "Ekstrak tipe karakter jika disebutkan" },
+                    "negative_prompt": { "type": "STRING", "description": "DILARANG sertakan kata 'text' atau 'teks'." },
                     "font_header": { "type": "STRING" },
                     "effect_header": { "type": "STRING" },
                     "pt_header": { "type": "INTEGER" },
                     "font_body": { "type": "STRING" },
                     "effect_body": { "type": "STRING" },
                     "pt_body": { "type": "INTEGER" },
+                    "font_footer": { "type": "STRING" },
+                    "effect_footer": { "type": "STRING" },
                     "body_format": { "type": "STRING" },
-                    "alignment": { "type": "STRING" },
+                    "alignment": { "type": "STRING", "description": "Rata kiri/tengah/kanan" },
                     "patch_footer": { "type": "STRING" },
                     "footer_position": { "type": "STRING" },
-                    "pt_footer": { "type": "INTEGER" }
+                    "pt_footer": { "type": "INTEGER" },
+                    "watermark_logos": { "type": "STRING", "description": "Ekstrak teks logo sosmed (cth: Instagram, Tiktok) jika ada" },
+                    "watermark_username": { "type": "STRING", "description": "Ekstrak username akun (cth: @katasirah) jika ada" },
+                    "logo_filename": { "type": "STRING", "description": "Ekstrak nama file lampiran logo (cth: logo.png) jika ada" },
+                    "logo_position": { "type": "STRING", "description": "Posisi file logo jika disebutkan, jika tidak ada biarkan 'Tanpa File Logo'" }
                 };
 
                 const result = await callGeminiAPI(promptText, schemaProps);
@@ -1146,10 +1682,13 @@ REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
                         'set-texteffect-header': config.effect_header,
                         'set-font-body': config.font_body,
                         'set-texteffect-body': config.effect_body,
+                        'set-font-footer': config.font_footer,
+                        'set-texteffect-footer': config.effect_footer,
                         'set-bodyformat': config.body_format,
                         'set-alignment': config.alignment,
                         'set-patch-footer': config.patch_footer,
-                        'set-footer-position': config.footer_position
+                        'set-footer-position': config.footer_position,
+                        'set-logo-position': config.logo_position
                     };
 
                     for (const [id, val] of Object.entries(mapString)) {
@@ -1157,18 +1696,24 @@ REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
                     }
 
                     if (config.negative_prompt) {
+                        const cleanedNeg = config.negative_prompt.replace(/teks/gi, '').replace(/text/gi, '').replace(/,,/g, ',').trim();
                         const currentNeg = document.getElementById('set-negative-prompt').value;
-                        if (!currentNeg.toLowerCase().includes(config.negative_prompt.toLowerCase())) {
-                            document.getElementById('set-negative-prompt').value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + config.negative_prompt;
+                        if (cleanedNeg && !currentNeg.toLowerCase().includes(cleanedNeg.toLowerCase())) {
+                            document.getElementById('set-negative-prompt').value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + cleanedNeg;
                         }
                     }
+                    
                     if (config.jumlah_slide) document.getElementById('set-slide-count').value = String(config.jumlah_slide).replace(/[^0-9]/g, '');
                     if (config.pt_header) document.getElementById('set-pt-header').value = String(config.pt_header).replace(/[^0-9]/g, '');
                     if (config.pt_body) document.getElementById('set-pt-body').value = String(config.pt_body).replace(/[^0-9]/g, '');
                     if (config.pt_footer) document.getElementById('set-pt-footer').value = String(config.pt_footer).replace(/[^0-9]/g, '');
+                    
+                    if (config.watermark_username) document.getElementById('set-watermark-username').value = config.watermark_username;
+                    if (config.watermark_logos) document.getElementById('set-watermark-logos').value = config.watermark_logos;
+                    if (config.logo_filename) document.getElementById('set-logo-filename').value = config.logo_filename;
 
                     handleCharacterChange(document.getElementById('set-character'));
-                    showToast("✅ AI Auto-Set Berhasil!");
+                    showToast("✅ AI Auto-Set Berhasil & Mematuhi Input!");
                 }
             } catch (error) {
                 console.error(error);
@@ -1201,10 +1746,10 @@ REFERENSI OPSI BAWAAN SISTEM (Gunakan persis teks ini jika memilih):
                 const selectEl = document.getElementById(elementId);
                 if (selectEl && selectEl.options) {
                     const opts = Array.from(selectEl.options)
-                                    .map(o => o.value)
-                                    .filter(v => v !== 'Auto-Set by AI' && v !== 'KUSTOM');
+                                      .map(o => o.value)
+                                      .filter(v => v !== 'Auto-Set by AI' && v !== 'KUSTOM');
                     if(opts.length > 0) {
-                        optionsListText = `\n\nREFERENSI OPSI BAWAAN SISTEM UNTUK FITUR INI:\n[ ${opts.join(' | ')} ]\n\nATURAN PRIORITAS KETAT: Anda WAJIB memprioritaskan untuk memilih persis salah satu dari opsi di atas yang paling MATCHING dengan Art Style / Topik. JIKA DAN HANYA JIKA tidak ada opsi yang cocok sama sekali, barulah Anda diizinkan melakukan override dengan menjawab nilai KUSTOM buatan Anda sendiri.`;
+                        optionsListText = `\n\nREFERENSI OPSI BAWAAN SISTEM UNTUK FITUR INI:\n[ ${opts.join(' | ')} ]\n\nATURAN PRIORITAS KETAT: Usahakan memprioritaskan untuk memilih persis salah satu dari opsi di atas yang paling MATCHING dengan Art Style / Topik.`;
                     }
                 }
 
@@ -1215,9 +1760,15 @@ Dan Instruksi Tambahan: "${instructions}"
 
 Tugas Anda HANYA memprediksi/memberikan nilai yang paling cocok untuk SATU fitur pengaturan berikut: "${schemaKey}".
 PENTING:
-1. MIX & MATCH VISUAL: Nilai yang Anda hasilkan WAJIB selaras secara estetika (matching) dengan "Art Style" yang sedang aktif dan topik bahasan.
+1. MIX & MATCH VISUAL (WAJIB KETAT): Nilai yang Anda hasilkan WAJIB 100% selaras dan matching secara tema/tekstur dengan "Art Style" ("${currentArtStyle}"). 
+   - Jika fitur ini soal Font/Efek Header: Pastikan relevan dengan Art Style (Misal: Art Knit -> carikan font & efek 3D Knit).
+   - Jika fitur ini soal Font/Efek Body: Pastikan relevan (Misal: Flat Minimalist -> carikan Font & Efek Flat Clean).
+   - Jika fitur ini soal Font/Efek Footer: Pastikan relevan (Misal: Papercut -> carikan font & Efek Deboss).
+   - Jika fitur ini soal Patch Footer: Pastikan relevan (Misal: Storybook Textile -> Patch Stitched Cloth).
+   *ANDA WAJIB MEMBUAT NILAI CUSTOM jika opsi bawaan kurang spesifik/kurang bertekstur!*
 2. JIKA instruksi user secara spesifik menyebutkan nilai untuk fitur ini, WAJIB salin teks tersebut utuh ke dalam nilai (jangan diringkas).
-3. KHUSUS NEGATIVE PROMPT: HANYA berikan kata kunci tambahan (misal: text, watermark, bad anatomy), JANGAN menyalin atau menghapus aturan default yang sudah ada.${optionsListText}`;
+3. JIKA tidak ada opsi bawaan yang sangat identik atau cocok untuk gaya seni tersebut, Anda DIWAJIBKAN membuat nilai KUSTOM (custom string text) yang paling spesifik mendeskripsikan tekstur/gaya yang pas.
+4. KHUSUS NEGATIVE PROMPT: HANYA berikan kata kunci tambahan (misal: watermark, bad anatomy, lowres). DILARANG KERAS menyertakan kata 'text' atau 'teks'.${optionsListText}`;
 
                 const schemaProps = {
                     [schemaKey]: { "type": schemaType, "description": description }
@@ -1225,12 +1776,13 @@ PENTING:
 
                 const result = await callGeminiAPI(promptText, schemaProps);
                 if (result && result.length > 0) {
-                    const aiValue = result[0][schemaKey];
+                    let aiValue = result[0][schemaKey];
                     if (aiValue !== undefined && aiValue !== null) {
                         if (elementId === 'set-negative-prompt') {
+                            const cleanedNeg = String(aiValue).replace(/teks/gi, '').replace(/text/gi, '').replace(/,,/g, ',').trim();
                             const currentNeg = document.getElementById(elementId).value;
-                            if (!currentNeg.toLowerCase().includes(aiValue.toLowerCase())) {
-                                document.getElementById(elementId).value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + aiValue;
+                            if (cleanedNeg && !currentNeg.toLowerCase().includes(cleanedNeg.toLowerCase())) {
+                                document.getElementById(elementId).value = currentNeg + (currentNeg.endsWith(',') || currentNeg.trim() === '' ? ' ' : ', ') + cleanedNeg;
                             }
                         } else if (elementId === 'set-watermark-username' || elementId === 'set-watermark-logos' || elementId === 'set-logo-filename') {
                             document.getElementById(elementId).value = aiValue;
@@ -1259,7 +1811,6 @@ PENTING:
                 localStorage.setItem('imapro_gemini_key', apiKeyInput);
             }
 
-            // Using empty key format for Canvas injection
             const apiKey = apiKeyInput || "";
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
@@ -1309,19 +1860,19 @@ PENTING:
             currentTopicTemp = topic.length > 55 ? topic.substring(0, 55) + "..." : topic;
             currentOutputBlocks = []; 
             
-            const container = document.getElementById('output-container');
-            container.innerHTML = `<div class="flex flex-col items-center justify-center p-10 gap-5">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-t-2 border-[#007AFF]"></div>
-                <p class="text-sm font-bold text-gray-600 dark:text-gray-400 animate-pulse text-center">AI sedang meracik Copywriting & Visual Prompt secara spesifik...<br><span class="text-xs font-normal text-gray-400">Mohon tunggu beberapa detik.</span></p>
-            </div>`;
-            
             const outContent = document.getElementById('output-wrapper');
             if(outContent && !outContent.classList.contains('open')) {
                 toggleAccordion('output-wrapper', 'output-icon');
                 setTimeout(() => {
                     outContent.parentElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300);
+                }, 100);
             }
+
+            const container = document.getElementById('output-container');
+            container.innerHTML = `<div class="flex flex-col items-center justify-center p-10 gap-5 w-full">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-t-2 border-[#007AFF]"></div>
+                <p class="text-sm font-bold text-gray-600 dark:text-gray-400 animate-pulse text-center">AI sedang meracik Copywriting & Visual Prompt secara spesifik...<br><span class="text-xs font-normal text-gray-400">Mohon tunggu beberapa detik.</span></p>
+            </div>`;
             
             try {
                 if (currentMode === 'A') {
@@ -1330,16 +1881,16 @@ PENTING:
                     await generateModeB(topic, instructions);
                 }
             } catch(error) {
-                container.innerHTML = `<div class="p-8 text-center text-red-500 font-bold bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/30">Terjadi Kesalahan:<br><span class="font-normal text-sm">${error.message}</span></div>`;
+                container.innerHTML = `<div class="p-8 text-center text-red-500 font-bold bg-red-50 dark:bg-red-900/20 rounded-2xl border border-red-100 dark:border-red-900/30 w-full">Terjadi Kesalahan:<br><span class="font-normal text-sm">${error.message}</span></div>`;
             }
         }
 
         function createOutputBlockHTML(index, title, content, isFirst) {
             const id = `out-blk-${Date.now()}-${index}`;
             return `
-                <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-white dark:bg-ios-darkPanel mb-5 shadow-sm">
-                    <div class="flex justify-between items-center bg-[#F9F9FB] dark:bg-[#1C1C1E] px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder">
-                        <button onclick="toggleAccordion('${id}-content', '${id}-icon')" class="flex-grow flex items-center gap-3 text-left font-bold text-sm tracking-wide">
+                <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-white dark:bg-ios-darkPanel mb-5 shadow-sm w-full">
+                    <div class="flex justify-between items-center bg-[#F9F9FB] dark:bg-[#1C1C1E] px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder flex-wrap gap-2">
+                        <button onclick="toggleAccordion('${id}-content', '${id}-icon')" class="flex-grow flex items-center gap-3 text-left font-bold text-sm tracking-wide min-w-[200px]">
                             <svg id="${id}-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             ${title}
                         </button>
@@ -1349,7 +1900,7 @@ PENTING:
                         </div>
                     </div>
                     <div id="${id}-content" class="accordion-content px-5 py-0">
-                        <div class="py-5 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">${content}</div>
+                        <div class="py-5 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed w-full break-words">${content}</div>
                     </div>
                 </div>
             `;
@@ -1384,6 +1935,7 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
                 html += createOutputBlockHTML(i, title, content, false);
             }
             document.getElementById('output-container').innerHTML = html;
+            saveActiveOutput();
         }
 
         async function generateModeB(topic, instructions) {
@@ -1411,10 +1963,14 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             }
             
             const style = getSettingValue('set-style');
+            const styleConcept = styleArtsConcepts[style] ? styleArtsConcepts[style] : (style === 'Auto-Set by AI' || style === 'KUSTOM' ? 'Buatkan deskripsi visual yang estetik dan detail sesuai gaya yang Anda tentukan sendiri' : style);
+            
             const fontHeader = getSettingValue('set-font-header');
             const effectHeader = getSettingValue('set-texteffect-header');
             const fontBody = getSettingValue('set-font-body');
             const effectBody = getSettingValue('set-texteffect-body');
+            const fontFooter = getSettingValue('set-font-footer');
+            const effectFooter = getSettingValue('set-texteffect-footer');
             
             const alignment = getSettingValue('set-alignment');
             const ratio = getSettingValue('set-ratio');
@@ -1444,7 +2000,12 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
             
             let fileLogoInstruction = "";
             if (logoFilename && logoPosition && logoPosition !== 'Tanpa File Logo' && logoPosition !== 'Auto-Set by AI') {
-                fileLogoInstruction = `\n* ATTACHMENT LOGO OVERLAY: Tempelkan (overlay) file gambar lampiran yang bernama "${logoFilename}" pada posisi ${logoPosition} di setiap slide.`;
+                const dynamicLogoStyle = "Ubah gaya dan warna logo secara dinamis agar estetik.";
+                if (logoFilename.includes(',')) {
+                    fileLogoInstruction = `\n- LOGO OVERLAYS: Tempelkan (overlay) file-file gambar lampiran bernama "${logoFilename}" di posisi: ${logoPosition}. ${dynamicLogoStyle}`;
+                } else {
+                    fileLogoInstruction = `\n- LOGO OVERLAY: Tempelkan (overlay) file gambar lampiran bernama "${logoFilename}" di posisi ${logoPosition}. ${dynamicLogoStyle}`;
+                }
             }
 
             const charDetails = getCharacterDetailsString();
@@ -1468,20 +2029,27 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
                 "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
             };
 
+            const commonPromptRules = `ATURAN PEMBUATAN 'image_prompt' (SANGAT PENTING):
+1. DESKRIPSI KAYA & SPESIFIK: JANGAN gunakan template generik. Jelaskan elemen adegan, tindakan karakter, objek utama, pencahayaan, dan latar belakang (background) secara sangat kaya dan mendetail sesuai dengan narasi pada slide tersebut.
+2. Art Style & Konsep: ${style}. Deskripsi Konsep Visual: ${styleConcept}. (WAJIB sertakan seluruh deskripsi konsep visual ini secara eksplisit di awal kalimat 'image_prompt' pada SETIAP slide agar AI pembuat gambar tidak lupa. Misal: "A highly detailed [Deskripsi Konsep Visual], ...")
+3. Palet Warna: ${rawPalette}
+4. Komposisi Ruang: ${comp} (Pastikan mengatur letak objek visual agar menyediakan ruang kosong sesuai komposisi ini)
+5. SPESIFIKASI KARAKTER (WAJIB diterjemahkan ke dalam bahasa Inggris dan dimasukkan ke dalam prompt jika nilainya bukan 'Tanpa Karakter'):
+${charDetails}
+6. ATURAN WAJIB SYARIAT HEWAN (EXTREME WARNING): Jika di dalam gambar ada hewan/binatang/boneka apapun jenisnya, Anda WAJIB mendeskripsikan secara eksplisit bahwa ia "completely faceless [animal] with a smooth featureless blank head, zero facial features, absolutely no eyes, no nose, no mouth".
+7. INTEGRASI TEKS KE DALAM GAMBAR (WAJIB): Di dalam 'image_prompt', WAJIB JELASKAN SECARA EKSPLISIT deskripsi tata letak tipografi yang melayang (floating). Masukkan tulisan Header/Body sesuai naskah ke dalam prompt gambar. Contoh penulisan di dalam prompt AI: "Floating in the spacious negative space is the header text '[NASKAH HEADER]' rendered in ${effectHeader} typography. Floating below is the body text '[NASKAH BODY]' in ${effectBody} text. Clean background. Fixed ${patchFooter} at ${posFooter} containing ${wtLogos} ${wtUser} | [NOMOR SLIDE]/${slides}".
+8. SUFFIX WAJIB: SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+
             if (isCustomScript) {
                 const promptTextCustom = `Anda adalah Master AI Image Prompter & Desainer Visual.
 User telah membuat naskah copywriting sendiri untuk ${slides} slide. Berikut naskahnya:
 
 ${customSlides.map((txt, idx) => `[SLIDE ${idx + 1}]\n${txt}`).join('\n\n')}
 
-Tugas Anda HANYA membuatkan 'image_prompt' (Prompt visual AI bahasa Inggris yang mendetail) untuk masing-masing slide agar gambarnya relevan dengan cerita/pesan pada naskah slide tersebut.
-Biarkan field 'header' dan 'body' KOSONG (empty string), karena teks aslinya akan digabungkan secara otomatis oleh sistem kami.
+Tugas Anda HANYA membuatkan 'image_prompt' (Prompt visual AI bahasa Inggris yang KAYA, MENDETAIL, dan BERVARIASI untuk tiap slide) agar gambarnya relevan dengan cerita/pesan pada naskah slide tersebut.
+Biarkan field 'header' dan 'body' KOSONG (empty string), karena teks aslinya akan digabungkan secara otomatis.
 
-ATURAN IMAGE PROMPT:
-1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci (suasana, objek utama, latar belakang, pencahayaan).
-2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang/boneka, Anda WAJIB mendeskripsikan secara eksplisit bahwa hewan tersebut "completely faceless with a smooth featureless blank head, zero facial features, absolutely no eyes, no nose, no mouth".
-4. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+${commonPromptRules}`;
 
                 const customRes = await callGeminiAPI(promptTextCustom, schemaProps);
                 
@@ -1508,11 +2076,7 @@ ATURAN NASKAH TEKS KETAT:
 4. SLIDE 2 s.d ${slides - 1}: Pecah materi secara lega, maksimal 2 kalimat per slide. DILARANG memasukkan label teknis seperti "Attention", "Interest", dll.
 5. SLIDE TERAKHIR (Slide ${slides}): Wajib berisi kalimat penutup dan CTA (Follow, Like, Komen, Share, Save) secara natural.
 
-ATURAN IMAGE PROMPT:
-1. Buat 'image_prompt' dalam Bahasa Inggris yang sangat rinci.
-2. Art Style: ${style} dan Palet Warna: ${rawPalette}.
-3. ATURAN WAJIB SYARIAT: Jika di dalam gambar ada hewan/binatang/boneka, Anda WAJIB mendeskripsikan secara eksplisit bahwa hewan tersebut "completely faceless with a smooth featureless blank head, zero facial features, absolutely no eyes, no nose, no mouth".
-4. SETIAP prompt WAJIB diakhiri dengan instruksi absolut: "Faceless completely blank face area for ALL humans AND animals/creatures, no eyes, aspect ratio ${ratio}, seamless floating text concept, full bleed edge-to-edge background, abundant 140px negative margin space at all borders for seamless text insertion."`;
+${commonPromptRules}`;
 
                 slidesData = await callGeminiAPI(promptText, schemaProps);
                 if (slidesData.length < slides) slides = slidesData.length;
@@ -1521,50 +2085,37 @@ ATURAN IMAGE PROMPT:
             let html = "";
             const materiKonten = isCustomScript ? "Naskah Kustom" : (topic.length > 30 ? topic.substring(0,30)+"..." : topic).toUpperCase();
 
+            let charFormatted = charDetails;
+
             // --- SLIDE 1 ---
             const s1Data = slidesData[0];
             const s1Title = `[Kartu 1] - Global Config & Slide 1 (Visual Hook)`;
 
             let s1Naskah = "";
             if (isCustomScript) {
-                s1Naskah = `* NASKAH (CUSTOM SCRIPT DIMASUKKAN USER):\n\t${s1Data.body.replace(/\n/g, '\n\t')}\n\t* FOOTER: ${wtLogos} ${wtUser} | 1/${slides}`;
+                s1Naskah = `NASKAH:\nCUSTOM TEXT: ${s1Data.body.replace(/\n/g, ' ')}\nFOOTER: Fixed ${patchFooter} at ${posFooter} containing ${rawLogos} icon ${wtUser} | 1/${slides}`;
             } else {
-                s1Naskah = `* NASKAH:\n\t* HEADER: ${s1Data.header}\n${s1Data.body ? `\t* SUB-HEADER: ${s1Data.body}\n` : ''}\t* FOOTER: ${wtLogos} ${wtUser} | 1/${slides}`;
+                s1Naskah = `NASKAH:\nHEADER: ${s1Data.header}\n${s1Data.body ? `SUB-HEADER: ${s1Data.body}\n` : ''}FOOTER: Fixed ${patchFooter} at ${posFooter} containing ${rawLogos} icon ${wtUser} | 1/${slides}`;
             }
 
             const s1Content = `@createimage
 [GLOBAL CONFIGURATION]
-* OPERATION MODE: MODE B
-* TOPIK KONTEN: ${materiKonten}
-* STYLE ART: ${style}
-* RATIO: ${ratio}
-* KOMPOSISI: ${comp}
-* ALUR COPYWRITING: ${fwText}
-* GAYA BAHASA: ${appliedLang}
-* TYPOGRAPHY SETTINGS (APPLIES TO ALL SLIDES)
-\t* ALIGNMENT (RATA TEKS): ${alignment} -> [WAJIB BERLAKU SAMA UNTUK HEADER MAUPUN BODY]
-\t* HEADER: Font ${fontHeader} | Efek: ${effectHeader} | Ukuran: ${ptHead}pt
-\t* BODY: Font ${fontBody} | Efek: ${effectBody} | Ukuran: ${ptBody}pt | Format: ${bodyFmt}
-\t* FOOTER: Patch ${patchFooter} | Ukuran: ${ptFoot}pt | Posisi: ${posFooter}
-* PALET WARNA (STRICT): ${paletteExpanded}
-* NEGATIVE PROMPT: ${negativePrompt}${fileLogoInstruction}
-* STRICT TEXT RULES (ATURAN MUTLAK KANVAS):
-	1. NO TECHNICAL LABELS: DILARANG KERAS merender nama tahapan framework.
-	2. SEAMLESS/ FLOATING TEXT: Teks HARUS menyatu natural di area negative space background. DILARANG menggunakan text-box kaku.
-	3. BREATHABLE LAYOUT: Area teks tidak boleh terasa sempit. Pecah line teks agar lega.
-	4. FULL BLEED EDGE-TO-EDGE: Gambar HARUS menyentuh tepian kanvas 100%.
-	5. TEXT MARGIN 140PX: Selalu sediakan ruang kosong Maya sebesar 140px di keempat sisi KHUSUS untuk teks.
-	6. DYNAMIC FOOTER CONTRAST: Pewarnaan pada teks dan patch FOOTER WAJIB BERSIFAT DINAMIS! Selalu gunakan warna yang SANGAT KONTRAS terhadap background di belakangnya (Gunakan teks Putih/Terang jika background gelap, dan teks Hitam/Gelap jika background terang) agar teks maupun patch footer super jelas terbaca.
-	7. CONSISTENT ALIGNMENT: Keselarasan adalah kunci! Header dan Body WAJIB memiliki alignment (rata teks) yang sama persis agar rapi. DILARANG KERAS mencampur rata kiri dengan rata tengah di satu slide!
-${strictSyariatRule}
-${charDetails}
+- SPECS: Aspect Ratio ${ratio}, Safe Margin 140px.
+- VISUAL GUIDE: ${style}. ${comp}.
+- ART STYLE: ${style}.
+- KONSEP VISUAL: ${styleConcept}
+- CHARACTER SPECIFICATION: ${charFormatted}. Completely blank featureless face without any eyes, dots, or facial expression (STRICT FACELESS).
+- COLOR PALETTE: ${paletteExpanded}.
+- TYPOGRAPHY: Header (${fontHeader}, ${effectHeader}) | Body (${fontBody}, ${effectBody}, ${bodyFmt}) | Footer (${fontFooter}, ${patchFooter} at ${posFooter}).
+- LAYOUT: Full bleed edge-to-edge canvas with 140px safe margin, floating seamless text.
+${fileLogoInstruction ? fileLogoInstruction + '\n' : ''}- SYARIAT RULES: No real eyes, no face features for humans & animals. Woman must cover chest & arms.
 
-[SLIDE 1] (VISUAL HOOK AWAL)
-* SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
-* STRICT RULE SLIDE 1: DILARANG KERAS MEMBUAT TEKS PARAGRAF BODY. SLIDE 1 ADALAH COVER HOOK. HANYA RENDER TEKS HEADER DENGAN FONT BESAR.
-* STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide-slide berikutnya. Harus persis 100% SAMA secara template, hanya hilangkan body textnya!
-* GEN AI PROMPT (VISUAL): ${s1Data.image_prompt}
+[SLIDE 1]
+GEN AI PROMPT:
+${s1Data.image_prompt}
+
 ${s1Naskah}
+
 Make the aspect ratio ${ratio}`;
             
             currentOutputBlocks.push({ title: s1Title, content: s1Content });
@@ -1579,18 +2130,22 @@ Make the aspect ratio ${ratio}`;
 
                 let siNaskah = "";
                 if (isCustomScript) {
-                    siNaskah = `* NASKAH (CUSTOM SCRIPT):\n\t${sData.body.replace(/\n/g, '\n\t')}\n\t* FOOTER: ${wtLogos} ${wtUser} | ${slideNum}/${slides}`;
+                    siNaskah = `NASKAH:\nCUSTOM TEXT: ${sData.body.replace(/\n/g, ' ')}\nFOOTER: Fixed ${patchFooter} at ${posFooter} containing ${rawLogos} icon ${wtUser} | ${slideNum}/${slides}`;
                 } else {
-                    siNaskah = `* NASKAH:\n\t* HEADER: ${sData.header}\n\t* BODY: ${sData.body}\n\t* FOOTER: ${wtLogos} ${wtUser} | ${slideNum}/${slides}`;
+                    siNaskah = `NASKAH:\nHEADER: ${sData.header}\nBODY: ${sData.body}\nFOOTER: Fixed ${patchFooter} at ${posFooter} containing ${rawLogos} icon ${wtUser} | ${slideNum}/${slides}`;
                 }
 
                 const sContent = `@createimage
 [SLIDE ${slideNum}] ${isLast ? ' - SLIDE PENUTUP (CALL TO ACTION / FLKS)' : ''}
 * SPECS: Aspect Ratio ${ratio}, FULL BLEED EDGE-TO-EDGE, Invisible Text Margin 140px.
-* STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide sebelumnya. Harus persis 100% SAMA!
+* STRICT UNIFORMITY: DILARANG MENGUBAH desain typography (Font Header, Font Body, Font Footer, dan Patch Footer) dari slide sebelumnya. Harus persis 100% SAMA! (TETAP PATUHI DYNAMIC FOOTER CONTRAST DAN ALIGNMENT GLOBAL).
+* KONSEP VISUAL UTAMA: ${style} - ${styleConcept}
 ${strictSyariatRule}
-* GEN AI PROMPT (VISUAL): ${sData.image_prompt}
+* GEN AI PROMPT:
+${sData.image_prompt}
+
 ${siNaskah}
+
 Make the aspect ratio ${ratio}`;
                 
                 currentOutputBlocks.push({ title: sTitle, content: sContent });
@@ -1605,15 +2160,16 @@ Make the aspect ratio ${ratio}`;
                  const capPrompt = `Abaikan perintah gambar. Fokus HANYA buatkan 1 paragraf teks tulisan untuk Caption Postingan Instagram yang edukatif dan ringkas mengenai topik "${topic}". Maksimalkan 350 karakter (huruf). Sertakan emoji relevan dan 4-6 hashtag. Jangan gunakan kata pengantar apapun, JANGAN menyisipkan prompt gambar, hanya teks caption murni!`;
                  const capSchema = { "caption": { "type": "STRING" } };
                  const capRes = await callGeminiAPI(capPrompt, capSchema);
-                 capContent = capRes[0].caption;
+                 capContent = `CAPTION & HASHTAGS:\n\n${capRes[0].caption}`;
             } else {
-                 capContent = `Ringkasan materi "${materiKonten}" bergaya Feynman Muslim. Penjelasan di-breakdown dengan mudah, menyentuh hati, dan mengajak audiens pada kebaikan.\n\n#edukasi #dakwahvisual #islamicreminder #muhasabah`;
+                 capContent = `CAPTION & HASHTAGS:\n\nRingkasan materi "${materiKonten}" bergaya Feynman Muslim. Penjelasan di-breakdown dengan mudah, menyentuh hati, dan mengajak audiens pada kebaikan.\n\n#edukasi #dakwahvisual #islamicreminder #muhasabah`;
             }
             
             currentOutputBlocks.push({ title: capTitle, content: capContent });
             html += createOutputBlockHTML(slides, capTitle, capContent, false);
 
             document.getElementById('output-container').innerHTML = html;
+            saveActiveOutput();
         }
 
         async function copyText(btn, index) {
@@ -1652,7 +2208,7 @@ Make the aspect ratio ${ratio}`;
             const bundle = {
                 id: Date.now(),
                 title: `Single Save: ${block.title} - ${currentTopicTemp}`,
-                blocks: [{ ...block, image: null }]
+                blocks: [{ ...block }]
             };
             savedData[currentMode].push(bundle);
             saveToLocal();
@@ -1666,7 +2222,7 @@ Make the aspect ratio ${ratio}`;
             const bundle = {
                 id: Date.now(),
                 title: `${currentTopicTemp || 'Untitled'} (${currentOutputBlocks.length} Blocks)`,
-                blocks: currentOutputBlocks.map(b => ({ ...b, image: null }))
+                blocks: currentOutputBlocks.map(b => ({ ...b }))
             };
             
             savedData[currentMode].push(bundle);
@@ -1682,7 +2238,7 @@ Make the aspect ratio ${ratio}`;
         }
 
         function saveToLocal() {
-            localStorage.setItem('imapro_saved', JSON.stringify(savedData));
+            localStorage.setItem('imapro_saved_no_img', JSON.stringify(savedData));
         }
 
         function switchSavedTab(mode) {
@@ -1717,35 +2273,24 @@ Make the aspect ratio ${ratio}`;
                 let cardsHtml = bundle.blocks.map((blk, i) => {
                     const blockId = `${bundleId}-blk-${i}`;
                     return `
-                    <div class="bg-white dark:bg-ios-darkPanel border border-gray-100 dark:border-ios-darkBorder rounded-2xl p-6 mb-4 shadow-sm">
-                        <div class="flex justify-between items-center mb-4">
+                    <div class="bg-white dark:bg-ios-darkPanel border border-gray-100 dark:border-ios-darkBorder rounded-2xl p-4 sm:p-6 mb-4 shadow-sm w-full">
+                        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                             <span class="font-bold text-sm tracking-wide">${blk.title}</span>
                             <div class="flex gap-2">
                                 <button onclick="copySavedText('${blockId}-text')" class="p-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors" title="Copy"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
                                 <button onclick="enableEdit('${blockId}-text', ${bIdx}, ${i})" class="p-2 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30 rounded-xl hover:bg-orange-100 dark:hover:bg-orange-900/50 transition-colors" title="Edit Teks"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg></button>
-                                <label class="cursor-pointer p-2 text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors" title="Upload Gambar Hasil">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                                    <input type="file" accept="image/*" class="hidden" onchange="uploadSavedImg(${bIdx}, ${i}, this)">
-                                </label>
                             </div>
                         </div>
                         <textarea id="${blockId}-text" class="w-full p-4 text-sm font-mono border border-gray-200 dark:border-[#3A3A3C] rounded-xl bg-[#F9F9FB] dark:bg-ios-darkInput outline-none focus:ring-2 focus:ring-[#007AFF] focus:bg-white dark:focus:bg-[#1C1C1E] resize-y transition-colors leading-relaxed" rows="5" readonly onblur="saveEditedText(${bIdx}, ${i}, this.value)">${blk.content}</textarea>
-                        
-                        ${blk.image ? `
-                        <div class="mt-5 relative bg-[#F5F5F7] dark:bg-[#1A1A1C] rounded-xl overflow-hidden flex justify-center border border-gray-100 dark:border-ios-darkBorder p-2">
-                            <img src="${blk.image}" class="w-full h-auto object-contain max-h-[500px] rounded-lg">
-                            <button onclick="removeImg(${bIdx}, ${i})" class="absolute top-4 right-4 p-2 bg-white dark:bg-[#2C2C2E] text-red-500 rounded-full shadow-lg hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                        </div>
-                        ` : ''}
                     </div>
                     `;
                 }).join('');
 
                 container.innerHTML += `
-                <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-[#F9F9FB] dark:bg-[#1A1A1C] mb-5 shadow-sm">
-                    <div class="flex justify-between items-center px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder bg-white dark:bg-[#1C1C1E]">
-                        <button onclick="toggleAccordion('${bundleId}-content', '${bundleId}-icon')" class="flex-grow flex items-center gap-3 text-left font-bold text-sm tracking-wide">
-                            <svg id="${bundleId}-icon" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                <div class="border border-gray-100 dark:border-ios-darkBorder rounded-3xl overflow-hidden bg-[#F9F9FB] dark:bg-[#1A1A1C] mb-5 shadow-sm w-full">
+                    <div class="flex justify-between items-center px-4 sm:px-6 py-5 border-b border-gray-100 dark:border-ios-darkBorder bg-white dark:bg-[#1C1C1E] flex-wrap gap-2">
+                        <button onclick="toggleAccordion('${bundleId}-content', '${bundleId}-icon')" class="flex-grow flex items-center gap-3 text-left font-bold text-sm tracking-wide min-w-[150px]">
+                            <svg id="${bundleId}-icon" class="w-4 h-4 text-gray-400 transition-transform flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                             ${bundle.title}
                         </button>
                         <div class="flex gap-2">
@@ -1753,8 +2298,8 @@ Make the aspect ratio ${ratio}`;
                             <button onclick="deleteGroup(${bIdx})" class="px-4 py-2 text-xs font-bold text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/30 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors">Delete</button>
                         </div>
                     </div>
-                    <div id="${bundleId}-content" class="accordion-content px-6 py-0">
-                        <div class="py-5">
+                    <div id="${bundleId}-content" class="accordion-content px-4 sm:px-6 py-0 w-full">
+                        <div class="py-5 w-full">
                             ${cardsHtml}
                         </div>
                     </div>
@@ -1794,12 +2339,12 @@ Make the aspect ratio ${ratio}`;
         }
 
         function deleteGroup(bIdx) {
-            if(confirm("Yakin ingin menghapus grup ini?")) {
+            showConfirmModal("Yakin ingin menghapus grup ini?", () => {
                 savedData[currentSavedTab].splice(bIdx, 1);
                 saveToLocal();
                 renderSaved();
                 showToast("Group Deleted");
-            }
+            });
         }
 
         function enableEdit(elementId, bIdx, i) {
@@ -1815,26 +2360,6 @@ Make the aspect ratio ${ratio}`;
             saveToLocal();
             renderSaved(); 
             showToast("Teks Diperbarui!");
-        }
-
-        function uploadSavedImg(bIdx, i, input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    savedData[currentSavedTab][bIdx].blocks[i].image = e.target.result;
-                    saveToLocal();
-                    renderSaved();
-                    showToast("Gambar Diunggah!");
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function removeImg(bIdx, i) {
-            savedData[currentSavedTab][bIdx].blocks[i].image = null;
-            saveToLocal();
-            renderSaved();
-            showToast("Gambar Dihapus");
         }
 
         function exportData() {
@@ -1862,11 +2387,182 @@ Make the aspect ratio ${ratio}`;
                             renderSaved();
                             showToast("Data Berhasil Diimpor & Digabungkan!");
                         } else {
-                            alert("Format JSON tidak valid untuk imapro.");
+                            showToast("Format JSON tidak valid untuk imapro.");
                         }
                     } catch(err) {
-                        alert("Gagal membaca file JSON.");
+                        showToast("Gagal membaca file JSON.");
                     }
+                };
+                reader.readAsText(input.files[0]);
+            }
+        }
+
+        // --- MANAJEMEN PROFIL SETTING ---
+        function renderSavedSettingsDropdown() {
+            const dropdown = document.getElementById('saved-settings-dropdown');
+            if(!dropdown) return;
+            let html = '<option value="">-- Pilih Profil Setting --</option>';
+            for(let key in savedSettingsProfiles) {
+                html += `<option value="${key}">${key}</option>`;
+            }
+            dropdown.innerHTML = html;
+        }
+
+        function getSettingsData() {
+            const ids = [
+                'set-style', 'set-style-custom', 'set-slide-count', 'set-ratio', 'set-ratio-custom', 
+                'set-copywriting', 'set-copywriting-custom', 'set-hook', 'set-hook-custom', 
+                'set-language-style', 'set-language-style-custom', 'set-palette', 'set-palette-custom', 
+                'set-composition', 'set-composition-custom', 'set-character', 'set-character-custom', 
+                'set-negative-prompt', 'set-font-header', 'set-font-header-custom', 'set-texteffect-header', 
+                'set-texteffect-header-custom', 'set-pt-header', 'set-font-body', 'set-font-body-custom', 
+                'set-texteffect-body', 'set-texteffect-body-custom', 'set-pt-body', 'set-bodyformat', 
+                'set-bodyformat-custom', 'set-alignment', 'set-alignment-custom', 'set-font-footer', 
+                'set-font-footer-custom', 'set-texteffect-footer', 'set-texteffect-footer-custom', 
+                'set-patch-footer', 'set-patch-footer-custom', 'set-pt-footer', 'set-footer-position', 
+                'set-footer-position-custom', 'set-watermark-logos', 'set-watermark-username', 
+                'set-logo-filename', 'set-logo-position', 'set-logo-position-custom',
+                'char-face', 'char-face-custom', 'char-haircut', 'char-haircut-custom', 'char-headwear', 'char-headwear-custom', 
+                'char-outfit', 'char-outfit-custom', 'char-accessories', 'char-accessories-custom',
+                'suami-face', 'suami-face-custom', 'suami-haircut', 'suami-haircut-custom', 'suami-headwear', 'suami-headwear-custom', 
+                'suami-outfit', 'suami-outfit-custom', 'suami-accessories', 'suami-accessories-custom',
+                'istri-face', 'istri-face-custom', 'istri-headwear', 'istri-headwear-custom', 
+                'istri-outfit', 'istri-outfit-custom', 'istri-accessories', 'istri-accessories-custom'
+            ];
+            
+            let data = {};
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    data[id] = el.value;
+                }
+            });
+            return data;
+        }
+
+        function setSettingsData(data) {
+            if(!data) return;
+            
+            for(let id in data) {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.value = data[id];
+                }
+            }
+            
+            const selectIds = [
+                'set-style', 'set-ratio', 'set-copywriting', 'set-hook', 'set-language-style', 
+                'set-palette', 'set-composition', 'set-font-header', 'set-texteffect-header', 
+                'set-font-body', 'set-texteffect-body', 'set-bodyformat', 'set-alignment', 
+                'set-font-footer', 'set-texteffect-footer', 'set-patch-footer', 'set-footer-position', 
+                'set-logo-position'
+            ];
+            
+            selectIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) handleKustom(el);
+            });
+
+            const charEl = document.getElementById('set-character');
+            if(charEl) {
+                handleCharacterChange(charEl);
+                
+                const dynamicIds = [
+                    'char-face', 'char-face-custom', 'char-haircut', 'char-haircut-custom', 'char-headwear', 'char-headwear-custom', 
+                    'char-outfit', 'char-outfit-custom', 'char-accessories', 'char-accessories-custom',
+                    'suami-face', 'suami-face-custom', 'suami-haircut', 'suami-haircut-custom', 'suami-headwear', 'suami-headwear-custom', 
+                    'suami-outfit', 'suami-outfit-custom', 'suami-accessories', 'suami-accessories-custom',
+                    'istri-face', 'istri-face-custom', 'istri-headwear', 'istri-headwear-custom', 
+                    'istri-outfit', 'istri-outfit-custom', 'istri-accessories', 'istri-accessories-custom'
+                ];
+                dynamicIds.forEach(id => {
+                    if(data[id]) {
+                        const dEl = document.getElementById(id);
+                        if(dEl) {
+                            dEl.value = data[id];
+                            if(dEl.tagName === 'SELECT') checkCharCustom(dEl);
+                        }
+                    }
+                });
+            }
+        }
+
+        function saveSettingsProfile() {
+            showPromptModal((name) => {
+                if(!name || name.trim() === "") {
+                    showToast("Nama profil tidak boleh kosong!");
+                    return;
+                }
+                
+                const data = getSettingsData();
+                savedSettingsProfiles[name.trim()] = data;
+                localStorage.setItem('imapro_settings_profiles', JSON.stringify(savedSettingsProfiles));
+                renderSavedSettingsDropdown();
+                document.getElementById('saved-settings-dropdown').value = name.trim();
+                showToast("Profil Setting Tersimpan!");
+            });
+        }
+
+        function loadSettingsProfile() {
+            const name = document.getElementById('saved-settings-dropdown').value;
+            if(!name || !savedSettingsProfiles[name]) {
+                showToast("Pilih profil setting terlebih dahulu!");
+                return;
+            }
+            
+            setSettingsData(savedSettingsProfiles[name]);
+            showToast(`Profil '${name}' Dimuat!`);
+        }
+
+        function deleteSettingsProfile() {
+            const name = document.getElementById('saved-settings-dropdown').value;
+            if(!name || !savedSettingsProfiles[name]) {
+                showToast("Pilih profil yang ingin dihapus!");
+                return;
+            }
+            
+            showConfirmModal(`Yakin ingin menghapus Profil Setting '${name}'?`, () => {
+                delete savedSettingsProfiles[name];
+                localStorage.setItem('imapro_settings_profiles', JSON.stringify(savedSettingsProfiles));
+                renderSavedSettingsDropdown();
+                showToast("Profil Dihapus!");
+            });
+        }
+
+        function exportSettingsProfile() {
+            if(Object.keys(savedSettingsProfiles).length === 0) {
+                showToast("Tidak ada profil untuk diekspor!");
+                return;
+            }
+            const dataStr = JSON.stringify(savedSettingsProfiles);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'imapro_settings_profiles.json';
+            
+            let linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            showToast("Profil Setting Diekspor!");
+        }
+
+        function importSettingsProfile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        if(typeof importedData === 'object' && !Array.isArray(importedData)) {
+                            savedSettingsProfiles = { ...savedSettingsProfiles, ...importedData };
+                            localStorage.setItem('imapro_settings_profiles', JSON.stringify(savedSettingsProfiles));
+                            renderSavedSettingsDropdown();
+                            showToast("Profil Setting Berhasil Diimpor!");
+                        } else {
+                            showToast("Format JSON profil tidak valid.");
+                        }
+                    } catch(err) {
+                        showToast("Gagal membaca file JSON.");
+                    }
+                    input.value = "";
                 };
                 reader.readAsText(input.files[0]);
             }
