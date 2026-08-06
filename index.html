@@ -289,7 +289,7 @@
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6 w-full">
                     <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
-                        <button onclick="window.open('https://share.gemini.google/IqtXvQMzkgmQ', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/pKEtM7BB3Y2l', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">Reset</button>
@@ -445,10 +445,20 @@
                                 <label class="block text-gray-700 dark:text-gray-300 font-bold">Palet Warna (Color DNA)</label>
                                 <button type="button" onclick="autoSetSingle(this, 'set-palette', 'color_palette', 'STRING', 'Palet warna/mood')" class="text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-1 rounded transition-colors" title="Auto-Set Fitur Ini"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></button>
                             </div>
-                            <div class="flex gap-2">
-                                <select id="set-palette" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
-                                    <!-- Options populated by JS -->
-                                </select>
+                            <div class="flex gap-2 relative w-full">
+                                <div id="palette-ui-wrapper" class="w-full relative">
+                                    <div id="custom-palette-trigger" onclick="togglePaletteMenu()" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none cursor-pointer flex justify-between items-center h-full min-h-[46px] transition-colors">
+                                        <div class="truncate flex flex-col gap-1 w-full pr-4 text-left">
+                                            <span id="custom-palette-text" class="block leading-none mt-0.5">Auto-Set by AI</span>
+                                            <div id="custom-palette-colorbar" class="flex h-1.5 w-full rounded-full overflow-hidden hidden"></div>
+                                        </div>
+                                        <svg class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </div>
+                                    <div id="custom-palette-menu" class="hidden absolute top-full left-0 mt-1 w-full max-h-72 overflow-y-auto bg-white dark:bg-[#1C1C1E] border border-ios-border dark:border-ios-darkBorder rounded-xl shadow-2xl z-[200]">
+                                        <!-- Populated by JS -->
+                                    </div>
+                                </div>
+                                <select id="set-palette" onchange="handleKustom(this)" class="hidden"></select>
                                 <input type="text" id="set-palette-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik palet warna kustom...">
                             </div>
                         </div>
@@ -1308,6 +1318,83 @@
             "[SUZUME]": "DNA: Orange, Blue, Gold"
         };
 
+        const paletteHexMap = {
+            "[GHIBLI]": ["#8A9A5B", "#228B22", "#87CEEB", "#F5F5DC", "#8B5A2B"],
+            "[MAKOTO SHINKAI]": ["#00008B", "#F0FFFF", "#00FFFF", "#F8F8FF", "#FD5E53"],
+            "[WES ANDERSON]": ["#FFDB58", "#DCAE96", "#98FF98", "#008080", "#FFFDD0"],
+            "[PIXAR]": ["#007AFF", "#FF3B30", "#FFCC00", "#34C759", "#FF9500"],
+            "[DISNEY CLASSIC]": ["#4169E1", "#FFD700", "#FF0000", "#FFFDD0"],
+            "[FROZEN]": ["#A5F2F3", "#FFFFFF", "#C0C0C0", "#E0FFFF"],
+            "[DREAMWORKS]": ["#007AFF", "#FF9500", "#FF3B30", "#34C759"],
+            "[LAIKA]": ["#8B5A2B", "#808000", "#F5F5DC", "#006400", "#B7410E"],
+            "[CARTOON SALOON]": ["#228B22", "#808000", "#FFFDD0", "#87CEEB"],
+            "[ARCANE]": ["#50C878", "#000080", "#36454F", "#FFD700"],
+            "[SPIDER-VERSE]": ["#00FFFF", "#FF00FF", "#800080", "#000000"],
+            "[GENSHIN IMPACT]": ["#87CEEB", "#FFFFFF", "#34C759", "#FFFDD0"],
+            "[HONKAI STAR RAIL]": ["#800080", "#007AFF", "#C0C0C0", "#000000"],
+            "[BREATH OF THE WILD]": ["#7CFC00", "#87CEEB", "#FFFDD0", "#8B5A2B"],
+            "[TEARS OF THE KINGDOM]": ["#50C878", "#FFD700", "#007AFF", "#FFFFFF"],
+            "[FINAL FANTASY]": ["#FFFFFF", "#007AFF", "#C0C0C0", "#000000"],
+            "[ELDEN RING]": ["#808000", "#B8860B", "#8B5A2B", "#000000"],
+            "[DARK SOULS]": ["#808080", "#000000", "#8B5A2B"],
+            "[BLOODBORNE]": ["#000000", "#8B0000", "#8B5A2B", "#808080"],
+            "[GHOST OF TSUSHIMA]": ["#FFD700", "#DC143C", "#006400", "#708090"],
+            "[JOURNEY]": ["#C2B280", "#FFFDD0", "#FFA500", "#007AFF"],
+            "[MONUMENT VALLEY]": ["#FFD1DC", "#98FF98", "#FFE5B4", "#87CEEB"],
+            "[ANIMAL CROSSING]": ["#98FF98", "#FFFDD0", "#89CFF0", "#90EE90"],
+            "[CHRISTOPHER NOLAN]": ["#4682B4", "#708090", "#000000"],
+            "[DENIS VILLENEUVE]": ["#C2B280", "#F5F5DC", "#808080", "#000000"],
+            "[BLADE RUNNER 2049]": ["#FFA500", "#000000", "#808080"],
+            "[DUNE]": ["#C2B280", "#CD7F32", "#8B5A2B", "#FFFDD0"],
+            "[INTERSTELLAR]": ["#000080", "#000000", "#FFFFFF", "#808080"],
+            "[HARRY POTTER]": ["#8B5A2B", "#FFD700", "#006400"],
+            "[LORD OF THE RINGS]": ["#228B22", "#FFD700", "#8B5A2B", "#808080"],
+            "[AMELIE]": ["#008000", "#FF0000", "#8B5A2B", "#FFFDD0"],
+            "[GRAND BUDAPEST HOTEL]": ["#FFC0CB", "#800080", "#FFFDD0"],
+            "[CLAUDE MONET]": ["#FFD1DC", "#E6E6FA", "#87CEEB", "#98FF98", "#FFFDD0"],
+            "[VAN GOGH]": ["#120A8F", "#FFDA03", "#FFA500", "#008000"],
+            "[HOKUSAI]": ["#4B0082", "#FFFFFF", "#808080", "#0000FF"],
+            "[GUSTAV KLIMT]": ["#FFD700", "#000000", "#8B5A2B", "#50C878"],
+            "[ALPHONSE MUCHA]": ["#8A9A5B", "#F5F5DC", "#808000", "#FFD700", "#FF007F"],
+            "[MATISSE]": ["#FF0000", "#0000FF", "#FFFF00"],
+            "[WILLIAM MORRIS]": ["#808000", "#228B22", "#800020", "#FFFDD0"],
+            "[SCANDINAVIAN]": ["#FFFFFF", "#DFB67A", "#D3D3D3", "#8A9A5B"],
+            "[JAPANDI]": ["#F5F5DC", "#D2B48C", "#36454F", "#808000"],
+            "[MUJI]": ["#FFFDD0", "#FAF0E6", "#8B5A2B", "#808080"],
+            "[APPLE]": ["#FFFFFF", "#C0C0C0", "#383838", "#000000"],
+            "[NOTION]": ["#FFFFFF", "#808080", "#000000"],
+            "[FIGMA]": ["#800080", "#007AFF", "#34C759", "#FF9500", "#FF3B30"],
+            "[VAPORWAVE]": ["#FFC0CB", "#800080", "#00FFFF", "#0000FF"],
+            "[SYNTHWAVE]": ["#800080", "#FF00FF", "#FFA500", "#0000FF"],
+            "[RETROWAVE]": ["#FF69B4", "#4D4DFF", "#FFA500"],
+            "[MEMPHIS]": ["#FFFF00", "#FF0000", "#0000FF", "#008000", "#000000"],
+            "[BAUHAUS]": ["#FF0000", "#0000FF", "#FFFF00", "#FFFFFF", "#000000"],
+            "[SWISS]": ["#FFFFFF", "#000000", "#FF0000"],
+            "[RISOGRAPH]": ["#D8A8B4", "#8B9BB4", "#FFDB58", "#228B22"],
+            "[KODAK PORTRA]": ["#FFCBA4", "#FFFDD0", "#8B5A2B", "#90EE90"],
+            "[FUJI PRO 400H]": ["#98FF98", "#FFFDD0", "#90EE90", "#FFD1DC"],
+            "[GOLDEN HOUR]": ["#FFBF00", "#FFA500", "#FFD700", "#FFFDD0"],
+            "[BLUE HOUR]": ["#00008B", "#4B0082", "#00FFFF"],
+            "[SAKURA SPRING]": ["#FE828C", "#FFFDD0", "#98FF98"],
+            "[AUTUMN FOREST]": ["#CC7722", "#B7410E", "#8B5A2B", "#808000"],
+            "[TROPICAL BEACH]": ["#40E0D0", "#C2B280", "#FFFFFF", "#0000FF"],
+            "[LAVENDER FIELD]": ["#E6E6FA", "#800080", "#008000"],
+            "[NORDIC WINTER]": ["#FFFFFF", "#99FFFF", "#808080"],
+            "[DESERT SUNSET]": ["#E2725B", "#C2B280", "#FFA500", "#8B5A2B"],
+            "[RAINY FOREST]": ["#50C878", "#006400", "#808080"],
+            "[MOUNTAIN DAWN]": ["#87CEEB", "#E6E6FA", "#FFFDD0"],
+            "[KYOTO ANIMATION]": ["#FFD1DC", "#87CEEB", "#FFFDD0", "#FFC0CB"],
+            "[UFOTABLE]": ["#000000", "#0000FF", "#FFA500", "#FFD700"],
+            "[MAPPA]": ["#00008B", "#000000", "#FF0000"],
+            "[WIT STUDIO]": ["#0000FF", "#FFFFFF", "#8B5A2B"],
+            "[TRIGGER]": ["#CCFF00", "#FF0000", "#0000FF"],
+            "[CLOVERWORKS]": ["#FFB6C1", "#FFFDD0", "#87CEEB"],
+            "[VIOLET EVERGARDEN]": ["#FFD700", "#FFFFF0", "#0000FF", "#800080"],
+            "[YOUR NAME]": ["#0000FF", "#FFA500", "#FFC0CB"],
+            "[WEATHERING WITH YOU]": ["#0000FF", "#808080", "#00FFFF"],
+            "[SUZUME]": ["#FFA500", "#0000FF", "#FFD700"]
+        };
+
         const styleArtsConcepts = {
             "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D": "Realistic 3D knitted wool diorama in isometric miniature style, premium Cinema 4D (C4D) render. Featuring highly detailed wool fiber textures, visible woven stitches, and a soft matte fabric surface that provides a warm, cozy, and highly artistic atmosphere.",
             "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D": "3D needle felting craft illustration of an organic miniature sculpture. Featuring a dense, fuzzy wool texture with fine fibers naturally sticking out along its contours, creating an aesthetic and warm handmade decor vibe.",
@@ -1525,12 +1612,41 @@
             populateSelect('set-font-footer', fontDNAList);
             
             const palSelect = document.getElementById('set-palette');
+            const customMenu = document.getElementById('custom-palette-menu');
             for(const p in colorPalettesDetails) {
+                // Tambah data ke dropdown tersembunyi
                 const opt = document.createElement('option');
                 opt.value = p;
                 opt.textContent = p;
                 palSelect.appendChild(opt);
+
+                // Tambah data dan bar warna ke custom dropdown menu
+                const item = document.createElement('div');
+                item.className = 'px-4 py-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-[#2C2C2E] border-b border-gray-100 dark:border-ios-darkBorder last:border-0 transition-colors';
+                item.onclick = () => selectPalette(p);
+                
+                let titleSpan = `<span class="font-bold text-sm block text-gray-800 dark:text-white">${p}</span>`;
+                let descSpan = (p !== "Auto-Set by AI" && p !== "KUSTOM") ? `<span class="text-[10px] text-gray-500 dark:text-gray-400 block mt-0.5 leading-tight">${colorPalettesDetails[p]}</span>` : '';
+                
+                let colorBarHtml = '';
+                if (paletteHexMap[p]) {
+                    const colors = paletteHexMap[p];
+                    let segments = colors.map(c => `<div style="background-color: ${c}" class="h-full flex-1"></div>`).join('');
+                    colorBarHtml = `<div class="flex h-2.5 w-full mt-2 rounded border border-gray-200 dark:border-gray-700 overflow-hidden shadow-inner">${segments}</div>`;
+                }
+                
+                item.innerHTML = `${titleSpan}${descSpan}${colorBarHtml}`;
+                customMenu.appendChild(item);
             }
+            updatePaletteUI('Auto-Set by AI');
+
+            document.addEventListener('click', (e) => {
+                const trigger = document.getElementById('custom-palette-trigger');
+                const menu = document.getElementById('custom-palette-menu');
+                if (trigger && menu && !trigger.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
 
             const savedKey = localStorage.getItem('imapro_gemini_key');
             if(savedKey) {
@@ -1626,6 +1742,36 @@
             const emptyState = document.getElementById('gems-empty');
             if (emptyState) {
                 emptyState.style.display = hasVisible ? 'none' : 'flex';
+            }
+        }
+
+        // --- CUSTOM DROPDOWN COLOR PALETTE FUNCTIONS ---
+        function togglePaletteMenu() {
+            document.getElementById('custom-palette-menu').classList.toggle('hidden');
+        }
+
+        function selectPalette(value) {
+            const selectEl = document.getElementById('set-palette');
+            selectEl.value = value;
+            handleKustom(selectEl);
+            updatePaletteUI(value);
+            document.getElementById('custom-palette-menu').classList.add('hidden');
+        }
+
+        function updatePaletteUI(value) {
+            const textEl = document.getElementById('custom-palette-text');
+            const colorBarEl = document.getElementById('custom-palette-colorbar');
+            if(!textEl || !colorBarEl) return;
+            textEl.textContent = value;
+            
+            if (paletteHexMap[value]) {
+                const colors = paletteHexMap[value];
+                let segments = colors.map(c => `<div style="background-color: ${c}" class="h-full flex-1"></div>`).join('');
+                colorBarEl.innerHTML = segments;
+                colorBarEl.classList.remove('hidden');
+            } else {
+                colorBarEl.innerHTML = '';
+                colorBarEl.classList.add('hidden');
             }
         }
 
@@ -1913,6 +2059,7 @@
                 const el = document.getElementById(id);
                 if(el) { el.selectedIndex = 0; handleKustom(el); }
             });
+            updatePaletteUI('Auto-Set by AI');
             document.getElementById('set-ratio').value = '3:4'; 
             document.getElementById('set-slide-count').value = '7';
             document.getElementById('set-pt-header').value = '';
@@ -1959,6 +2106,7 @@
                 const customInput = document.getElementById(elementId + '-custom');
                 if (customInput) customInput.classList.add('hidden');
             }
+            if(elementId === 'set-palette') updatePaletteUI(selectEl.value);
         }
 
         async function autoSetSettings() {
@@ -2914,6 +3062,7 @@ Make the aspect ratio ${ratio}`;
                 const el = document.getElementById(id);
                 if(el) handleKustom(el);
             });
+            if(data['set-palette']) updatePaletteUI(data['set-palette']);
 
             const charEl = document.getElementById('set-character');
             if(charEl) {
