@@ -289,7 +289,7 @@
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6 w-full">
                     <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
-                        <button onclick="window.open('https://share.gemini.google/BIfZiRVDKyMj', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/IqtXvQMzkgmQ', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">Reset</button>
@@ -528,16 +528,144 @@
                             </div>
                             <div class="flex gap-2">
                                 <select id="set-texteffect-header" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
-                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                    <option value="KUSTOM">KUSTOM</option>
-                                    <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
-                                    <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
-                                    <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
-                                    <option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
-                                    <option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
-                                    <option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
-                                    <option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
-                                </select>
+<option value="Auto-Set by AI">Auto-Set by AI</option>
+<option value="KUSTOM">KUSTOM</option>
+
+<option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+<option value="SEMI BOLD BOOST">SEMI BOLD BOOST</option>
+<option value="EXTRA BOLD IMPACT">EXTRA BOLD IMPACT</option>
+
+<option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
+<option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+<option value="BEVEL SOFT">BEVEL SOFT</option>
+<option value="BEVEL HARD">BEVEL HARD</option>
+<option value="3D EXTRUDED">3D EXTRUDED</option>
+<option value="INFLATABLE PUFF">INFLATABLE PUFF</option>
+<option value="CLAY 3D">CLAY 3D</option>
+<option value="PLASTIC 3D">PLASTIC 3D</option>
+<option value="GEL 3D">GEL 3D</option>
+
+<option value="NEON GLOW (MENYALA)">NEON GLOW (MENYALA)</option>
+<option value="OUTER GLOW SOFT">OUTER GLOW SOFT</option>
+<option value="OUTER GLOW STRONG">OUTER GLOW STRONG</option>
+<option value="INNER GLOW">INNER GLOW</option>
+<option value="AURA GLOW">AURA GLOW</option>
+<option value="CYBER GLOW">CYBER GLOW</option>
+<option value="HOLOGLOW">HOLOGLOW</option>
+
+<option value="METALLIC FOIL (EMAS/ PERAK)">METALLIC FOIL (EMAS/ PERAK)</option>
+<option value="CHROME SHINE">CHROME SHINE</option>
+<option value="GOLD LUXE">GOLD LUXE</option>
+<option value="SILVER LUXE">SILVER LUXE</option>
+<option value="ROSE GOLD FOIL">ROSE GOLD FOIL</option>
+<option value="BRONZE METAL">BRONZE METAL</option>
+<option value="IRIDESCENT METAL">IRIDESCENT METAL</option>
+
+<option value="CHALK/ TEXTURAL (KAPUR/ KASAR)">CHALK/ TEXTURAL (KAPUR/ KASAR)</option>
+<option value="GRAINY TEXTURE">GRAINY TEXTURE</option>
+<option value="ROUGH INK">ROUGH INK</option>
+<option value="DRY BRUSH">DRY BRUSH</option>
+<option value="PASTEL DUST">PASTEL DUST</option>
+<option value="PENCIL SHADE">PENCIL SHADE</option>
+<option value="CHARCOAL TEXTURE">CHARCOAL TEXTURE</option>
+<option value="CRAYON TEXTURE">CRAYON TEXTURE</option>
+<option value="MARKER BLEED">MARKER BLEED</option>
+<option value="HALFTONE PRINT">HALFTONE PRINT</option>
+<option value="RISOGRAPH GRAIN">RISOGRAPH GRAIN</option>
+<option value="SCREEN PRINT">SCREEN PRINT</option>
+
+<option value="WATERCOLOR BLEND (MENYATU AIR)">WATERCOLOR BLEND (MENYATU AIR)</option>
+<option value="INK WASH">INK WASH</option>
+<option value="BRUSH PAINT">BRUSH PAINT</option>
+<option value="GOUACHE PAINT">GOUACHE PAINT</option>
+<option value="ACRYLIC PAINT">ACRYLIC PAINT</option>
+<option value="OIL PAINT TEXTURE">OIL PAINT TEXTURE</option>
+<option value="HAND PAINTED">HAND PAINTED</option>
+
+<option value="DROP SHADOW SOFT">DROP SHADOW SOFT</option>
+<option value="DROP SHADOW HARD">DROP SHADOW HARD</option>
+<option value="LONG SHADOW">LONG SHADOW</option>
+<option value="FLOATING SHADOW">FLOATING SHADOW</option>
+<option value="MULTI SHADOW STACK">MULTI SHADOW STACK</option>
+<option value="AMBIENT SHADOW">AMBIENT SHADOW</option>
+
+<option value="OUTLINE THIN">OUTLINE THIN</option>
+<option value="OUTLINE MEDIUM">OUTLINE MEDIUM</option>
+<option value="OUTLINE THICK">OUTLINE THICK</option>
+<option value="DOUBLE OUTLINE">DOUBLE OUTLINE</option>
+<option value="INLINE STROKE">INLINE STROKE</option>
+<option value="OUTLINE + SHADOW">OUTLINE + SHADOW</option>
+<option value="STICKER OUTLINE">STICKER OUTLINE</option>
+<option value="BUBBLE OUTLINE">BUBBLE OUTLINE</option>
+
+<option value="GRADIENT FILL">GRADIENT FILL</option>
+<option value="GRADIENT MESH">GRADIENT MESH</option>
+<option value="DUOTONE FILL">DUOTONE FILL</option>
+<option value="MULTICOLOR BLEND">MULTICOLOR BLEND</option>
+<option value="SUNSET GRADIENT">SUNSET GRADIENT</option>
+<option value="OCEAN GRADIENT">OCEAN GRADIENT</option>
+<option value="PASTEL GRADIENT">PASTEL GRADIENT</option>
+
+<option value="GLASSMORPHISM">GLASSMORPHISM</option>
+<option value="FROSTED GLASS">FROSTED GLASS</option>
+<option value="LIQUID GLASS">LIQUID GLASS</option>
+<option value="TRANSLUCENT ACRYLIC">TRANSLUCENT ACRYLIC</option>
+
+<option value="NEUMORPHISM SOFT">NEUMORPHISM SOFT</option>
+<option value="NEUMORPHISM INSET">NEUMORPHISM INSET</option>
+<option value="SOFT UI RAISED">SOFT UI RAISED</option>
+
+<option value="VINTAGE LETTERPRESS">VINTAGE LETTERPRESS</option>
+<option value="TYPEWRITER INK">TYPEWRITER INK</option>
+<option value="RETRO PRINT">RETRO PRINT</option>
+<option value="COMIC POP">COMIC POP</option>
+<option value="MANGA IMPACT">MANGA IMPACT</option>
+<option value="PIXEL ART">PIXEL ART</option>
+<option value="ARCADE GLOW">ARCADE GLOW</option>
+<option value="GAME HUD">GAME HUD</option>
+<option value="SCI-FI HOLOGRAM">SCI-FI HOLOGRAM</option>
+<option value="CYBERPUNK EDGE">CYBERPUNK EDGE</option>
+
+<option value="PAPER CUT LAYERED">PAPER CUT LAYERED</option>
+<option value="CUTOUT SHADOW">CUTOUT SHADOW</option>
+<option value="KIRIGAMI PAPER">KIRIGAMI PAPER</option>
+<option value="ORIGAMI FOLD">ORIGAMI FOLD</option>
+<option value="TORN PAPER">TORN PAPER</option>
+
+<option value="KNIT TEXTURE">KNIT TEXTURE</option>
+<option value="CROCHET TEXTURE">CROCHET TEXTURE</option>
+<option value="WOOL FELT">WOOL FELT</option>
+<option value="EMBROIDERY STITCH">EMBROIDERY STITCH</option>
+<option value="PATCHWORK FABRIC">PATCHWORK FABRIC</option>
+<option value="DENIM STITCH">DENIM STITCH</option>
+<option value="LEATHER STAMP">LEATHER STAMP</option>
+
+<option value="WOOD ENGRAVED">WOOD ENGRAVED</option>
+<option value="STONE ENGRAVED">STONE ENGRAVED</option>
+<option value="MARBLE ENGRAVED">MARBLE ENGRAVED</option>
+<option value="CERAMIC GLAZE">CERAMIC GLAZE</option>
+<option value="METAL ENGRAVED">METAL ENGRAVED</option>
+
+<option value="SMOKE EFFECT">SMOKE EFFECT</option>
+<option value="FIRE GLOW">FIRE GLOW</option>
+<option value="ICE CRYSTAL">ICE CRYSTAL</option>
+<option value="LIGHTNING EDGE">LIGHTNING EDGE</option>
+<option value="DUST PARTICLE">DUST PARTICLE</option>
+
+<option value="HANDWRITTEN BRUSH">HANDWRITTEN BRUSH</option>
+<option value="CALLIGRAPHIC SWASH">CALLIGRAPHIC SWASH</option>
+<option value="MARKER HANDDRAWN">MARKER HANDDRAWN</option>
+<option value="DOODLE OUTLINE">DOODLE OUTLINE</option>
+<option value="SKETCHY LINE">SKETCHY LINE</option>
+
+<option value="MINIMAL ELEGANT">MINIMAL ELEGANT</option>
+<option value="EDITORIAL LUXE">EDITORIAL LUXE</option>
+<option value="MODERN CLEAN SHADOW">MODERN CLEAN SHADOW</option>
+<option value="SOFT BLUR BLEND">SOFT BLUR BLEND</option>
+<option value="AMBIENT GLOW TEXT">AMBIENT GLOW TEXT</option>
+<option value="MATTE FINISH">MATTE FINISH</option>
+<option value="SATIN FINISH">SATIN FINISH</option>
+<option value="GLOSSY FINISH">GLOSSY FINISH</option>                                </select>
                                 <input type="text" id="set-texteffect-header-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik efek...">
                             </div>
                         </div>
@@ -571,11 +699,16 @@
                             <div class="flex gap-2">
                                 <select id="set-texteffect-body" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                    <option value="KUSTOM">KUSTOM</option>
-                                    <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
-                                    <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
-                                    <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
-                                </select>
+<option value="Auto-Set by AI">Auto-Set by AI</option>
+<option value="CLEAN FLAT TEXT">CLEAN FLAT TEXT</option>
+<option value="FLOATING CLEAN TEXT">FLOATING CLEAN TEXT</option>
+<option value="DROP SHADOW TIPIS">DROP SHADOW TIPIS</option>
+<option value="SOFT OUTLINE">SOFT OUTLINE</option>
+<option value="OUTLINE + SOFT SHADOW">OUTLINE + SOFT SHADOW</option>
+<option value="SEAMLESS BLEND WITH ART">SEAMLESS BLEND WITH ART</option>
+<option value="CONTEXTUAL AUTO-CONTRAST">CONTEXTUAL AUTO-CONTRAST</option>
+<option value="OPAQUE 90%">OPAQUE 90%</option>
+<option value="KUSTOM">KUSTOM</option>                              </select>
                                 <input type="text" id="set-texteffect-body-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik efek...">
                             </div>
                         </div>
@@ -642,9 +775,48 @@
                                 <select id="set-texteffect-footer" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
                                     <option value="Auto-Set by AI">Auto-Set by AI</option>
                                     <option value="KUSTOM">KUSTOM</option>
-                                    <option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
-                                    <option value="3D EMBOSSED (TIMBUL)">3D EMBOSSED (TIMBUL)</option>
-                                    <option value="DEBOSSED (TENGGELAM)">DEBOSSED (TENGGELAM)</option>
+
+<option value="FLAT (BAWAAN FONT)">FLAT (BAWAAN FONT)</option>
+<option value="CLEAN FLAT TEXT">CLEAN FLAT TEXT</option>
+<option value="MINIMAL FLAT TEXT">MINIMAL FLAT TEXT</option>
+<option value="MATTE FLAT TEXT">MATTE FLAT TEXT</option>
+
+<option value="OPAQUE 100%">OPAQUE 100%</option>
+<option value="OPAQUE 90%">OPAQUE 90%</option>
+<option value="OPAQUE 80%">OPAQUE 80%</option>
+<option value="OPAQUE 70%">OPAQUE 70%</option>
+<option value="OPAQUE 60%">OPAQUE 60%</option>
+<option value="OPAQUE 50%">OPAQUE 50%</option>
+
+<option value="DROP SHADOW TIPIS">DROP SHADOW TIPIS</option>
+<option value="SOFT SHADOW">SOFT SHADOW</option>
+<option value="AMBIENT SHADOW">AMBIENT SHADOW</option>
+
+<option value="OUTLINE TIPIS">OUTLINE TIPIS</option>
+<option value="SOFT OUTLINE">SOFT OUTLINE</option>
+<option value="WHITE OUTLINE TIPIS">WHITE OUTLINE TIPIS</option>
+<option value="DARK OUTLINE TIPIS">DARK OUTLINE TIPIS</option>
+<option value="OUTLINE + SOFT SHADOW">OUTLINE + SOFT SHADOW</option>
+
+<option value="SEMI TRANSPARENT">SEMI TRANSPARENT</option>
+<option value="TRANSPARENT BLEND">TRANSPARENT BLEND</option>
+<option value="SEAMLESS BLEND WITH PATCH">SEAMLESS BLEND WITH PATCH</option>
+<option value="AUTO-CONTRAST WITH PATCH">AUTO-CONTRAST WITH PATCH</option>
+
+<option value="EMBOSSED HALUS">EMBOSSED HALUS</option>
+<option value="DEBOSSED HALUS">DEBOSSED HALUS</option>
+
+<option value="MONOCHROME PRINT">MONOCHROME PRINT</option>
+<option value="EDITORIAL PRINT">EDITORIAL PRINT</option>
+<option value="PAPER GRAIN HALUS">PAPER GRAIN HALUS</option>
+
+<option value="FABRIC PRINT">FABRIC PRINT</option>
+<option value="EMBROIDERY STITCH HALUS">EMBROIDERY STITCH HALUS</option>
+<option value="KNIT TEXTURE HALUS">KNIT TEXTURE HALUS</option>
+<option value="WOVEN LABEL TEXT">WOVEN LABEL TEXT</option>
+
+<option value="GLASS TEXT BLEND">GLASS TEXT BLEND</option>
+
                                 </select>
                                 <input type="text" id="set-texteffect-footer-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik efek...">
                             </div>
@@ -656,13 +828,171 @@
                             </div>
                             <div class="flex gap-2">
                                 <select id="set-patch-footer" onchange="handleKustom(this)" class="w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none">
-                                    <option value="Auto-Set by AI">Auto-Set by AI</option>
-                                    <option value="KUSTOM">KUSTOM</option>
-                                    <option value="Tanpa Patch (Teks Transparan)">Tanpa Patch (Teks Transparan)</option>
-                                    <option value="Pill Hollow Capsule">Pill Hollow Capsule</option>
-                                    <option value="Kotak Minimalis">Kotak Minimalis</option>
-                                    <option value="Rounded Rectangle">Rounded Rectangle</option>
-                                    <option value="Pita/ Ribbon">Pita/ Ribbon</option>
+<option value="Auto-Set by AI">Auto-Set by AI</option>
+<option value="KUSTOM">KUSTOM</option>
+<option value="Tanpa Patch (Teks Transparan)">Tanpa Patch (Teks Transparan)</option>
+
+<option value="Pill Hollow Capsule">Pill Hollow Capsule</option>
+<option value="Pill Solid Capsule">Pill Solid Capsule</option>
+<option value="Pill Glassmorphism">Pill Glassmorphism</option>
+<option value="Pill Soft Shadow">Pill Soft Shadow</option>
+<option value="Pill Gradient">Pill Gradient</option>
+<option value="Pill Neon Glow">Pill Neon Glow</option>
+
+<option value="Kotak Minimalis">Kotak Minimalis</option>
+<option value="Kotak Solid">Kotak Solid</option>
+<option value="Kotak Outline">Kotak Outline</option>
+<option value="Kotak Sudut Tajam">Kotak Sudut Tajam</option>
+<option value="Kotak Berlapis">Kotak Berlapis</option>
+<option value="Kotak Bayangan Keras">Kotak Bayangan Keras</option>
+
+<option value="Rounded Rectangle">Rounded Rectangle</option>
+<option value="Rounded Rectangle Solid">Rounded Rectangle Solid</option>
+<option value="Rounded Rectangle Outline">Rounded Rectangle Outline</option>
+<option value="Rounded Rectangle Glass">Rounded Rectangle Glass</option>
+<option value="Rounded Rectangle Gradient">Rounded Rectangle Gradient</option>
+<option value="Rounded Rectangle Soft Shadow">Rounded Rectangle Soft Shadow</option>
+
+<option value="Pita / Ribbon">Pita / Ribbon</option>
+<option value="Pita Lipat">Pita Lipat</option>
+<option value="Pita Ujung Bercabang">Pita Ujung Bercabang</option>
+<option value="Pita Melengkung">Pita Melengkung</option>
+<option value="Pita Vertikal">Pita Vertikal</option>
+<option value="Pita Kain">Pita Kain</option>
+<option value="Pita Kertas">Pita Kertas</option>
+
+<option value="Label Minimalis">Label Minimalis</option>
+<option value="Label Harga">Label Harga</option>
+<option value="Label Gantung">Label Gantung</option>
+<option value="Label Pakaian">Label Pakaian</option>
+<option value="Label Jahitan">Label Jahitan</option>
+<option value="Label Emboss">Label Emboss</option>
+<option value="Label Deboss">Label Deboss</option>
+
+<option value="Badge Bulat">Badge Bulat</option>
+<option value="Badge Oval">Badge Oval</option>
+<option value="Badge Perisai">Badge Perisai</option>
+<option value="Badge Vintage">Badge Vintage</option>
+<option value="Badge Stempel">Badge Stempel</option>
+<option value="Badge Segel Lilin">Badge Segel Lilin</option>
+<option value="Badge Medal">Badge Medal</option>
+
+<option value="Speech Bubble">Speech Bubble</option>
+<option value="Chat Bubble Rounded">Chat Bubble Rounded</option>
+<option value="Chat Bubble Outline">Chat Bubble Outline</option>
+<option value="Cloud Bubble">Cloud Bubble</option>
+
+<option value="Sticker Outline Putih">Sticker Outline Putih</option>
+<option value="Sticker Die-Cut">Sticker Die-Cut</option>
+<option value="Sticker Kiss-Cut">Sticker Kiss-Cut</option>
+<option value="Sticker Holographic">Sticker Holographic</option>
+<option value="Sticker Kertas">Sticker Kertas</option>
+<option value="Sticker Sobek">Sticker Sobek</option>
+
+<option value="Paper Strip">Paper Strip</option>
+<option value="Sobekan Kertas">Sobekan Kertas</option>
+<option value="Potongan Kertas">Potongan Kertas</option>
+<option value="Sticky Note">Sticky Note</option>
+<option value="Washi Tape">Washi Tape</option>
+<option value="Kertas Terlipat">Kertas Terlipat</option>
+<option value="Kertas Gulung">Kertas Gulung</option>
+<option value="Kertas Pergamen">Kertas Pergamen</option>
+
+<option value="Fabric Patch">Fabric Patch</option>
+<option value="Knit Patch">Knit Patch</option>
+<option value="Crochet Patch">Crochet Patch</option>
+<option value="Felt Patch">Felt Patch</option>
+<option value="Denim Patch">Denim Patch</option>
+<option value="Leather Patch">Leather Patch</option>
+<option value="Embroidered Patch">Embroidered Patch</option>
+<option value="Woven Label Patch">Woven Label Patch</option>
+<option value="Quilted Patch">Quilted Patch</option>
+
+<option value="Wooden Plaque">Wooden Plaque</option>
+<option value="Bamboo Plaque">Bamboo Plaque</option>
+<option value="Metal Plate">Metal Plate</option>
+<option value="Enamel Plate">Enamel Plate</option>
+<option value="Acrylic Plate">Acrylic Plate</option>
+<option value="Ceramic Tile">Ceramic Tile</option>
+<option value="Stone Plaque">Stone Plaque</option>
+<option value="Clay Plaque">Clay Plaque</option>
+
+<option value="Glassmorphism Panel">Glassmorphism Panel</option>
+<option value="Frosted Glass Panel">Frosted Glass Panel</option>
+<option value="Transparent Blur Panel">Transparent Blur Panel</option>
+<option value="Liquid Glass Capsule">Liquid Glass Capsule</option>
+<option value="Acrylic Transparent Panel">Acrylic Transparent Panel</option>
+
+<option value="Neumorphism Soft Panel">Neumorphism Soft Panel</option>
+<option value="Neumorphism Inset Panel">Neumorphism Inset Panel</option>
+<option value="Soft UI Capsule">Soft UI Capsule</option>
+
+<option value="Gradient Bar">Gradient Bar</option>
+<option value="Solid Color Bar">Solid Color Bar</option>
+<option value="Transparent Color Bar">Transparent Color Bar</option>
+<option value="Bottom Full-Width Bar">Bottom Full-Width Bar</option>
+<option value="Bottom Floating Bar">Bottom Floating Bar</option>
+<option value="Lower Third Minimalis">Lower Third Minimalis</option>
+<option value="Lower Third Modern">Lower Third Modern</option>
+<option value="Lower Third Editorial">Lower Third Editorial</option>
+
+<option value="Outline Frame">Outline Frame</option>
+<option value="Double Outline Frame">Double Outline Frame</option>
+<option value="Corner Bracket Frame">Corner Bracket Frame</option>
+<option value="Decorative Border Frame">Decorative Border Frame</option>
+<option value="Ornamental Frame">Ornamental Frame</option>
+<option value="Vintage Frame">Vintage Frame</option>
+<option value="Art Deco Frame">Art Deco Frame</option>
+
+<option value="Hexagon Badge">Hexagon Badge</option>
+<option value="Octagon Badge">Octagon Badge</option>
+<option value="Diamond Badge">Diamond Badge</option>
+<option value="Arch Shape">Arch Shape</option>
+<option value="Ticket Shape">Ticket Shape</option>
+<option value="Bookmark Shape">Bookmark Shape</option>
+<option value="Tab Shape">Tab Shape</option>
+<option value="Folder Tab">Folder Tab</option>
+
+<option value="Pixel UI Panel">Pixel UI Panel</option>
+<option value="Game HUD Panel">Game HUD Panel</option>
+<option value="Retro Game Label">Retro Game Label</option>
+<option value="Cyberpunk HUD">Cyberpunk HUD</option>
+<option value="Futuristic Interface">Futuristic Interface</option>
+<option value="Sci-Fi Hologram Panel">Sci-Fi Hologram Panel</option>
+
+<option value="Comic Caption Box">Comic Caption Box</option>
+<option value="Comic Speech Box">Comic Speech Box</option>
+<option value="Manga Caption Box">Manga Caption Box</option>
+<option value="Pop Art Burst">Pop Art Burst</option>
+
+<option value="Isometric Platform">Isometric Platform</option>
+<option value="3D Extruded Plate">3D Extruded Plate</option>
+<option value="3D Floating Capsule">3D Floating Capsule</option>
+<option value="3D Beveled Plaque">3D Beveled Plaque</option>
+<option value="Inflatable 3D Patch">Inflatable 3D Patch</option>
+<option value="Clay 3D Patch">Clay 3D Patch</option>
+
+<option value="Minimal Underline">Minimal Underline</option>
+<option value="Double Underline">Double Underline</option>
+<option value="Highlight Marker">Highlight Marker</option>
+<option value="Brush Stroke">Brush Stroke</option>
+<option value="Paint Swipe">Paint Swipe</option>
+<option value="Ink Stroke">Ink Stroke</option>
+<option value="Chalk Stroke">Chalk Stroke</option>
+
+<option value="Islamic Geometric Frame">Islamic Geometric Frame</option>
+<option value="Mihrab Arch Patch">Mihrab Arch Patch</option>
+<option value="Arabesque Border Patch">Arabesque Border Patch</option>
+<option value="Mashrabiya Pattern Patch">Mashrabiya Pattern Patch</option>
+<option value="Islamic Tile Patch">Islamic Tile Patch</option>
+
+<option value="Organic Blob">Organic Blob</option>
+<option value="Soft Cloud Shape">Soft Cloud Shape</option>
+<option value="Abstract Wave">Abstract Wave</option>
+<option value="Leaf Shape">Leaf Shape</option>
+<option value="Pebble Shape">Pebble Shape</option>
+<option value="Scalloped Edge Patch">Scalloped Edge Patch</option>
+<option value="Wavy Border Patch">Wavy Border Patch</option>
                                 </select>
                                 <input type="text" id="set-patch-footer-custom" class="hidden w-full p-3 ios-input border border-ios-border dark:border-ios-darkBorder bg-ios-input dark:bg-ios-darkInput dark:text-white outline-none" placeholder="Ketik patch footer custom...">
                             </div>
@@ -1045,6 +1375,7 @@
 
         const gemsData = [
             // --- 🧵 3D FABRIC & YARN CRAFTS ---
+            { title: "IMAPRO 62 | 06.08.2026", url: "https://gemini.google.com/gem/1u6jC4eD_-wHVQMS8dHzoHrxC8vJIThoU?usp=sharing", desc: "Referensi Visual & Aset" },
             { title: "1. GAYA 1/ ImaKnit / Premium Knit & Crochet 3D", url: "https://gemini.google.com/gem/1wydjr_DFrGN_q70XNjnhYovpasUFtGvA?usp=sharing", desc: "Referensi Visual & Aset" },
             { title: "2. GAYA 2/ ImaWaru / Premium Needle Felting 3D", url: "#", desc: "Referensi Visual & Aset" },
             { title: "3. GAYA 3/ ImaQupa / Premium Quilted Patchwork 3D", url: "#", desc: "Referensi Visual & Aset" },
@@ -1154,18 +1485,35 @@
             let html = '';
             gemsData.forEach((gem, index) => {
                 const style = styleSets[index % styleSets.length];
-                html += `
-                <a href="${gem.url}" target="_blank" class="gem-item p-4 bg-white dark:bg-[#1C1C1E] border border-gray-100 dark:border-ios-darkBorder shadow-sm hover:shadow-md rounded-2xl ${style.border} transition-all flex items-center gap-4 group h-full">
-                    <div class="w-12 h-12 flex-shrink-0 ${style.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <span class="text-xl">${style.emoji}</span>
+                const isActive = gem.url && gem.url !== "#";
+                
+                if (isActive) {
+                    html += `
+                    <a href="${gem.url}" target="_blank" class="gem-item p-4 bg-white dark:bg-[#1C1C1E] border border-gray-100 dark:border-ios-darkBorder shadow-sm hover:shadow-md rounded-2xl ${style.border} transition-all flex items-center gap-4 group h-full cursor-pointer">
+                        <div class="w-12 h-12 flex-shrink-0 ${style.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span class="text-xl">${style.emoji}</span>
+                        </div>
+                        <div class="flex-1 min-w-0 text-left">
+                            <h4 class="font-bold text-sm text-gray-800 dark:text-white truncate gem-title" title="${gem.title}">${gem.title}</h4>
+                            <p class="text-xs text-gray-500 mt-0.5 truncate gem-desc">${gem.desc}</p>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 ${style.text} transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </a>
+                    `;
+                } else {
+                    html += `
+                    <div class="gem-item p-4 bg-gray-50 dark:bg-[#141414] border border-transparent shadow-none rounded-2xl flex items-center gap-4 h-full opacity-60 cursor-not-allowed select-none">
+                        <div class="w-12 h-12 flex-shrink-0 bg-gray-200 dark:bg-gray-800/50 rounded-xl flex items-center justify-center grayscale">
+                            <span class="text-xl opacity-50">${style.emoji}</span>
+                        </div>
+                        <div class="flex-1 min-w-0 text-left">
+                            <h4 class="font-bold text-sm text-gray-400 dark:text-gray-600 truncate gem-title" title="${gem.title}">${gem.title}</h4>
+                            <p class="text-[11px] text-gray-400/80 dark:text-gray-600 mt-0.5 truncate gem-desc">${gem.desc}</p>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-300 dark:text-gray-700 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    <div class="flex-1 min-w-0 text-left">
-                        <h4 class="font-bold text-sm text-gray-800 dark:text-white truncate gem-title" title="${gem.title}">${gem.title}</h4>
-                        <p class="text-xs text-gray-500 mt-0.5 truncate gem-desc">${gem.desc}</p>
-                    </div>
-                    <svg class="w-4 h-4 text-gray-300 dark:text-gray-600 ${style.text} transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                </a>
-                `;
+                    `;
+                }
             });
             grid.innerHTML = html;
         }
