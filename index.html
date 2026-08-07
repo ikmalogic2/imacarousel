@@ -289,7 +289,7 @@
             <div id="setting-content" class="accordion-content open px-6 py-0 border-t border-ios-border dark:border-ios-darkBorder">
                 <div class="py-6 w-full">
                     <div class="flex flex-wrap justify-between items-center mb-2 gap-2">
-                        <button onclick="window.open('https://share.gemini.google/pKEtM7BB3Y2l', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
+                        <button onclick="window.open('https://share.gemini.google/wraELNdQ7t6s', '_blank')" class="px-4 py-2 text-xs font-bold text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition-colors flex items-center gap-1 shadow-sm whitespace-nowrap"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg> Canvas</button>
                         
                         <div class="flex gap-2">
                             <button onclick="resetSettings()" class="px-4 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">Reset</button>
@@ -501,7 +501,7 @@
                         
                         <div id="character-details-container" class="col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3 hidden bg-gray-50 dark:bg-[#1C1C1E] p-5 rounded-2xl border border-gray-100 dark:border-ios-darkBorder shadow-sm w-full">
                             <p class="text-xs text-red-500 dark:text-red-400 font-bold mb-4 tracking-wide">*ATURAN FACELESS & NO EYES MUTLAK BERLAKU UNTUK SYARIAT.</p>
-                            <div id="dynamic-char-fields" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                            <div id="dynamic-char-fields" class="w-full">
                                 <!-- Injected dynamically -->
                             </div>
                         </div>
@@ -1947,7 +1947,7 @@
                 </div>`;
             } else {
                 // LAYOUT TUNGGAL
-                html = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">${generateCharFields('char', isMale, isFemale)}</div>`;
+                html = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 w-full">${generateCharFields('char', isMale, isFemale)}</div>`;
             }
 
             fields.innerHTML = html;
@@ -2619,7 +2619,7 @@ Kembalikan wajib dalam format JSON array sesuai skema yang diminta.`;
                 "slide_number": { "type": "INTEGER" },
                 "image_prompt": { "type": "STRING", "description": "Prompt gambar AI bahasa inggris mendetail" },
                 "header": { "type": "STRING", "description": "Judul/Teks utama tebal (Sentence case)" },
-                "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1)" }
+                "body": { "type": "STRING", "description": "Teks penjelasan kecil (Wajib KOSONG untuk slide 1. Wajib ada dalil/terjemahan di salah satu slide)" }
             };
 
             let extraContext = "";
@@ -2673,7 +2673,8 @@ ATURAN NASKAH TEKS KETAT:
 2. Gunakan Sentence case. Jangan gunakan AUTO CAPITALIZE pada Header atau Body.
 3. SLIDE 1 (HOOK): WAJIB berupa 1 kalimat singkat menohok. Isian 'body' di slide 1 HARUS KOSONG (String kosong). DILARANG menulis paragraf panjang di Slide 1.
 4. SLIDE 2 s.d ${slides - 1}: Pecah materi secara lega, maksimal 2 kalimat per slide. DILARANG memasukkan label teknis seperti "Attention", "Interest", dll.
-5. SLIDE TERAKHIR (Slide ${slides}): Wajib berisi kalimat penutup dan CTA (Follow, Like, Komen, Share, Save) secara natural.
+5. DALIL / TERJEMAHAN WAJIB: Anda WAJIB menyertakan minimal 1 (satu) kutipan terjemahan dalil (Al-Qur'an / Hadits / Perkataan Ulama) yang relevan pada salah satu isi slide (di bagian 'body').
+6. SLIDE TERAKHIR (Slide ${slides}): Wajib berisi kalimat penutup dan CTA (Follow, Like, Komen, Share, Save) secara natural.
 
 ${commonPromptRules}`;
 
